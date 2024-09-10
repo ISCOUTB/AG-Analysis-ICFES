@@ -15,7 +15,9 @@
 
 <template>
     <section class="w-full bg-background py-12">
-        <div class="container px-4 md:px-6 flex flex-col md:grid md:grid-cols-2 gap-4">
+        <div
+            class="container px-4 md:px-6 flex flex-col md:grid md:grid-cols-2 gap-4"
+        >
             <div class="flex flex-col gap-8">
                 <div class="flex flex-col gap-4">
                     <span class="text-3xl font-bold">Advanced Analysis</span>
@@ -26,13 +28,14 @@
                 </div>
                 <div>
                     <span class="font-semibold">Report Type</span>
-                    <Select @update:modelValue="handleReportTypeChange">
+                    <Select @update:model-value="handleReportTypeChange">
                         <SelectTrigger class="mt-2">
                             <SelectValue placeholder="Select the Report Type" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem
                                 v-for="type in ReportType"
+                                :key="type"
                                 :value="type"
                             >
                                 {{ type }}
@@ -41,13 +44,14 @@
                     </Select>
                 </div>
             </div>
-            <div class="flex flex-col gap-4" (>
+            <div class="flex flex-col gap-4">
                 <div>
                     <span class="font-semibold">Department</span>
                     <Select
-                        :modelValue="analysisStore.department"
-                        @update:modelValue="
-                            (payload) => analysisStore.setDepartment(payload)
+                        :model-value="analysisStore.department"
+                        @update:model-value="
+                            (payload: string) =>
+                                analysisStore.setDepartment(payload)
                         "
                     >
                         <SelectTrigger class="mt-2">
@@ -61,9 +65,9 @@
                 <div>
                     <span class="font-semibold">Municipality</span>
                     <Select
-                        :modelValue="analysisStore.municipality"
-                        @update:modelValue="
-                            (payload) => analysisStore.setMunicipality(payload)
+                        :model-value="analysisStore.municipality"
+                        @update:model-value="
+                            (payload: string) => analysisStore.setMunicipality(payload)
                         "
                     >
                         <SelectTrigger class="mt-2">
@@ -77,9 +81,9 @@
                 <div>
                     <span class="font-semibold">Institution</span>
                     <Select
-                        :modelValue="analysisStore.institution"
-                        @update:modelValue="
-                            (payload) => analysisStore.setInstitution(payload)
+                        :model-value="analysisStore.institution"
+                        @update:model-value="
+                            (payload: string) => analysisStore.setInstitution(payload)
                         "
                     >
                         <SelectTrigger class="mt-2">

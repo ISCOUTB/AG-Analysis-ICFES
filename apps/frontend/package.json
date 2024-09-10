@@ -12,6 +12,7 @@
     "dependencies": {
         "@nuxt/eslint": "^0.5.6",
         "@nuxt/icon": "^1.5.1",
+        "@nuxt/image": "^1.8.0",
         "@pinia/nuxt": "^0.5.4",
         "@prisma/nuxt": "^0.0.35",
         "@vee-validate/nuxt": "^4.13.2",
@@ -36,6 +37,7 @@
     "devDependencies": {
         "@eslint/js": "^9.9.1",
         "@iconify-json/heroicons-outline": "^1.2.0",
+        "@iconify-json/material-symbols": "^1.2.1",
         "@iconify-json/mdi": "^1.2.0",
         "@iconify-json/tdesign": "^1.2.1",
         "@nuxtjs/color-mode": "^3.4.4",

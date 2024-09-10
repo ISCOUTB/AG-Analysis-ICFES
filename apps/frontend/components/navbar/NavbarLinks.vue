@@ -4,7 +4,7 @@
     const items: NavbarLinkItem[] = [
         {
             label: "features",
-            to: "/",
+            to: "/features",
         },
         {
             label: "pricing",
