@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import { providers } from "@/lib/providers";
+    import { createAvatarFallback } from "@/lib/utils";
     import { capitalize } from "vue";
     import { useToast } from "@/components/ui/toast";
 
@@ -52,13 +53,6 @@
             },
         },
     ];
-
-    const createAvatarFallback = (username?: string) => {
-        return username
-            ?.split(" ")
-            .map((word) => word[0].toUpperCase())
-            .join("");
-    };
 </script>
 
 <template>

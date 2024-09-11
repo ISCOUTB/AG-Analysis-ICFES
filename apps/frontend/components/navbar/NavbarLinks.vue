@@ -12,7 +12,7 @@
         },
         {
             label: "about",
-            to: "/",
+            to: "/about",
         },
         {
             label: "contact",

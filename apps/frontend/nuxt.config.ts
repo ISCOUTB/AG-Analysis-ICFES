@@ -13,6 +13,7 @@ export default defineNuxtConfig({
       "@nuxt/icon",
       "@vee-validate/nuxt",
       "@nuxt/image",
+      "@formkit/auto-animate",
     ],
     experimental: {
         typedPages: true,
