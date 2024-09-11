@@ -47,6 +47,14 @@ declare global {
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete for more info about this field
         autocomplete: InputHTMLAttributes["autocomplete"];
     }
+
+    interface Participant {
+        name: string;
+        role: string;
+        description: string;
+        tags: string[];
+        image: string;
+    }
 }
 
 export {};

@@ -1,28 +1,20 @@
 <script setup lang="ts">
     import { createAvatarFallback } from "@/lib/utils";
 
-    interface Participant {
-        name: string;
-        role: string;
-        description: string;
-        tags: string[];
-        image: string;
-    }
-
     const participants: Participant[] = [
         {
             name: "Mauro Gonzalez",
             role: "Frontend Developer",
-            description: "Lorem Ipsum dolor sit amet",
+            description: "College Student",
             tags: ["UI Designer", "Vue Developer"],
-            image: "https://th.bing.com/th/id/R.fbfb9f15f4cab25264e51d3912f69b1d?rik=O83ol7vxuFN76g&pid=ImgRaw&r=0&sres=1&sresct=1",
+            image: "https://avatars.githubusercontent.com/u/101476062?v=4",
         },
     ];
 </script>
 
 <template>
     <section :key="$route.fullPath" class="w-full bg-background">
-        <div class="container px-4 py-12 flex flex-col gap-4">
+        <div v-auto-animate class="container px-4 py-12 flex flex-col gap-4">
             <Card
                 v-for="participant in participants"
                 :key="participant.name"
