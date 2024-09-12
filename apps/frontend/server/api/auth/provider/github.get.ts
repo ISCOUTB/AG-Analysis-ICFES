@@ -1,4 +1,4 @@
-import { H3Event } from "h3";
+import type { H3Event } from "h3";
 import { prisma } from "@/lib/prisma";
 
 const provider: string = "github";
@@ -39,7 +39,7 @@ export default oauthGitHubEventHandler({
 
         if (!_user)
             throw createError({
-                statusCode: 500,
+                statusCode: 400,
                 statusMessage: "User not exists",
             });
 
