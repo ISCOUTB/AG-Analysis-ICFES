@@ -1,0 +1,186 @@
+openapi: 3.0.0
+info:
+    description: |
+        Documentation for the api/ mounted in the frontend. It handles the authentication of the user, and some
+        integrations with the database, since it's using an ORM, it can only run in a nodejs environment. All the routes have the route prefix /api/.
+    version: "1.0.0"
+    title: Frontend API
+    contact:
+        email: mauroalonso.g.f2004@gmail.com
+servers:
+    - description: Will be mounted in {domain}/api
+      url: http://localhost:3000/api
+tags:
+    - name: auth
+      description: Operations about auth
+    - name: user
+      description: Operations about the user, related to the current session or used for validation
+    - name: provider
+      description: Handling OAuth providers
+paths:
+    /auth/register:
+        post:
+            tags:
+                - auth
+            summary: Register a new user in the application
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                    description: The user's username
+                                password:
+                                    type: string
+                                    description: The user's password
+                                email:
+                                    type: string
+                                    description: The user's email
+                            required:
+                                - name
+                                - password
+                                - email
+            responses:
+                "200":
+                    description: New user created and stored in the db
+                "400":
+                    description: Email already in use
+                "500":
+                    description: Unknown error
+    /auth/login:
+        post:
+            tags:
+                - auth
+            summary: Creates a new session for the user
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    description: The user's email
+                                password:
+                                    type: string
+                                    description: The user's password
+                            required:
+                                - email
+                                - password
+            responses:
+                "200":
+                    description: New session is created successfully
+                "400":
+                    description: User does not exist, wrong login method, or wrong password
+                "500":
+                    description: Unknown error.
+    /auth/user/edit:
+        post:
+            tags:
+                - user
+            summary: Updates the info of the current user
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    description: The user's new email
+                                name:
+                                    type: string
+                                    description: The user's new username
+                            required:
+                                - email
+                                - name
+            responses:
+                "200":
+                    description: User succesfully updated
+                "400":
+                    description: Email already in use
+                "401":
+                    description: Unauthorized
+                "500":
+                    description: Unknown error
+    /auth/user/update-password:
+        post:
+            tags:
+                - user
+            summary: Updates the password of the current user
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                password:
+                                    type: string
+                                    description: The user's new password
+                            required:
+                                - password
+            responses:
+                "200":
+                    description: Password succesfully updated
+                "400":
+                    description: No password were provided
+                "401":
+                    description: unauthorized
+                "500":
+                    description: Unknown error
+    /auth/user/valid-password:
+        post:
+            tags:
+                - user
+            summary: Utility to check if the password is valid
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                password:
+                                    type: string
+                                    description: Password to be checked if it's valid or not
+                            required:
+                                - password
+            responses:
+                "200":
+                    description: Updated succesfully
+                "400":
+                    description: User not exists, or wrong loggin method
+                "401":
+                    description: Auauthorized
+                "500":
+                    description: Unknown error
+    /auth/provider/github:
+        get:
+            tags:
+                - provider
+            summary: Login with GitHub
+            responses:
+                "200":
+                    description: User succesfully logged in
+                "400":
+                    description: User not exists
+                "500":
+                    description: Unknown error
+    /auth/provider/google:
+        get:
+            tags:
+                - provider
+            summary: Login with Google
+            responses:
+                "200":
+                    description: User succesfully logged in
+                "400":
+                    description: User not exists
+                "500":
+                    description: Unknown error
