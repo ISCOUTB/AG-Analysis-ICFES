@@ -1,14 +1,19 @@
-# ! Not using this
-
-
 from django.core.management.base import BaseCommand, CommandParser
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 import pandas as pd
-import os
+import dask.dataframe as dd
 from django.conf import settings
-from pandas.io.parsers import TextFileReader
-import multiprocessing
-import numpy as np
+import os
+import uuid
+import gc
+from typing import Literal
+
+
+depto_col: list[str] = ['BOGOTÁ', 'VALLE', 'TOLIMA', 'SANTANDER', 'SUCRE', 'ANTIOQUIA',
+                        'BOYACA', 'CAUCA', 'HUILA', 'CUNDINAMARCA', 'CORDOBA', 'ATLANTICO',
+                        'BOLIVAR', 'ARAUCA', 'NORTE SANTANDER', 'CALDAS', 'RISARALDA',
+                        'CESAR', 'QUINDIO', 'MAGDALENA', 'CHOCO', 'LA GUAJIRA', 'META',
+                        'CAQUETA', 'NARIÑO', 'PUTUMAYO', 'AMAZONAS', 'CASANARE',
+                        'SAN ANDRES', 'GUAVIARE', 'GUAINIA', 'VAUPES', 'VICHADA']
 
 
 class Command(BaseCommand):
@@ -21,56 +26,71 @@ class Command(BaseCommand):
                             default='Saber11',
                             help='File to be procesed')
 
-        parser.add_argument('-C', '--chunksize', type=int, nargs='?',
-                            default=100000, help='Chunksize to be used')
+    def clean_dataframe(self, file_path: str) -> None:
+        self.stdout.write(self.style.HTTP_INFO('[ Info ] Reading ...'))
 
-    def clean_chunk(self, df: pd.DataFrame) -> None:
-        df = df.dropna()
-        df = df.drop_duplicates()
-
-        return df
-
-    def process_chunk(self, chunk: pd.DataFrame) -> None:
-        with ThreadPoolExecutor() as executor:
-            sub_chunks = np.array_split(chunk, os.cpu_count())
-            cleaned_sub_chunks = list(
-                executor.map(self.clean_chunk, sub_chunks))
-
-        cleaned_chunk = pd.concat(cleaned_sub_chunks)
+        df: pd.DataFrame = dd.read_csv(file_path,
+                                       dtype='str',
+                                       assume_missing=True,
+                                       na_values=['', 'NA', 'nan']).compute()
 
         self.stdout.write(self.style.SUCCESS(
-            f'Processed chunk of size {len(cleaned_chunk)}'))
+            '[ Info ] Finished reading the DataFrame'))
+
+        self._cleaned_file_name = uuid.uuid4()
+
+        if self.type == 'Saber11':
+            df = df[df['ESTU_PAIS_RESIDE'] == 'COLOMBIA']
+            df['COLE_DEPTO_UBICACION'] = df['COLE_DEPTO_UBICACION'].replace(
+                {'BOGOTA': 'BOGOTÁ'})
+
+        if self.type == 'SaberPro':
+            df = df[df['ESTU_PAIS_RESIDE'] == 'COLOMBIA']
+            df = df[df['ESTU_DEPTO_RESIDE'].isin(depto_col)]
+
+        df = df.dropna(ignore_index=True)
+
+        self.stdout.write(self.style.HTTP_INFO('[ Info ] Exporting ...'))
+
+        df.to_csv(os.path.join(settings.BASE_DIR, "data",
+                  f"{self.cleaned_file_name}.csv"), index=False)
+
+        del df
+        gc.collect()
 
     def handle(self, *args, **options):
         file_type: str = options['file_type']
 
+        if not file_type in ['Saber11', 'SaberPro']:
+            self.stdout.write(self.style.ERROR("[ Error ] Invalid file type"))
+            return
+
         if file_type == 'Saber11':
             csv_file: str = os.path.join(
                 settings.BASE_DIR, "data", "Resultados11.csv")
+            self._type = 'Saber11'
 
-        elif file_type == 'SaberPro':
+        if file_type == 'SaberPro':
             csv_file: str = os.path.join(
                 settings.BASE_DIR, "data", "ResultadosPro.csv")
-
-        else:
-            self.stdout.write(self.style.ERROR("[ Error ] Invalid file type"))
-            return
+            self._type = 'SaberPro'
 
         if not os.path.exists(csv_file):
             self.stdout.write(self.style.ERROR('[ Error ] File not found'))
             return
 
-        chunksize: int = options['chunksize']
-        num_processes: int = multiprocessing.cpu_count()
-
         self.stdout.write(self.style.HTTP_INFO(
-            f"[ Info ] Using {num_processes} processes"))
+            '[ Info ] Started cleaning the DataFrame'))
 
-        data_iterator: TextFileReader = pd.read_csv(
-            csv_file, chunksize=chunksize)
-
-        with ProcessPoolExecutor(max_workers=num_processes) as executor:
-            executor.map(self.process_chunk, data_iterator)
+        self.clean_dataframe(file_path=csv_file)
 
         self.stdout.write(self.style.SUCCESS(
-            '[ Success ] Processing completed'))    
+            f"[ Info ] DataFrame cleaned and stored as {self.cleaned_file_name}.csv"))
+
+    @property
+    def cleaned_file_name(self) -> str:
+        return self._cleaned_file_name
+
+    @property
+    def type(self) -> Literal['Saber11', 'SaberPro']:
+        return self._type
