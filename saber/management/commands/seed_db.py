@@ -53,21 +53,7 @@ class Command(BaseCommand):
         if self.type == 'Saber11':
             from saber.models import Highschool
 
-            department, municipality, establishment, period = row[[
-                'COLE_DEPTO_UBICACION', 'COLE_MCPIO_UBICACION', 'COLE_NOMBRE_ESTABLECIMIENTO', 'PERIODO']]
-
-            department_object = Department.objects.get(name=department)
-
-            if not department_object:
-                logger.fatal(f"Department not found | name: {department}")
-                raise CommandError()
-
-            municipality_object, _ = Municipality.objects.get_or_create(
-                name=municipality, department=department_object)
-
-            highschool_object = Highschool.objects.get_or_create(
-                name=establishment, municipality=municipality_object)
-
+            
             return
 
     def parse_dataframe(self) -> None:
@@ -75,6 +61,8 @@ class Command(BaseCommand):
                                        dtype='str',
                                        assume_missing=True,
                                        na_values=['', 'NA', 'nan']).compute()
+
+                
 
         df.apply(self.parse_row, axis=1)
 

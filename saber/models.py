@@ -39,7 +39,7 @@ class HighschoolStudent(BaseStudent):
 
 class Highschool(BaseInstitution):
     municipality = models.ForeignKey(
-        'Municipality', on_delete=models.CASCADE, related_name='highschools')
+        'Municipality', on_delete=models.CASCADE, related_name='highschools', null=True, blank=True)
 
 
 class CollegeStudent(BaseStudent):
@@ -54,13 +54,13 @@ class CollegeStudent(BaseStudent):
 
 class College(BaseInstitution):
     municipality = models.ForeignKey(
-        'Municipality', on_delete=models.CASCADE, related_name='colleges')
+        'Municipality', on_delete=models.CASCADE, related_name='colleges', null=True, blank=True)
 
 
 class Municipality(models.Model):
     name = models.CharField(max_length=255)
     department = models.ForeignKey(
-        'Department', on_delete=models.CASCADE, related_name='municipalities')
+        'Department', on_delete=models.CASCADE, related_name='municipalities', null=True, blank=True)
 
 
 class Department(models.Model):
