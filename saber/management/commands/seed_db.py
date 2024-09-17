@@ -53,13 +53,14 @@ class Command(BaseCommand):
             if not self.skip_highschools and Highschool.objects.filter(municipality=None).exists():
                 self.skip_highschools = True
 
+            if self.skip_municipalities and self.skip_highschools:
+                return
+
             department_name, municipality_name, establishment_name = row[[
                 'COLE_DEPTO_UBICACION', 'COLE_MCPIO_UBICACION', 'COLE_NOMBRE_ESTABLECIMIENTO']]
 
-            if not self.skip_highschools and not self.skip_municipalities:
-                department = Department.objects.get(name=department_name)
-                municipality = Municipality.objects.get(name=municipality_name)
-
+            department = Department.objects.get(name=department_name)
+            municipality = Municipality.objects.get(name=municipality_name)
             highschool = Highschool.objects.get(name=establishment_name)
 
             if not self.skip_municipalities:
@@ -70,11 +71,13 @@ class Command(BaseCommand):
                 highschool.municipality = municipality
                 highschool.save()
 
-            punt_english, punt_math, punt_social, punt_natural, punt_reading, punt_global, period = row[[
-                'PUNT_INGLES', 'PUNT_MATEMATICAS', 'PUNT_SOCIALES_CIUDADANAS', 'PUNT_C_NATURALES', 'PUNT_LECTURA_CRITICA', 'PUNT_GLOBAL', 'PERIODO']]
+    def parse_students(self, row: pd.Series) -> None:
+        # Do a list comprenhension here and then a bulk_create
 
-            HighschoolStudent.objects.create(
-                PUNT_ENGLISH=punt_english, PUNT_MATHEMATICS=punt_math, PUNT_SOCIAL_CITIZENSHIP=punt_social, PUNT_NATURAL_SCIENCES=punt_natural, PUNT_CRITICAL_READING=punt_reading, PUNT_GLOBAL=punt_global, period=period, highschool=highschool)
+        if self.type == 'Saber11':
+            punt_english, punt_math, punt_social, punt_natural, punt_languaje, punt_global, period, establishment_name = row[[
+                'PUNT_INGLES', 'PUNT_MATEMATICAS', 'PUNT_SOCIALES_CIUDADANAS', 'PUNT_C_NATURALES', 'PUNT_LECTURA_CRITICA', 'PUNT_GLOBAL', 'PERIODO', 'COLE_NOMBRE_ESTABLECIMIENTO']]
+            return
 
     def parse_dataframe(self) -> None:
 
