@@ -1,5 +1,5 @@
-from django.core.management.base import BaseCommand, CommandParser, CommandError
-from saber.models import Department, Municipality, Highschool
+from django.core.management.base import BaseCommand, CommandParser
+from saber.models import Department, Municipality, Highschool, HighschoolStudent
 import pandas as pd
 import dask.dataframe as dd
 from django.conf import settings
@@ -36,8 +36,6 @@ class Command(BaseCommand):
                             help='File to be procesed')
 
     def add_departments(self) -> None:
-        from saber.models import Department
-
         logger.info('Adding the Departments ...')
 
         for department in COLOMBIA_DEPARTMENTS:
@@ -55,15 +53,13 @@ class Command(BaseCommand):
             if not self.skip_highschools and Highschool.objects.filter(municipality=None).exists():
                 self.skip_highschools = True
 
-            if self.skip_highschools and self.skip_municipalities:
-                return
+            department_name, municipality_name, establishment_name = row[[
+                'COLE_DEPTO_UBICACION', 'COLE_MCPIO_UBICACION', 'COLE_NOMBRE_ESTABLECIMIENTO']]
 
-            department_name, municipality_name, establishment_name, period = row[[
-                'COLE_DEPTO_UBICACION', 'COLE_MCPIO_UBICACION', 'COLE_NOMBRE_ESTABLECIMIENTO', 'PERIODO']]
+            if not self.skip_highschools and not self.skip_municipalities:
+                department = Department.objects.get(name=department_name)
+                municipality = Municipality.objects.get(name=municipality_name)
 
-            department = Department.objects.get(name=department_name)
-
-            municipality = Municipality.objects.get(name=municipality_name)
             highschool = Highschool.objects.get(name=establishment_name)
 
             if not self.skip_municipalities:
@@ -74,6 +70,12 @@ class Command(BaseCommand):
                 highschool.municipality = municipality
                 highschool.save()
 
+            punt_english, punt_math, punt_social, punt_natural, punt_reading, punt_global, period = row[[
+                'PUNT_INGLES', 'PUNT_MATEMATICAS', 'PUNT_SOCIALES_CIUDADANAS', 'PUNT_C_NATURALES', 'PUNT_LECTURA_CRITICA', 'PUNT_GLOBAL', 'PERIODO']]
+
+            HighschoolStudent.objects.create(
+                PUNT_ENGLISH=punt_english, PUNT_MATHEMATICS=punt_math, PUNT_SOCIAL_CITIZENSHIP=punt_social, PUNT_NATURAL_SCIENCES=punt_natural, PUNT_CRITICAL_READING=punt_reading, PUNT_GLOBAL=punt_global, period=period, highschool=highschool)
+
     def parse_dataframe(self) -> None:
 
         df: pd.DataFrame = dd.read_csv(os.path.join(self.DATA_DIR, f"{self.cleaned_file_name}.csv"),
@@ -82,7 +84,7 @@ class Command(BaseCommand):
                                        na_values=['', 'NA', 'nan']).compute()
 
         if self.type == 'Saber11':
-            from saber.models import Highschool
+            HighschoolStudent.objects.all().delete()
 
             def create_municipalities():
                 for name in df['COLE_MCPIO_UBICACION'].unique():
