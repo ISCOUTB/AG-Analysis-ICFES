@@ -20,6 +20,7 @@ class BaseInstitution(models.Model):
 
 class BaseStudent(models.Model):
     genre = models.CharField(max_length=20, choices=GENRE)
+    period = models.CharField(max_length=255)
 
     class Meta:
         abstract = True
