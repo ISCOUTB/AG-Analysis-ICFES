@@ -149,15 +149,13 @@ LOGGING = {
             'formatter': 'verbose',
         },
         'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-        },
+            'class': 'logging.StreamHandler'
+        }
     },
     'formatters': {
         'verbose': {
             'format': '[ {levelname} ] [ {asctime} ] [ {module} ] {message}',
-            'style': '{',
+            'style': '{'
         },
     },
     'loggers': {
@@ -165,11 +163,6 @@ LOGGING = {
             'handlers': ['file_saber', 'console'],
             'level': 'DEBUG',
             'propagate': False,
-        },
-        'django': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
         },
     },
 }
