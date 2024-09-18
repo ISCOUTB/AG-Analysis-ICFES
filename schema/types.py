@@ -3,6 +3,11 @@ import saber.models as saber_models
 import graphene
 
 
+class PeriodType(DjangoObjectType):
+    class Meta:
+        model = saber_models.Period
+
+
 class DepartmentType(DjangoObjectType):
     class Meta:
         model = saber_models.Department
