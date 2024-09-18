@@ -11,6 +11,9 @@ GENRE = [
 ]
 
 
+class Period(models.Model):
+    label = models.CharField(max_length=32) 
+
 class BaseInstitution(models.Model):
     name = models.TextField()
 
@@ -20,7 +23,7 @@ class BaseInstitution(models.Model):
 
 class BaseStudent(models.Model):
     genre = models.CharField(max_length=20, choices=GENRE)
-    period = models.CharField(max_length=10)
+    period = models.ForeignKey('Period', on_delete=models.PROTECT, related_name='%(class)s_periods')
 
     class Meta:
         abstract = True

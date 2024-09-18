@@ -3,14 +3,13 @@ from django.core.management.base import BaseCommand, CommandParser
 from data.constants import COLOMBIA_DEPARTMENTS
 from django.conf import settings
 from django.db import transaction
-from saber.models import Department, Municipality, Highschool, HighschoolStudent, College, CollegeStudent
+from saber.models import Department, Municipality, Highschool, HighschoolStudent, College, CollegeStudent, Period
 from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
 import dask.dataframe as dd
 import os
 import logging
 import uuid
-import sys
 
 logger = logging.getLogger('saber')
 
@@ -49,10 +48,17 @@ class Command(BaseCommand):
                 for name in data['COLE_NOMBRE_ESTABLECIMIENTO'].unique():
                     Highschool.objects.get_or_create(name=name)
 
+            def fill_periods() -> None:
+                logger.info('( fill_periods ) run')
+
+                for label in data['PERIODO'].unique():
+                    Period.objects.get_or_create(label=label)
+
             with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
                 futures = [
                     executor.submit(fill_municipalities),
-                    executor.submit(fill_highschools)
+                    executor.submit(fill_highschools),
+                    executor.submit(fill_periods)
                 ]
 
                 for future in futures:
@@ -195,7 +201,8 @@ class Command(BaseCommand):
                 HighschoolStudent.objects.all().delete()
 
                 logger.info('( parse_students ) creating objects')
-                highschools = {h.name: h for h in Highschool.objects.all()}                
+                highschools = {h.name: h for h in Highschool.objects.all()} 
+                periods = {p.label: p for p in Period.objects.all()}               
 
                 def process_chunk(chunk: pd.DataFrame):
                     students = [
@@ -207,7 +214,7 @@ class Command(BaseCommand):
                             PUNT_CRITICAL_READING=row['PUNT_LECTURA_CRITICA'],
                             PUNT_GLOBAL=row['PUNT_GLOBAL'],
                             highschool=highschools.get(row['COLE_NOMBRE_ESTABLECIMIENTO']),
-                            period=row['PERIODO'],
+                            period=periods.get(row['PERIODO']),
                             genre="MALE" if row['ESTU_GENERO'] == "M" else "FEMALE"
                         ) for _, row in chunk.iterrows()
                     ]
