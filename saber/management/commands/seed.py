@@ -190,31 +190,44 @@ class Command(BaseCommand):
         logger.info('( parse_students ) run')
 
         if self.type == 'Saber11':
-            logger.info('( parse_students ) removing previous students')
+            with transaction.atomic():
+                logger.info('( parse_students ) removing previous students')
+                HighschoolStudent.objects.all().delete()
 
-            Highschool.objects.all().delete()
+                logger.info('( parse_students ) creating objects')
+                highschools = {h.name: h for h in Highschool.objects.all()}                
 
-            logger.info('( parse_students ) creating objects')
+                def process_chunk(chunk: pd.DataFrame):
+                    students = [
+                        HighschoolStudent(
+                            PUNT_ENGLISH=row['PUNT_INGLES'],
+                            PUNT_MATHEMATICS=row['PUNT_MATEMATICAS'],
+                            PUNT_SOCIAL_CITIZENSHIP=row['PUNT_SOCIALES_CIUDADANAS'],
+                            PUNT_NATURAL_SCIENCES=row['PUNT_C_NATURALES'],
+                            PUNT_CRITICAL_READING=row['PUNT_LECTURA_CRITICA'],
+                            PUNT_GLOBAL=row['PUNT_GLOBAL'],
+                            highschool=highschools.get(row['COLE_NOMBRE_ESTABLECIMIENTO']),
+                            period=row['PERIODO'],
+                            genre="MALE" if row['ESTU_GENERO'] == "M" else "FEMALE"
+                        ) for _, row in chunk.iterrows()
+                    ]
 
-            highschools = {h.name: h for h in Highschool.objects.all()}
+                    return HighschoolStudent.objects.bulk_create(students)
+                
+                num_chunks: int = os.cpu_count()
+                chunk_size: int = 10000
+                chunks: list[pd.DataFrame] = [data.iloc[i:i + chunk_size] for i in range(0, len(data), chunk_size)]
 
-            students = [
-                HighschoolStudent(
-                    PUNT_ENGLISH=punt_english,
-                    PUNT_MATHEMATICS=punt_math,
-                    PUNT_SOCIAL_CITIZENSHIP=punt_social,
-                    PUNT_NATURAL_SCIENCES=punt_natural,
-                    PUNT_CRITICAL_READING=punt_languaje,
-                    PUNT_GLOBAL=punt_global,
-                    highschool=highschools.get(highschool_name),
-                    period=period,
-                    genre="MALE" if genre == "M" else "FEMALE"
-                ) for punt_english, punt_math, punt_social, punt_natural, punt_languaje, punt_global, period, highschool_name, genre in data[[
-                    'PUNT_INGLES', 'PUNT_MATEMATICAS', 'PUNT_SOCIALES_CIUDADANAS', 'PUNT_C_NATURALES', 'PUNT_LECTURA_CRITICA', 'PUNT_GLOBAL', 'PERIODO', 'COLE_NOMBRE_ESTABLECIMIENTO', 'ESTU_GENERO']].values]
+                logger.info('( parse_students ) creating threads')
 
-            HighschoolStudent.objects.bulk_create(students)
+                with ThreadPoolExecutor(max_workers=num_chunks) as executor:
+                    logger.info('( parse_students ) running threads')
 
-            logger.info('( parse_students ) finished')
+                    futures = [executor.submit(process_chunk, chunk) for chunk in chunks]
+                    for future in futures:
+                        future.result()
+
+                logger.info('( parse_students ) finished')
 
             return
 
@@ -259,14 +272,15 @@ class Command(BaseCommand):
             futures = [
                 executor.submit(self.parse_municipalities, data),
                 executor.submit(self.parse_institutions, data),
-                # executor.submit(self.parse_students, data)
             ]
 
             for future in futures:
                 future.result()
 
-        logger.info('( handle ) Finished execution')
+        self.parse_students(data=data)
+
         os.remove(os.path.join(self.DATA_DIR, f"{self.file_name}.csv"))
+        logger.info('( handle ) Finished execution')
 
     @property
     def type(self) -> Literal['Saber11', 'SaberPro']:

@@ -20,7 +20,7 @@ class BaseInstitution(models.Model):
 
 class BaseStudent(models.Model):
     genre = models.CharField(max_length=20, choices=GENRE)
-    period = models.CharField(max_length=255)
+    period = models.CharField(max_length=10)
 
     class Meta:
         abstract = True
@@ -29,12 +29,12 @@ class BaseStudent(models.Model):
 class HighschoolStudent(BaseStudent):
     highschool = models.ForeignKey(
         'Highschool', on_delete=models.CASCADE, related_name='highschool_students')
-    PUNT_ENGLISH = models.FloatField()
-    PUNT_MATHEMATICS = models.FloatField()
-    PUNT_SOCIAL_CITIZENSHIP = models.FloatField()
-    PUNT_NATURAL_SCIENCES = models.FloatField()
-    PUNT_CRITICAL_READING = models.FloatField()
-    PUNT_GLOBAL = models.FloatField()
+    PUNT_ENGLISH = models.IntegerField()
+    PUNT_MATHEMATICS = models.IntegerField()
+    PUNT_SOCIAL_CITIZENSHIP = models.IntegerField()
+    PUNT_NATURAL_SCIENCES = models.IntegerField()
+    PUNT_CRITICAL_READING = models.IntegerField()
+    PUNT_GLOBAL = models.IntegerField()
 
 
 class Highschool(BaseInstitution):
@@ -45,11 +45,11 @@ class Highschool(BaseInstitution):
 class CollegeStudent(BaseStudent):
     college = models.ForeignKey(
         'College', on_delete=models.CASCADE, related_name='college_students')
-    MOD_QUANTITATIVE_REASONING = models.FloatField()
-    MOD_WRITTEN_COMMUNICATION = models.FloatField()
-    MOD_CRITICAL_READING = models.FloatField()
-    MOD_ENGLISH = models.FloatField()
-    MOD_CITIZENSHIP_COMPETENCES = models.FloatField()
+    MOD_QUANTITATIVE_REASONING = models.IntegerField()
+    MOD_WRITTEN_COMMUNICATION = models.IntegerField()
+    MOD_CRITICAL_READING = models.IntegerField()
+    MOD_ENGLISH = models.IntegerField()
+    MOD_CITIZENSHIP_COMPETENCES = models.IntegerField()
 
 
 class College(BaseInstitution):
