@@ -10,6 +10,7 @@ import dask.dataframe as dd
 import os
 import logging
 import uuid
+import sys
 
 logger = logging.getLogger('saber')
 
@@ -36,19 +37,19 @@ class Command(BaseCommand):
         logger.info('( fill ) run')
 
         if self.type == 'Saber11':
-            def fill_municipalities() -> None:
+            def fill_municipalities_saber11() -> None:
                 logger.info('( fill_municipalities ) run')
 
                 for name in data['COLE_MCPIO_UBICACION'].unique():
                     Municipality.objects.get_or_create(name=name)
 
-            def fill_highschools() -> None:
+            def fill_highschools_saber11() -> None:
                 logger.info('( fill_highschools ) run')
 
                 for name in data['COLE_NOMBRE_ESTABLECIMIENTO'].unique():
                     Highschool.objects.get_or_create(name=name)
 
-            def fill_periods() -> None:
+            def fill_periods_saber11() -> None:
                 logger.info('( fill_periods ) run')
 
                 for label in data['PERIODO'].unique():
@@ -56,9 +57,40 @@ class Command(BaseCommand):
 
             with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
                 futures = [
-                    executor.submit(fill_municipalities),
-                    executor.submit(fill_highschools),
-                    executor.submit(fill_periods)
+                    executor.submit(fill_municipalities_saber11),
+                    executor.submit(fill_highschools_saber11),
+                    executor.submit(fill_periods_saber11)
+                ]
+
+                for future in futures:
+                    future.result()
+
+            return
+
+        if self.type == 'SaberPro':
+            def fill_municipalities_saberpro() -> None:
+                logger.info('( fill_municipalities ) run')
+
+                for name in data['ESTU_INST_MUNICIPIO'].unique():
+                    Municipality.objects.get_or_create(name=name)
+
+            def fill_colleges_saberpro() -> None:
+                logger.info('( fill_colleges ) run')
+
+                for name in data['INST_NOMBRE_INSTITUCION'].unique():
+                    College.objects.get_or_create(name=name)
+
+            def fill_periods_saberpro() -> None:
+                logger.info('( fill_periods ) run')
+
+                for label in data['PERIODO'].unique():
+                    Period.objects.get_or_create(label=label)
+
+            with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
+                futures = [
+                    executor.submit(fill_municipalities_saberpro),
+                    executor.submit(fill_colleges_saberpro),
+                    executor.submit(fill_periods_saberpro)
                 ]
 
                 for future in futures:
@@ -135,6 +167,18 @@ class Command(BaseCommand):
 
                 continue
 
+            if self.type == 'SaberPro':
+                department_name, municipality_name = row['ESTU_INST_DEPARTAMENTO'], row['ESTU_INST_MUNICIPIO']
+                municipality = unlinked_dict.get(municipality_name)
+                if municipality and municipality.department is None:
+                    department = departments.get(department_name)
+                    if department:
+                        municipality.department = department
+                        changes.append(municipality)
+                        del unlinked_dict[municipality_name]
+
+                continue
+
         if changes:
             with transaction.atomic():
                 Municipality.objects.bulk_update(changes, ['department'])
@@ -180,6 +224,19 @@ class Command(BaseCommand):
 
                 continue
 
+            if self.type == 'SaberPro':
+                municipality_name, institution_name = row['ESTU_INST_MUNICIPIO'], row['INST_NOMBRE_INSTITUCION']
+
+                institution = unlinked_dict.get(institution_name)
+                if institution and institution.municipality is None:
+                    municipality = municipalities.get(municipality_name)
+                    if municipality:
+                        institution.municipality = municipality
+                        changes.append(institution)
+                        del unlinked_dict[institution_name]
+
+                continue
+
         if changes:
             with transaction.atomic():
                 if self.type == 'Saber11':
@@ -201,10 +258,10 @@ class Command(BaseCommand):
                 HighschoolStudent.objects.all().delete()
 
                 logger.info('( parse_students ) creating objects')
-                highschools = {h.name: h for h in Highschool.objects.all()} 
-                periods = {p.label: p for p in Period.objects.all()}               
+                highschools = {h.name: h for h in Highschool.objects.all()}
+                periods = {p.label: p for p in Period.objects.all()}
 
-                def process_chunk(chunk: pd.DataFrame):
+                def process_chunk_saber11(chunk: pd.DataFrame) -> None:
                     students = [
                         HighschoolStudent(
                             PUNT_ENGLISH=row['PUNT_INGLES'],
@@ -213,24 +270,72 @@ class Command(BaseCommand):
                             PUNT_NATURAL_SCIENCES=row['PUNT_C_NATURALES'],
                             PUNT_CRITICAL_READING=row['PUNT_LECTURA_CRITICA'],
                             PUNT_GLOBAL=row['PUNT_GLOBAL'],
-                            highschool=highschools.get(row['COLE_NOMBRE_ESTABLECIMIENTO']),
+                            highschool=highschools.get(
+                                row['COLE_NOMBRE_ESTABLECIMIENTO']),
                             period=periods.get(row['PERIODO']),
                             genre="MALE" if row['ESTU_GENERO'] == "M" else "FEMALE"
                         ) for _, row in chunk.iterrows()
                     ]
 
-                    return HighschoolStudent.objects.bulk_create(students)
-                
+                    HighschoolStudent.objects.bulk_create(students)
+
                 num_chunks: int = os.cpu_count()
                 chunk_size: int = 10000
-                chunks: list[pd.DataFrame] = [data.iloc[i:i + chunk_size] for i in range(0, len(data), chunk_size)]
+                chunks: list[pd.DataFrame] = [data.iloc[i:i + chunk_size]
+                                              for i in range(0, len(data), chunk_size)]
 
                 logger.info('( parse_students ) creating threads')
 
                 with ThreadPoolExecutor(max_workers=num_chunks) as executor:
                     logger.info('( parse_students ) running threads')
 
-                    futures = [executor.submit(process_chunk, chunk) for chunk in chunks]
+                    futures = [executor.submit(process_chunk_saber11, chunk)
+                               for chunk in chunks]
+                    for future in futures:
+                        future.result()
+
+                logger.info('( parse_students ) finished')
+
+            return
+
+        if self.type == 'SaberPro':
+            with transaction.atomic():
+                logger.info('( parse_students ) removing previous students')
+                CollegeStudent.objects.all().delete()
+
+                logger.info('( parse_students ) creating objects')
+                colleges = {c.name: c for c in College.objects.all()}
+                periods = {p.label: p for p in Period.objects.all()}
+
+                def process_chunk_saberpro(chunk: pd.DataFrame) -> None:
+                    students = [
+                        CollegeStudent(
+                            MOD_QUANTITATIVE_REASONING=row['MOD_RAZONA_CUANTITAT_PUNT'],
+                            MOD_WRITTEN_COMMUNICATION=row['MOD_COMUNI_ESCRITA_PUNT'],
+                            MOD_CRITICAL_READING=row['MOD_LECTURA_CRITICA_PUNT'],
+                            MOD_ENGLISH=row['MOD_INGLES_PUNT'],
+                            MOD_CITIZENSHIP_COMPETENCES=row['MOD_COMPETEN_CIUDADA_PUNT'],
+                            college=colleges.get(
+                                row['INST_NOMBRE_INSTITUCION']),
+                            period=periods.get(row['PERIODO']),
+                            genre="MALE" if row['ESTU_GENERO'] == "M" else "FEMALE"
+                        ) for _, row in chunk.iterrows()
+                    ]
+
+                    CollegeStudent.objects.bulk_create(students)
+
+                num_chunks: int = os.cpu_count()
+                chunk_size: int = 10000
+                chunks: list[pd.DataFrame] = [data.iloc[i:i + chunk_size]
+                                              for i in range(0, len(data), chunk_size)]
+
+                logger.info('( parse_students ) creating threads')
+
+                with ThreadPoolExecutor(max_workers=num_chunks) as executor:
+                    logger.info('( parse_students ) running threads')
+
+                    futures = [executor.submit(process_chunk_saberpro, chunk)
+                               for chunk in chunks]
                     for future in futures:
                         future.result()
 
