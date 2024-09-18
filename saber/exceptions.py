@@ -17,8 +17,3 @@ class CollegeNotFoundError(Exception):
 
     def __init__(self, id: str) -> None:
         super().__init__(f"""|College| with the given {id} does not exists""")
-
-
-class StudentsReportsNotFound(Exception):
-    def __init__(self, **args) -> None:
-        super().__init__(f"""No students were found. {str(args)}""")
