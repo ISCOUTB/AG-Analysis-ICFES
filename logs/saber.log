@@ -123,3 +123,27 @@
 [ INFO ] [ 2024-09-18 18:37:29,191 ] [ seed ] ( parse_students ) running threads
 [ INFO ] [ 2024-09-18 18:46:41,023 ] [ seed ] ( parse_students ) finished
 [ INFO ] [ 2024-09-18 18:46:42,042 ] [ seed ] ( handle ) Finished execution
+[ INFO ] [ 2024-09-18 20:06:46,760 ] [ seed ] ( handle ) Init
+[ INFO ] [ 2024-09-18 20:06:46,760 ] [ seed ] ( handle ) File selected
+[ INFO ] [ 2024-09-18 20:06:46,760 ] [ seed ] ( clean_dataframe ) run
+[ INFO ] [ 2024-09-18 20:06:46,760 ] [ seed ] ( clean_dataframe ) Reading Dataframe
+[ INFO ] [ 2024-09-18 20:06:59,788 ] [ seed ] ( clean_dataframe ) Cleaning some values
+[ INFO ] [ 2024-09-18 20:07:03,132 ] [ seed ] ( clean_dataframe ) Exporting
+[ INFO ] [ 2024-09-18 20:07:11,381 ] [ seed ] ( add_departments ) run
+[ INFO ] [ 2024-09-18 20:07:11,381 ] [ seed ] ( add_departments ) Adding the Departments
+[ INFO ] [ 2024-09-18 20:07:11,416 ] [ seed ] ( handle ) Reading cleaned data
+[ INFO ] [ 2024-09-18 20:07:15,428 ] [ seed ] ( fill ) run
+[ INFO ] [ 2024-09-18 20:07:15,428 ] [ seed ] ( fill_municipalities ) run
+[ INFO ] [ 2024-09-18 20:07:15,441 ] [ seed ] ( fill_colleges ) run
+[ INFO ] [ 2024-09-18 20:07:15,455 ] [ seed ] ( fill_periods ) run
+[ INFO ] [ 2024-09-18 20:07:16,263 ] [ seed ] ( parse_municipalities ) run
+[ INFO ] [ 2024-09-18 20:07:16,265 ] [ seed ] ( parse_institutions ) run
+[ INFO ] [ 2024-09-18 20:07:16,274 ] [ seed ] ( parse_municipalities ) finished
+[ INFO ] [ 2024-09-18 20:07:33,919 ] [ seed ] ( parse_institutions ) finished
+[ INFO ] [ 2024-09-18 20:07:33,920 ] [ seed ] ( parse_students ) run
+[ INFO ] [ 2024-09-18 20:07:33,920 ] [ seed ] ( parse_students ) removing previous students
+[ INFO ] [ 2024-09-18 20:07:33,921 ] [ seed ] ( parse_students ) creating objects
+[ INFO ] [ 2024-09-18 20:07:33,926 ] [ seed ] ( parse_students ) creating threads
+[ INFO ] [ 2024-09-18 20:07:33,926 ] [ seed ] ( parse_students ) running threads
+[ INFO ] [ 2024-09-18 20:09:21,398 ] [ seed ] ( parse_students ) finished
+[ INFO ] [ 2024-09-18 20:09:21,461 ] [ seed ] ( handle ) Finished execution
