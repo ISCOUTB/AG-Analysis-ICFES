@@ -35,6 +35,12 @@ class Command(BaseCommand):
                             choices=['Saber11', 'SaberPro'],
                             help='File to be procesed')
 
+    def read_dataframe(self, file_path: str) -> pd.DataFrame:
+        return dd.read_csv(file_path,
+                           dtype='str',
+                           assume_missing=True,
+                           na_values=['', 'NA', 'nan']).compute()
+
     def add_departments(self) -> None:
         logger.info('Adding the Departments ...')
 
@@ -71,20 +77,36 @@ class Command(BaseCommand):
                 highschool.municipality = municipality
                 highschool.save()
 
-    def parse_students(self, row: pd.Series) -> None:
-        # Do a list comprenhension here and then a bulk_create
+            return
+
+    def parse_students(self) -> None:
+        df: pd.DataFrame = self.read_dataframe(file_path=os.path.join(
+            self.DATA_DIR, f"{self.cleaned_file_name}.csv"))
 
         if self.type == 'Saber11':
-            punt_english, punt_math, punt_social, punt_natural, punt_languaje, punt_global, period, establishment_name = row[[
-                'PUNT_INGLES', 'PUNT_MATEMATICAS', 'PUNT_SOCIALES_CIUDADANAS', 'PUNT_C_NATURALES', 'PUNT_LECTURA_CRITICA', 'PUNT_GLOBAL', 'PERIODO', 'COLE_NOMBRE_ESTABLECIMIENTO']]
+
+            students = [
+                HighschoolStudent(
+                    PUNT_ENGLISH=punt_english,
+                    PUNT_MATHEMATICS=punt_math,
+                    PUNT_SOCIAL_CITIZENSHIP=punt_social,
+                    PUNT_NATURAL_SCIENCES=punt_natural,
+                    PUNT_CRITICAL_READING=punt_languaje,
+                    PUNT_GLOBAL=punt_global,
+                    highschool=Highschool.objects.get(name=highschool_name),
+                    period=period,
+                    genre="MALE" if genre == 'M' else 'FEMALE'
+                ) for punt_english, punt_math, punt_social, punt_natural, punt_languaje, punt_global, period, highschool_name, genre in df[[
+                    'PUNT_INGLES', 'PUNT_MATEMATICAS', 'PUNT_SOCIALES_CIUDADANAS', 'PUNT_C_NATURALES', 'PUNT_LECTURA_CRITICA', 'PUNT_GLOBAL', 'PERIODO', 'COLE_NOMBRE_ESTABLECIMIENTO', 'ESTU_GENERO']].values]
+
+            HighschoolStudent.objects.bulk_create(students)
+
             return
 
     def parse_dataframe(self) -> None:
 
-        df: pd.DataFrame = dd.read_csv(os.path.join(self.DATA_DIR, f"{self.cleaned_file_name}.csv"),
-                                       dtype='str',
-                                       assume_missing=True,
-                                       na_values=['', 'NA', 'nan']).compute()
+        df: pd.DataFrame = self.read_dataframe(file_path=os.path.join(
+            self.DATA_DIR, f"{self.cleaned_file_name}.csv"))
 
         if self.type == 'Saber11':
             HighschoolStudent.objects.all().delete()
@@ -106,10 +128,7 @@ class Command(BaseCommand):
     def clean_dataframe(self, file_path: str) -> None:
         logger.info('Reading ...')
 
-        df: pd.DataFrame = dd.read_csv(file_path,
-                                       dtype='str',
-                                       assume_missing=True,
-                                       na_values=['', 'NA', 'nan']).compute()
+        df: pd.DataFrame = self.read_dataframe(file_path=file_path)
 
         logger.info('Finished reading the DataFrame')
 
@@ -167,6 +186,10 @@ class Command(BaseCommand):
         logger.info('Started Parsing ...')
 
         self.parse_dataframe()
+
+        logger.info('Started Parsing students ...')
+
+        self.parse_students()
 
         logger.info('Removing the file')
 
