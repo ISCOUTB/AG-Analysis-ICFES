@@ -221,12 +221,12 @@ class Command(BaseCommand):
     # ! -----------------------------------------------------------------------------------------------------|>
 
     def handle(self, *args: Any, **options: Any) -> None:
-        logger.info('Init')
+        logger.info('( handle ) Init')
 
         file_type: str = options['file_type']
 
         if not file_type in ['Saber11', 'SaberPro']:
-            logger.fatal("Invalid file type")
+            logger.fatal("( handle ) Invalid file type")
             return
 
         if file_type == 'Saber11':
@@ -239,7 +239,7 @@ class Command(BaseCommand):
             self._type = 'SaberPro'
 
         if not os.path.exists(csv_file):
-            logger.fatal('File not found')
+            logger.fatal('( handle ) File not found')
             return
 
         logger.info('( handle ) File selected')
@@ -248,7 +248,6 @@ class Command(BaseCommand):
 
         self.add_departments()
 
-        logger.info('( handle )')
         logger.info('( handle ) Reading cleaned data')
 
         data = self.read_dataframe(file_path=os.path.join(
@@ -266,7 +265,6 @@ class Command(BaseCommand):
             for future in futures:
                 future.result()
 
-        logger.info('( handle )')
         logger.info('( handle ) Finished execution')
         os.remove(os.path.join(self.DATA_DIR, f"{self.file_name}.csv"))
 
