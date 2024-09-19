@@ -1,0 +1,191 @@
+openapi: 3.0.0
+info:
+  title: ICFES GraphQL API
+  description: GraphQL API for querying data about departments, municipalities, institutions, students, and results from the Saber11 and SaberPro tests.
+  version: 1.0.0
+
+tags:
+  - name: Department
+    description: Queries related to departments
+  - name: Municipality
+    description: Queries related to municipalities
+  - name: Institution
+    description: Queries related to institutions
+  - name: Student
+    description: Queries related to students
+
+paths:
+  /graphql:
+    post:
+      tags:
+        - Department
+        - Municipality
+        - Institution
+        - Student
+      summary: Execute data queries
+      description: Endpoint for executing GraphQL queries against the API. This endpoint allows retrieving data about departments, municipalities, institutions, students, and test results for Saber11 and SaberPro.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: The GraphQL query to execute
+                  example: |
+                    query {
+                      departments {
+                        id
+                        name
+                        municipalities {
+                          id
+                          name
+                        }
+                      }
+                    }
+      responses:
+        200:
+          description: Successful response with requested data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    description: Result of the GraphQL query
+        400:
+          description: Error in the GraphQL query
+
+components:
+  schemas:
+    Department:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID of the department
+        name:
+          type: string
+          description: Name of the department
+        municipalities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Municipality'
+
+    Municipality:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID of the municipality
+        name:
+          type: string
+          description: Name of the municipality
+        institutions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Institution'
+
+    Institution:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID of the institution
+        name:
+          type: string
+          description: Name of the institution
+        period:
+          type: string
+          description: Reporting period
+        type:
+          type: string
+          enum: 
+            - SABER11
+            - SABERPRO
+          description: Institution's report type (SABER11 or SABERPRO)
+        info:
+          $ref: '#/components/schemas/InstitutionInfo'
+        students:
+          type: array
+          items:
+            $ref: '#/components/schemas/Student'
+
+    InstitutionInfo:
+      type: object
+      properties:
+        isBilingual:
+          type: boolean
+          description: Indicates if the institution is bilingual
+
+    Student:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID of the student
+        genre:
+          type: string
+          enum: 
+            - Female
+            - Male
+            - Other
+          description: Gender of the student
+        results:
+          oneOf:
+            - $ref: '#/components/schemas/Saber11Results'
+            - $ref: '#/components/schemas/SaberProResults'
+
+    Saber11Results:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the Saber11 results
+        PUNT_ENGLISH:
+          type: number
+          description: English score
+        PUNT_MATHEMATICS:
+          type: number
+          description: Mathematics score
+        PUNT_SOCIAL_CITIZENSHIP:
+          type: number
+          description: Social citizenship score
+        PUNT_NATURAL_SCIENCES:
+          type: number
+          description: Natural sciences score
+        PUNT_CRITICAL_READING:
+          type: number
+          description: Critical reading score
+        PUNT_GLOBAL:
+          type: number
+          description: Global score
+
+    SaberProResults:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the SaberPro results
+        MOD_QUANTITATIVE_REASONING:
+          type: number
+          description: Quantitative reasoning module score
+        MOD_WRITTEN_COMMUNICATION:
+          type: number
+          description: Written communication module score
+        MOD_CRITICAL_READING:
+          type: number
+          description: Critical reading module score
+        MOD_ENGLISH:
+          type: number
+          description: English module score
+        MOD_CITIZENSHIP_COMPETENCES:
+          type: number
+          description: Citizenship competences module score
+
+externalDocs:
+  description: Links for querying data
+  url: https://www.datos.gov.co/Educaci-n/Resultados-nicos-Saber-11/kgxf-xxbe/about_data
