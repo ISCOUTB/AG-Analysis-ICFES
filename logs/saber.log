@@ -147,3 +147,56 @@
 [ INFO ] [ 2024-09-18 20:07:33,926 ] [ seed ] ( parse_students ) running threads
 [ INFO ] [ 2024-09-18 20:09:21,398 ] [ seed ] ( parse_students ) finished
 [ INFO ] [ 2024-09-18 20:09:21,461 ] [ seed ] ( handle ) Finished execution
+[ INFO ] [ 2024-09-19 19:36:20,473 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 19:36:31,323 ] [ create_json ] ( handle ) init 
+[ CRITICAL ] [ 2024-09-19 19:36:31,324 ] [ create_json ] ( handle ) :student_type param is [ Required ]
+[ INFO ] [ 2024-09-19 19:56:30,898 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 19:59:17,373 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 19:59:17,374 ] [ create_json ] ( handle_places ) run
+[ INFO ] [ 2024-09-19 19:59:17,374 ] [ create_json ] ( handle_places ) creating objects
+[ INFO ] [ 2024-09-19 19:59:17,596 ] [ create_json ] ( handle_places ) iterating
+[ INFO ] [ 2024-09-19 19:59:38,537 ] [ create_json ] ( handle_places ) exporting 
+[ INFO ] [ 2024-09-19 19:59:38,550 ] [ create_json ] ( handle ) finish
+[ INFO ] [ 2024-09-19 20:03:20,918 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 20:03:20,918 ] [ create_json ] ( handle_places ) run
+[ INFO ] [ 2024-09-19 20:03:20,918 ] [ create_json ] ( handle_places ) creating objects
+[ INFO ] [ 2024-09-19 20:03:21,119 ] [ create_json ] ( handle_places ) iterating
+[ INFO ] [ 2024-09-19 20:03:41,224 ] [ create_json ] ( handle_places ) exporting 
+[ INFO ] [ 2024-09-19 20:03:41,235 ] [ create_json ] ( handle ) finish
+[ INFO ] [ 2024-09-19 20:04:39,421 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 20:04:39,421 ] [ create_json ] ( handle_places ) run
+[ INFO ] [ 2024-09-19 20:04:39,421 ] [ create_json ] ( handle_places ) creating objects
+[ INFO ] [ 2024-09-19 20:04:39,622 ] [ create_json ] ( handle_places ) iterating
+[ INFO ] [ 2024-09-19 20:04:59,180 ] [ create_json ] ( handle_places ) exporting 
+[ INFO ] [ 2024-09-19 20:04:59,191 ] [ create_json ] ( handle ) finish
+[ INFO ] [ 2024-09-19 20:21:38,630 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 20:21:38,630 ] [ create_json ] ( handle_places ) run
+[ INFO ] [ 2024-09-19 20:21:38,631 ] [ create_json ] ( handle_places ) creating objects
+[ INFO ] [ 2024-09-19 20:21:38,826 ] [ create_json ] ( handle_places ) iterating
+[ INFO ] [ 2024-09-19 20:21:58,904 ] [ create_json ] ( handle_places ) exporting 
+[ INFO ] [ 2024-09-19 20:21:58,935 ] [ create_json ] ( handle ) finish
+[ INFO ] [ 2024-09-19 23:01:45,443 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 23:01:45,444 ] [ create_json ] ( handle_places ) run
+[ INFO ] [ 2024-09-19 23:01:45,444 ] [ create_json ] ( handle_places ) creating objects
+[ INFO ] [ 2024-09-19 23:01:45,552 ] [ create_json ] ( handle_places ) iterating
+[ INFO ] [ 2024-09-19 23:01:56,461 ] [ create_json ] ( handle_places ) exporting 
+[ INFO ] [ 2024-09-19 23:01:56,489 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 23:02:06,905 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 23:02:06,905 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 23:02:06,905 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 23:02:35,639 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 23:02:35,639 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 23:02:35,639 ] [ create_json ] ( handle_students ) ( saber11 ) creating objects
+[ INFO ] [ 2024-09-19 23:02:35,717 ] [ create_json ] ( handle_students ) ( saber11 ) iterating
+[ INFO ] [ 2024-09-19 23:04:19,712 ] [ create_json ] ( handle_places ) exporting 
+[ INFO ] [ 2024-09-19 23:04:43,817 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 23:38:53,228 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 23:38:53,228 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 23:38:53,228 ] [ create_json ] ( process_students ) run
+[ INFO ] [ 2024-09-19 23:38:53,228 ] [ create_json ] ( process_students ) creating objects
+[ INFO ] [ 2024-09-19 23:38:53,314 ] [ create_json ] ( process_students ) iterating 
+[ INFO ] [ 2024-09-20 00:05:28,396 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-20 00:05:28,396 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-20 00:05:28,396 ] [ create_json ] ( process_students ) run
+[ INFO ] [ 2024-09-20 00:05:28,396 ] [ create_json ] ( process_students ) creating objects
+[ INFO ] [ 2024-09-20 00:06:57,396 ] [ create_json ] ( process_students ) iterating 
