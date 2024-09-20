@@ -67,48 +67,87 @@ class Command(BaseCommand):
 
     # + -------------------------------------------------------------------------------|>
 
-    def process_students(self, school_model: Highschool | College,
-                         student_model: HighschoolStudent | CollegeStudent,
-                         type: Literal['Saber11', 'SaberPro'], data_fields: list[str]) -> None:
-        logger.info('( process_students ) run')
-
-        logger.info('( process_students ) creating objects')
-        students = {s.pk: s for s in student_model.objects.all()}
-
-        os.makedirs(os.path.join(self.DATA_DIR, "students"), exist_ok=True)
-
-        logger.info('( process_students ) iterating ')
-
-        def process_chunk(chunk: Dict[Any, HighschoolStudent | CollegeStudent], chunk_index: int):
-            chunk_data = {}
-             
-            self.export(json_object=chunk_data, file_name=os.path.join(
-                'students', f'{type}_{chunk_index}.json'))
-
-        num_chunks: int = os.cpu_count()
-        chunk_size: int = 10000
-        chunks = np.array_split(list(students.items()),
-                                np.ceil(len(students) / chunk_size))
-
-        with ThreadPoolExecutor(max_workers=num_chunks) as executor:
-            futures = [
-                executor.submit(process_chunk, dict(chunk), i) for i, chunk in enumerate(chunks)
-            ]
-            for future in futures:
-                future.result()
-
     def handle_students(self, type: Literal['Saber11', 'SaberPro']) -> None:
         logger.info('( handle_students ) run')
 
         if type == 'Saber11':
-            self.process_students(school_model=Highschool, student_model=HighschoolStudent, type='Saber11', data_fields=[
-                                  'PUNT_CRITICAL_READING', 'PUNT_ENGLISH', 'PUNT_GLOBAL', 'PUNT_MATHEMATICS', 'PUNT_NATURAL_SCIENCES', 'PUNT_SOCIAL_CITIZENSHIP'])
+            schools = {h.name: h for h in Highschool.objects.all()}
+
+            os.makedirs(os.path.join(self.DATA_DIR, type), exist_ok=True)
+
+            def process_chunk_saber11(chunk: Dict[Any, Highschool], chunk_index: int) -> None:
+                json_object = {}
+
+                for institution in chunk.values():
+                    json_object[institution.name] = []
+
+                    for student in HighschoolStudent.objects.filter(highschool=institution):
+                        json_object[institution.name].append({
+                            'data': {
+                                'PUNT_ENGLISH': student.PUNT_ENGLISH,
+                                'PUNT_MATHEMATICS': student.PUNT_MATHEMATICS,
+                                'PUNT_SOCIAL_CITIZENSHIP': student.PUNT_SOCIAL_CITIZENSHIP,
+                                'PUNT_NATURAL_SCIENCES': student.PUNT_NATURAL_SCIENCES,
+                                'PUNT_CRITICAL_READING': student.PUNT_CRITICAL_READING,
+                                'PUNT_GLOBAL': student.PUNT_GLOBAL,
+                            },
+                            'highschool_id': institution.pk
+                        })
+
+                self.export(json_object=json_object, file_name=os.path.join(
+                    type, f'{type}_{chunk_index}.json'))
+
+            num_workers: int | None = os.cpu_count()
+            chunks = np.array_split(
+                list(schools.items()), np.ceil(len(schools) / num_workers * 8))
+
+            with ThreadPoolExecutor(max_workers=num_workers) as executor:
+                futures = [
+                    executor.submit(process_chunk_saber11, dict(chunk_tuple), i) for i, chunk_tuple in enumerate(chunks)
+                ]
+
+                for future in futures:
+                    future.result()
 
             return
 
         if type == 'SaberPro':
-            self.process_students(school_model=College, student_model=CollegeStudent, type='SaberPro', data_fields=[
-                'MOD_CITIZENSHIP_COMPETENCES', 'MOD_CRITICAL_READING', 'MOD_ENGLISH', 'MOD_WRITTEN_COMMUNICATION', 'MOD_QUANTITATIVE_REASONING'])
+            schools = {h.name: h for h in College.objects.all()}
+
+            os.makedirs(os.path.join(self.DATA_DIR, type), exist_ok=True)
+
+            def process_chunk_saber11(chunk: Dict[Any, College], chunk_index: int) -> None:
+                json_object = {}
+
+                for institution in chunk.values():
+                    json_object[institution.name] = []
+
+                    for student in CollegeStudent.objects.filter(college=institution):
+                        json_object[institution.name].append({
+                            'data': {
+                                'MOD_CITIZENSHIP_COMPETENCES': student.MOD_CITIZENSHIP_COMPETENCES,
+                                'MOD_CRITICAL_READING': student.MOD_CRITICAL_READING,
+                                'MOD_ENGLISH': student.MOD_ENGLISH,
+                                'MOD_QUANTITATIVE_REASONING': student.MOD_QUANTITATIVE_REASONING,
+                                'MOD_WRITTEN_COMMUNICATION': student.MOD_WRITTEN_COMMUNICATION,
+                            },
+                            'college_id': institution.pk
+                        })
+
+                self.export(json_object=json_object, file_name=os.path.join(
+                    type, f'{type}_{chunk_index}.json'))
+
+            num_workers: int | None = os.cpu_count()
+            chunks = np.array_split(
+                list(schools.items()), np.ceil(len(schools) / num_workers * 4))
+
+            with ThreadPoolExecutor(max_workers=num_workers) as executor:
+                futures = [
+                    executor.submit(process_chunk_saber11, dict(chunk_tuple), i) for i, chunk_tuple in enumerate(chunks)
+                ]
+
+                for future in futures:
+                    future.result()
 
             return
 

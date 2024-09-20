@@ -200,3 +200,162 @@
 [ INFO ] [ 2024-09-20 00:05:28,396 ] [ create_json ] ( process_students ) run
 [ INFO ] [ 2024-09-20 00:05:28,396 ] [ create_json ] ( process_students ) creating objects
 [ INFO ] [ 2024-09-20 00:06:57,396 ] [ create_json ] ( process_students ) iterating 
+[ INFO ] [ 2024-09-19 20:40:07,537 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 20:40:07,538 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 20:40:07,538 ] [ create_json ] ( process_students ) run
+[ INFO ] [ 2024-09-19 20:40:07,538 ] [ create_json ] ( process_students ) creating objects
+[ INFO ] [ 2024-09-19 20:42:53,382 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 20:42:53,383 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 20:42:53,383 ] [ create_json ] ( process_students ) run
+[ INFO ] [ 2024-09-19 20:42:53,383 ] [ create_json ] ( process_students ) creating objects
+[ INFO ] [ 2024-09-19 20:43:21,480 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 20:43:21,480 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 20:43:21,480 ] [ create_json ] ( process_students ) run
+[ INFO ] [ 2024-09-19 20:43:21,480 ] [ create_json ] ( process_students ) creating objects
+[ INFO ] [ 2024-09-19 20:44:19,698 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 20:44:19,698 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 20:44:19,698 ] [ create_json ] ( process_students ) run
+[ INFO ] [ 2024-09-19 20:44:19,698 ] [ create_json ] ( process_students ) creating objects
+[ INFO ] [ 2024-09-19 20:45:05,715 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 20:45:05,715 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 20:45:05,715 ] [ create_json ] ( process_students ) run
+[ INFO ] [ 2024-09-19 20:45:05,715 ] [ create_json ] ( process_students ) creating objects
+[ INFO ] [ 2024-09-19 20:45:07,962 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 20:51:08,788 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 20:51:08,788 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 20:51:08,788 ] [ create_json ] ( process_students ) run
+[ INFO ] [ 2024-09-19 20:51:08,788 ] [ create_json ] ( process_students ) creating objects
+[ INFO ] [ 2024-09-19 20:57:20,994 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 20:57:20,995 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 20:57:20,995 ] [ create_json ] ( process_students ) run
+[ INFO ] [ 2024-09-19 20:57:20,995 ] [ create_json ] ( process_students ) creating objects
+[ INFO ] [ 2024-09-19 20:57:23,052 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 20:58:40,343 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 20:58:40,343 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 20:58:40,343 ] [ create_json ] ( process_students ) run
+[ INFO ] [ 2024-09-19 20:58:40,343 ] [ create_json ] ( process_students ) creating objects
+[ INFO ] [ 2024-09-19 20:58:42,408 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 20:59:24,124 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 20:59:24,124 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 20:59:24,124 ] [ create_json ] ( process_students ) run
+[ INFO ] [ 2024-09-19 20:59:24,124 ] [ create_json ] ( process_students ) creating objects
+[ INFO ] [ 2024-09-19 20:59:26,189 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 21:00:25,116 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:00:25,117 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:00:25,117 ] [ create_json ] ( process_students ) run
+[ INFO ] [ 2024-09-19 21:00:25,117 ] [ create_json ] ( process_students ) creating objects
+[ INFO ] [ 2024-09-19 21:00:27,392 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 21:06:32,978 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:06:32,978 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:07:17,610 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:07:17,611 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:10:49,591 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:10:49,592 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:11:23,216 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:11:23,216 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:11:23,964 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 21:11:47,309 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:11:47,309 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:11:48,051 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 21:14:55,183 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:16:51,719 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:16:51,719 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:17:38,442 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:17:38,443 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:18:08,489 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:18:08,489 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:19:05,825 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:19:05,825 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:20:35,408 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:20:35,408 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:20:37,637 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 21:21:03,540 ] [ seed ] ( handle ) Init
+[ CRITICAL ] [ 2024-09-19 21:21:03,540 ] [ seed ] ( handle ) File not found
+[ INFO ] [ 2024-09-19 21:23:40,268 ] [ seed ] ( handle ) Init
+[ INFO ] [ 2024-09-19 21:23:40,268 ] [ seed ] ( handle ) File selected
+[ INFO ] [ 2024-09-19 21:23:40,268 ] [ seed ] ( clean_dataframe ) run
+[ INFO ] [ 2024-09-19 21:23:40,269 ] [ seed ] ( clean_dataframe ) Reading Dataframe
+[ INFO ] [ 2024-09-19 21:23:49,772 ] [ seed ] ( clean_dataframe ) Cleaning some values
+[ INFO ] [ 2024-09-19 21:23:52,647 ] [ seed ] ( clean_dataframe ) Exporting
+[ INFO ] [ 2024-09-19 21:24:02,477 ] [ seed ] ( add_departments ) run
+[ INFO ] [ 2024-09-19 21:24:02,477 ] [ seed ] ( add_departments ) Adding the Departments
+[ INFO ] [ 2024-09-19 21:24:02,551 ] [ seed ] ( handle ) Reading cleaned data
+[ INFO ] [ 2024-09-19 21:24:08,290 ] [ seed ] ( fill ) run
+[ INFO ] [ 2024-09-19 21:24:08,291 ] [ seed ] ( fill_municipalities ) run
+[ INFO ] [ 2024-09-19 21:24:08,304 ] [ seed ] ( fill_colleges ) run
+[ INFO ] [ 2024-09-19 21:24:08,317 ] [ seed ] ( fill_periods ) run
+[ INFO ] [ 2024-09-19 21:24:08,608 ] [ seed ] ( parse_municipalities ) run
+[ INFO ] [ 2024-09-19 21:24:08,608 ] [ seed ] ( parse_institutions ) run
+[ INFO ] [ 2024-09-19 21:24:08,642 ] [ seed ] ( parse_municipalities ) finished
+[ INFO ] [ 2024-09-19 21:24:24,235 ] [ seed ] ( parse_institutions ) finished
+[ INFO ] [ 2024-09-19 21:24:24,235 ] [ seed ] ( parse_students ) run
+[ INFO ] [ 2024-09-19 21:24:24,235 ] [ seed ] ( parse_students ) removing previous students
+[ INFO ] [ 2024-09-19 21:24:24,237 ] [ seed ] ( parse_students ) creating objects
+[ INFO ] [ 2024-09-19 21:24:24,240 ] [ seed ] ( parse_students ) creating threads
+[ INFO ] [ 2024-09-19 21:24:24,240 ] [ seed ] ( parse_students ) running threads
+[ INFO ] [ 2024-09-19 21:25:34,769 ] [ seed ] ( parse_students ) finished
+[ INFO ] [ 2024-09-19 21:25:34,791 ] [ seed ] ( handle ) Finished execution
+[ INFO ] [ 2024-09-19 21:26:24,762 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:26:24,762 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:26:34,139 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 21:28:35,585 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:28:35,585 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:28:45,559 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 21:29:18,919 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:29:18,919 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:29:28,737 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 21:30:31,300 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:30:31,301 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:30:41,884 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 21:32:34,530 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:32:34,531 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:32:44,654 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 21:34:36,273 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:34:36,273 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:34:45,775 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 21:35:47,398 ] [ seed ] ( handle ) Init
+[ INFO ] [ 2024-09-19 21:35:47,398 ] [ seed ] ( handle ) File selected
+[ INFO ] [ 2024-09-19 21:35:47,399 ] [ seed ] ( clean_dataframe ) run
+[ INFO ] [ 2024-09-19 21:35:47,399 ] [ seed ] ( clean_dataframe ) Reading Dataframe
+[ INFO ] [ 2024-09-19 21:39:26,726 ] [ seed ] ( handle ) Init
+[ INFO ] [ 2024-09-19 21:39:26,726 ] [ seed ] ( handle ) File selected
+[ INFO ] [ 2024-09-19 21:39:26,726 ] [ seed ] ( clean_dataframe ) run
+[ INFO ] [ 2024-09-19 21:39:26,726 ] [ seed ] ( clean_dataframe ) Reading Dataframe
+[ INFO ] [ 2024-09-19 21:40:45,505 ] [ seed ] ( handle ) Init
+[ INFO ] [ 2024-09-19 21:40:45,505 ] [ seed ] ( handle ) File selected
+[ INFO ] [ 2024-09-19 21:40:45,507 ] [ seed ] ( clean_dataframe ) run
+[ INFO ] [ 2024-09-19 21:40:45,507 ] [ seed ] ( clean_dataframe ) Reading Dataframe
+[ INFO ] [ 2024-09-19 21:41:33,433 ] [ seed ] ( clean_dataframe ) Cleaning some values
+[ INFO ] [ 2024-09-19 21:41:49,663 ] [ seed ] ( clean_dataframe ) Exporting
+[ INFO ] [ 2024-09-19 21:42:32,793 ] [ seed ] ( add_departments ) run
+[ INFO ] [ 2024-09-19 21:42:32,793 ] [ seed ] ( add_departments ) Adding the Departments
+[ INFO ] [ 2024-09-19 21:42:32,877 ] [ seed ] ( handle ) Reading cleaned data
+[ INFO ] [ 2024-09-19 21:42:54,793 ] [ seed ] ( fill ) run
+[ INFO ] [ 2024-09-19 21:42:54,793 ] [ seed ] ( fill_municipalities ) run
+[ INFO ] [ 2024-09-19 21:42:54,818 ] [ seed ] ( fill_highschools ) run
+[ INFO ] [ 2024-09-19 21:42:54,855 ] [ seed ] ( fill_periods ) run
+[ INFO ] [ 2024-09-19 21:43:00,615 ] [ seed ] ( parse_municipalities ) run
+[ INFO ] [ 2024-09-19 21:43:00,615 ] [ seed ] ( parse_institutions ) run
+[ INFO ] [ 2024-09-19 21:43:00,646 ] [ seed ] ( parse_municipalities ) finished
+[ INFO ] [ 2024-09-19 21:43:00,647 ] [ seed ] ( parse_institutions ) finished
+[ INFO ] [ 2024-09-19 21:43:00,647 ] [ seed ] ( parse_students ) run
+[ INFO ] [ 2024-09-19 21:43:00,647 ] [ seed ] ( parse_students ) removing previous students
+[ INFO ] [ 2024-09-19 21:43:00,650 ] [ seed ] ( parse_students ) creating objects
+[ INFO ] [ 2024-09-19 21:43:00,681 ] [ seed ] ( parse_students ) creating threads
+[ INFO ] [ 2024-09-19 21:43:00,681 ] [ seed ] ( parse_students ) running threads
+[ INFO ] [ 2024-09-19 21:49:22,883 ] [ seed ] ( parse_students ) finished
+[ INFO ] [ 2024-09-19 21:49:22,962 ] [ seed ] ( handle ) Finished execution
+[ INFO ] [ 2024-09-19 21:49:49,374 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:49:49,374 ] [ create_json ] ( handle_periods ) run
+[ INFO ] [ 2024-09-19 21:49:49,375 ] [ create_json ] ( handle_periods ) creating objects 
+[ INFO ] [ 2024-09-19 21:49:49,415 ] [ create_json ] ( handle_periods ) exporting
+[ INFO ] [ 2024-09-19 21:49:49,415 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 21:49:56,150 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:49:56,151 ] [ create_json ] ( handle_places ) run
+[ INFO ] [ 2024-09-19 21:49:56,151 ] [ create_json ] ( handle_places ) creating objects
+[ INFO ] [ 2024-09-19 21:49:56,230 ] [ create_json ] ( handle_places ) iterating
+[ INFO ] [ 2024-09-19 21:50:07,101 ] [ create_json ] ( handle_places ) exporting 
+[ INFO ] [ 2024-09-19 21:50:07,133 ] [ create_json ] ( handle ) finished
+[ INFO ] [ 2024-09-19 21:50:20,219 ] [ create_json ] ( handle ) init 
+[ INFO ] [ 2024-09-19 21:50:20,219 ] [ create_json ] ( handle_students ) run
+[ INFO ] [ 2024-09-19 21:51:16,987 ] [ create_json ] ( handle ) finished
