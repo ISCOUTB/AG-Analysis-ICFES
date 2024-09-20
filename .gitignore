@@ -3,6 +3,7 @@
 # be uploaded to GitHub
 # -------------------------------------------------------------------------------------------
 data/*.csv
+data/**/*.json
 .venv
 apps/backend/venv
 __pycache__
