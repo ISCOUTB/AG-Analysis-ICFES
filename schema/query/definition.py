@@ -27,11 +27,18 @@ class Query(graphene.ObjectType):
     # Municipality
     # -----------------------------------------------------------------------------|>
 
-    municipalities = graphene.List(types.MunicipalityType)
+    municipalities = graphene.List(
+        types.MunicipalityType, department_id=graphene.ID(default_value=None))
     municipality = graphene.Field(types.MunicipalityType, id=graphene.ID())
 
-    def resolve_municipalities(self, info):
-        return saber_models.Municipality.objects.all()
+    def resolve_municipalities(self, info, department_id=None):
+        if department_id is None:
+            return saber_models.Municipality.objects.all()
+        try:
+            department = saber_models.Department.objects.get(pk=department_id)
+            return saber_models.Municipality.objects.filter(department=department)
+        except ObjectDoesNotExist:
+            raise DepartmentNotFoundError(id=str(department_id))
 
     def resolve_municipality(self, info, id):
         try:
@@ -43,11 +50,20 @@ class Query(graphene.ObjectType):
     # Highschool
     # -----------------------------------------------------------------------------|>
 
-    highschools = graphene.List(types.HighschoolType)
+    highschools = graphene.List(
+        types.HighschoolType, municipality_id=graphene.ID(default_value=None))
     highschool = graphene.Field(types.HighschoolType, id=graphene.ID())
 
-    def resolve_highschools(self, info):
-        return saber_models.Highschool.objects.all()
+    def resolve_highschools(self, info, municipality_id=None):
+        if municipality_id is None:
+            return saber_models.Highschool.objects.all()
+
+        try:
+            municipality = saber_models.Municipality.objects.get(
+                pk=municipality_id)
+            return saber_models.Highschool.objects.filter(municipality=municipality)
+        except ObjectDoesNotExist:
+            raise MunicipalityNotFoundError(id=str(municipality_id))
 
     def resolve_highschool(self, info, id):
         try:
@@ -59,11 +75,20 @@ class Query(graphene.ObjectType):
     # College
     # -----------------------------------------------------------------------------|>
 
-    colleges = graphene.List(types.CollegeType)
+    colleges = graphene.List(
+        types.CollegeType, municipality_id=graphene.ID(default_value=None))
     college = graphene.Field(types.CollegeType, id=graphene.ID())
 
-    def resolve_colleges(self, info):
-        return saber_models.College.objects.all()
+    def resolve_colleges(self, info, municipality_id=None):
+        if municipality_id is None:
+            return saber_models.College.objects.all()
+
+        try:
+            municipality = saber_models.Municipality.objects.get(
+                pk=municipality_id)
+            return saber_models.College.objects.filter(municipality=municipality)
+        except ObjectDoesNotExist:
+            raise MunicipalityNotFoundError(id=str(municipality_id))
 
     def resolve_college(self, info, id):
         try:
