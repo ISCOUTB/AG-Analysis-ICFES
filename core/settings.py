@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'saber',
+    'user',
     'graphene_django'
 ]
 
@@ -80,7 +81,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'AG-Analysis-Saber-Backend',
+        'NAME': 'AG-Analysis-Icfes',
         'USER': 'postgres',
         'PASSWORD': 'root',
         'HOST': 'localhost',

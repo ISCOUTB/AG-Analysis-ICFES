@@ -55,12 +55,12 @@ class Command(BaseCommand):
                     for highschool_name, highschool in highschools.items():
                         if highschool.municipality == municipality:
                             json_object[department_name][municipality_name]['highschools'].append(
-                                {'name': highschool_name, 'id': highschool.pk})
+                                highschool_name)
 
                     for college_name, college in colleges.items():
                         if college.municipality == municipality:
                             json_object[department_name][municipality_name]['colleges'].append(
-                                {'name': college_name, 'id': college.pk})
+                                college_name)
 
         logger.info('( handle_places ) exporting ')
         self.export(json_object=json_object, file_name='places.json')
@@ -81,7 +81,7 @@ class Command(BaseCommand):
                 for institution in chunk.values():
                     json_object[institution.name] = []
 
-                    for student in HighschoolStudent.objects.filter(highschool=institution):
+                    for student in HighschoolStudent.objects.filter(highschool=institution).select_related('period'):
                         json_object[institution.name].append({
                             'data': {
                                 'PUNT_ENGLISH': student.PUNT_ENGLISH,
@@ -91,7 +91,8 @@ class Command(BaseCommand):
                                 'PUNT_CRITICAL_READING': student.PUNT_CRITICAL_READING,
                                 'PUNT_GLOBAL': student.PUNT_GLOBAL,
                             },
-                            'highschool_id': institution.pk
+                            'period': student.period.label,
+                            'genre': student.genre
                         })
 
                 self.export(json_object=json_object, file_name=os.path.join(
@@ -122,7 +123,7 @@ class Command(BaseCommand):
                 for institution in chunk.values():
                     json_object[institution.name] = []
 
-                    for student in CollegeStudent.objects.filter(college=institution):
+                    for student in CollegeStudent.objects.filter(college=institution).select_related('period'):
                         json_object[institution.name].append({
                             'data': {
                                 'MOD_CITIZENSHIP_COMPETENCES': student.MOD_CITIZENSHIP_COMPETENCES,
@@ -131,7 +132,8 @@ class Command(BaseCommand):
                                 'MOD_QUANTITATIVE_REASONING': student.MOD_QUANTITATIVE_REASONING,
                                 'MOD_WRITTEN_COMMUNICATION': student.MOD_WRITTEN_COMMUNICATION,
                             },
-                            'college_id': institution.pk
+                            'period': student.period.label,
+                            'genre': student.genre
                         })
 
                 self.export(json_object=json_object, file_name=os.path.join(
