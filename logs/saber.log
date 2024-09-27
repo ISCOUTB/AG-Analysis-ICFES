@@ -1,0 +1,56 @@
+[ INFO ] [ 2024-09-26 16:29:51,744 ] [ seed ] ( handle ) Init
+[ INFO ] [ 2024-09-26 16:29:51,745 ] [ seed ] ( handle ) File selected
+[ INFO ] [ 2024-09-26 16:29:51,745 ] [ seed ] ( clean_dataframe ) run
+[ INFO ] [ 2024-09-26 16:29:51,745 ] [ seed ] ( clean_dataframe ) Reading Dataframe
+[ INFO ] [ 2024-09-26 16:30:47,353 ] [ seed ] ( clean_dataframe ) Cleaning some values
+[ INFO ] [ 2024-09-26 16:31:00,071 ] [ seed ] ( clean_dataframe ) Exporting
+[ INFO ] [ 2024-09-26 16:31:38,647 ] [ seed ] ( add_departments ) run
+[ INFO ] [ 2024-09-26 16:31:38,647 ] [ seed ] ( add_departments ) Adding the Departments
+[ INFO ] [ 2024-09-26 16:32:56,364 ] [ seed ] ( handle ) Init
+[ INFO ] [ 2024-09-26 16:32:56,364 ] [ seed ] ( handle ) File selected
+[ INFO ] [ 2024-09-26 16:32:56,364 ] [ seed ] ( clean_dataframe ) run
+[ INFO ] [ 2024-09-26 16:32:56,365 ] [ seed ] ( clean_dataframe ) Reading Dataframe
+[ INFO ] [ 2024-09-26 16:33:41,579 ] [ seed ] ( clean_dataframe ) Cleaning some values
+[ INFO ] [ 2024-09-26 16:33:54,186 ] [ seed ] ( clean_dataframe ) Exporting
+[ INFO ] [ 2024-09-26 16:34:35,884 ] [ seed ] ( add_departments ) run
+[ INFO ] [ 2024-09-26 16:34:35,885 ] [ seed ] ( add_departments ) Adding the Departments
+[ INFO ] [ 2024-09-26 16:34:36,453 ] [ seed ] ( handle ) Reading cleaned data
+[ INFO ] [ 2024-09-26 16:34:58,143 ] [ seed ] ( fill ) run
+[ INFO ] [ 2024-09-26 16:34:58,144 ] [ seed ] ( fill_municipalities ) run
+[ INFO ] [ 2024-09-26 16:34:58,144 ] [ seed ] ( fill_highschools ) run
+[ INFO ] [ 2024-09-26 16:34:58,242 ] [ seed ] ( fill_periods ) run
+[ INFO ] [ 2024-09-26 16:35:06,015 ] [ seed ] ( parse_municipalities ) run
+[ INFO ] [ 2024-09-26 16:35:06,015 ] [ seed ] ( parse_institutions ) run
+[ INFO ] [ 2024-09-26 16:37:37,780 ] [ seed ] ( parse_municipalities ) finished
+[ INFO ] [ 2024-09-26 16:38:00,998 ] [ seed ] ( parse_institutions ) finished
+[ INFO ] [ 2024-09-26 16:38:00,999 ] [ seed ] ( parse_students ) run
+[ INFO ] [ 2024-09-26 16:38:00,999 ] [ seed ] ( parse_students ) removing previous students
+[ INFO ] [ 2024-09-26 16:38:01,002 ] [ seed ] ( parse_students ) creating objects
+[ INFO ] [ 2024-09-26 16:38:01,042 ] [ seed ] ( parse_students ) creating threads
+[ INFO ] [ 2024-09-26 16:38:01,042 ] [ seed ] ( parse_students ) running threads
+[ INFO ] [ 2024-09-26 16:44:27,294 ] [ seed ] ( parse_students ) finished
+[ INFO ] [ 2024-09-26 16:44:27,373 ] [ seed ] ( handle ) Finished execution
+[ INFO ] [ 2024-09-26 16:44:39,517 ] [ seed ] ( handle ) Init
+[ INFO ] [ 2024-09-26 16:44:39,517 ] [ seed ] ( handle ) File selected
+[ INFO ] [ 2024-09-26 16:44:39,517 ] [ seed ] ( clean_dataframe ) run
+[ INFO ] [ 2024-09-26 16:44:39,517 ] [ seed ] ( clean_dataframe ) Reading Dataframe
+[ INFO ] [ 2024-09-26 16:44:49,995 ] [ seed ] ( clean_dataframe ) Cleaning some values
+[ INFO ] [ 2024-09-26 16:44:52,882 ] [ seed ] ( clean_dataframe ) Exporting
+[ INFO ] [ 2024-09-26 16:45:01,761 ] [ seed ] ( add_departments ) run
+[ INFO ] [ 2024-09-26 16:45:01,761 ] [ seed ] ( add_departments ) Adding the Departments
+[ INFO ] [ 2024-09-26 16:45:01,808 ] [ seed ] ( handle ) Reading cleaned data
+[ INFO ] [ 2024-09-26 16:45:07,220 ] [ seed ] ( fill ) run
+[ INFO ] [ 2024-09-26 16:45:07,221 ] [ seed ] ( fill_municipalities ) run
+[ INFO ] [ 2024-09-26 16:45:07,221 ] [ seed ] ( fill_colleges ) run
+[ INFO ] [ 2024-09-26 16:45:07,245 ] [ seed ] ( fill_periods ) run
+[ INFO ] [ 2024-09-26 16:45:07,693 ] [ seed ] ( parse_municipalities ) run
+[ INFO ] [ 2024-09-26 16:45:07,693 ] [ seed ] ( parse_institutions ) run
+[ INFO ] [ 2024-09-26 16:45:07,723 ] [ seed ] ( parse_municipalities ) finished
+[ INFO ] [ 2024-09-26 16:45:22,479 ] [ seed ] ( parse_institutions ) finished
+[ INFO ] [ 2024-09-26 16:45:22,479 ] [ seed ] ( parse_students ) run
+[ INFO ] [ 2024-09-26 16:45:22,479 ] [ seed ] ( parse_students ) removing previous students
+[ INFO ] [ 2024-09-26 16:45:22,481 ] [ seed ] ( parse_students ) creating objects
+[ INFO ] [ 2024-09-26 16:45:22,485 ] [ seed ] ( parse_students ) creating threads
+[ INFO ] [ 2024-09-26 16:45:22,485 ] [ seed ] ( parse_students ) running threads
+[ INFO ] [ 2024-09-26 16:46:30,225 ] [ seed ] ( parse_students ) finished
+[ INFO ] [ 2024-09-26 16:46:30,250 ] [ seed ] ( handle ) Finished execution

@@ -150,6 +150,28 @@ class Query(graphene.ObjectType):
         )
 
     # -----------------------------------------------------------------------------|>
+    # Periods
+    # -----------------------------------------------------------------------------|>
+
+    periods = graphene.List(
+        types.PeriodType, type=graphene.String(default_value='Saber11'))
+
+    def resolve_periods(self, info, type: Literal['Saber11', 'SaberPro']):
+        if type == 'Saber11':
+            periods_id = saber_models.HighschoolStudent.objects.values_list(
+                'period', flat=True).distinct()
+
+            return saber_models.Period.objects.filter(id__in=periods_id)
+
+        if type == 'SaberPro':
+            periods_id = saber_models.CollegeStudent.objects.values_list(
+                'period', flat=True).distinct()
+
+            return saber_models.Period.objects.filter(id__in=periods_id)
+
+        return saber_models.Period.objects.all()
+
+    # -----------------------------------------------------------------------------|>
     # Misc
     # -----------------------------------------------------------------------------|>
 
