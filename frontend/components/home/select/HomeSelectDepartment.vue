@@ -14,6 +14,7 @@
     function handleSelect(payload: string) {
         analysisStore.setDepartment(payload);
         analysisStore.clear("municipality");
+        analysisStore.clear("institution");
     }
 </script>
 

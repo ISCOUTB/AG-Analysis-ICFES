@@ -39,4 +39,21 @@ export default defineNuxtConfig({
     imports: {
         dirs: ["composables/**"],
     },
+    runtimeConfig: {
+        oauth: {
+            github: {
+                clientId: process.env.GITHUB_CLIENT_ID,
+                clientSecret: process.env.GITHUB_CLIENT_SECRET,
+            },
+            google: {
+                clientId: process.env.GOOGLE_CLIENT_ID,
+                clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            },
+        },
+        sessionPassword: process.env.NUXT_SESSION_PASSWORD,
+        databaseURL: process.env.DATABASE_URL,
+        public: {
+            GQL_HOST: process.env.GQL_HOST,
+        },
+    },
 });

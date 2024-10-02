@@ -11,6 +11,7 @@
 
         analysisStore.setReportType(value);
         analysisStore.clear("period");
+        analysisStore.clear("institution");
     }
 </script>
 
