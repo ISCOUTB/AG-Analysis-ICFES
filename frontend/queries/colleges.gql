@@ -1,0 +1,6 @@
+query colleges($municipalityId: ID!) {
+    colleges(municipalityId: $municipalityId) {
+        id
+        name
+    }
+}

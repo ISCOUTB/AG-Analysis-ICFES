@@ -1,0 +1,4 @@
+<template>
+    <LayoutNavbar />
+    <slot />
+</template>

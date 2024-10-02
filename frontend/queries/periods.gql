@@ -1,0 +1,6 @@
+query periods($type: String!) {
+    periods(type: $type) {
+        label
+        id
+    }
+}
