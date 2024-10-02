@@ -1,18 +1,7 @@
-export enum ReportType {
-    SABER11 = "SABER11",
-    SABERPRO = "SABERPRO",
-}
-
-interface State {
-    department: string;
-    municipality: string;
-    institution: string;
-    reportType: ReportType;
-    period: string;
-}
+import { ReportType } from "@/types/types";
 
 export const useAnalysisOptions = defineStore("analysis-options-store", {
-    state: (): State => ({
+    state: (): AnalysisOptionsState => ({
         department: "",
         institution: "",
         municipality: "",
@@ -42,7 +31,7 @@ export const useAnalysisOptions = defineStore("analysis-options-store", {
             this.period = payload;
         },
 
-        clear(key: keyof Omit<State, "reportType">) {
+        clear(key: keyof Omit<AnalysisOptionsState, "reportType">) {
             this[key] = "";
         },
 

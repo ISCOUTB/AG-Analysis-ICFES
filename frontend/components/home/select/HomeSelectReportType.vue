@@ -1,5 +1,6 @@
 <script setup lang="ts">
-    import { useAnalysisOptions, ReportType } from "@/stores/analysisOptions";
+    import { useAnalysisOptions } from "@/stores/analysisOptions";
+    import { ReportType } from "@/types/types";
 
     const analysisStore = useAnalysisOptions();
 

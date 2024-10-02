@@ -55,6 +55,14 @@ declare global {
         tags: string[];
         image: string;
     }
+
+    interface AnalysisOptionsState {
+        department: string;
+        municipality: string;
+        institution: string;
+        reportType: ReportType;
+        period: string;
+    }
 }
 
 export {};

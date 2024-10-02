@@ -8,13 +8,14 @@ datasource db {
 }
 
 model User {
-    id             String    @id @default(cuid())
-    email          String    @unique
-    hashedPassword String?   @map("hashed_password")
+    id             String          @id @default(cuid())
+    email          String          @unique
+    hashedPassword String?         @map("hashed_password")
     name           String?
-    createdAt      DateTime  @default(now())
-    updatedAt      DateTime  @updatedAt
+    createdAt      DateTime        @default(now())
+    updatedAt      DateTime        @updatedAt
     accounts       Account[]
+    savedAnalysis  SavedAnalysis[]
 }
 
 model Account {
@@ -25,4 +26,13 @@ model Account {
     user User @relation(fields: [userId], references: [id])
 
     @@unique([provider, providerAccountId])
+}
+
+model SavedAnalysis {
+    id        String   @id @default(cuid())
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
+    content   String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
