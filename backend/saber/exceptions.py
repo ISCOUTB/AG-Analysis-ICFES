@@ -17,3 +17,7 @@ class CollegeNotFoundError(Exception):
 
     def __init__(self, id: str) -> None:
         super().__init__(f"""|College| with the given {id} does not exists""")
+
+class PeriodNotFoundError(Exception):
+    def __init__(self, id: str) -> None:
+        super().__init__(f"""|Period| with the given {id} does not exists""")

@@ -1,5 +1,5 @@
 import graphene
-from saber.exceptions import DepartmentNotFoundError, MunicipalityNotFoundError, HighschoolNotFoundError, CollegeNotFoundError
+from saber.exceptions import DepartmentNotFoundError, MunicipalityNotFoundError, HighschoolNotFoundError, CollegeNotFoundError, PeriodNotFoundError
 import schema.types as types
 import saber.models as saber_models
 from django.core.exceptions import ObjectDoesNotExist
@@ -153,8 +153,15 @@ class Query(graphene.ObjectType):
     # Periods
     # -----------------------------------------------------------------------------|>
 
+    period = graphene.Field(types.PeriodType, id=graphene.ID())
     periods = graphene.List(
         types.PeriodType, type=graphene.String(default_value='Saber11'))
+
+    def resolve_period(self, info, id):
+        try:
+            return saber_models.Period.objects.get(pk=id)
+        except ObjectDoesNotExist:
+            raise PeriodNotFoundError(id=str(id))
 
     def resolve_periods(self, info, type: Literal['Saber11', 'SaberPro']):
         if type == 'Saber11':
