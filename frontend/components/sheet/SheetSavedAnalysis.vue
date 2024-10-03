@@ -1,16 +1,27 @@
+<script setup lang="ts">
+    import type { SavedAnalysis } from "@prisma/client";
+
+    const { data } = useFetch<SavedAnalysis[]>("/api/analysis/saved", {
+        key: "stored-analysis",
+    });
+</script>
+
 <template>
     <Sheet>
         <SheetTrigger>
             <Button variant="secondary"> Show stored analysis </Button>
         </SheetTrigger>
-        <SheetContent>
+        <SheetContent class="overflow-y-auto overflow-x-hidden">
             <SheetHeader>
-                <SheetTitle>Are you absolutely sure?</SheetTitle>
-                <SheetDescription>
-                    This action cannot be undone. This will permanently delete
-                    your account and remove your data from our servers.
-                </SheetDescription>
+                <SheetTitle>Stored Analysis</SheetTitle>
             </SheetHeader>
+            <div class="flex flex-col gap-4">
+                <SheetSavedAnalysisCollapsible
+                    v-for="item in data"
+                    :key="item.id"
+                    :saved-item="item"
+                />
+            </div>
         </SheetContent>
     </Sheet>
 </template>

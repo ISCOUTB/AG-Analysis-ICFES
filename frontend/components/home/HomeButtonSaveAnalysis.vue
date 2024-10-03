@@ -22,11 +22,13 @@
                     variant: "destructive",
                 });
             },
-        }).then(() => {
-            toast({
-                title: "Saved succesfully",
-            });
-        });
+        })
+            .then(() => {
+                toast({
+                    title: "Saved succesfully",
+                });
+            })
+            .finally(async () => await refreshNuxtData("stored-analysis"));
     }
 </script>
 

@@ -1,22 +1,14 @@
-import { H3Error, H3Event } from "h3";
-import { z } from "zod";
-import { ReportType } from "@/types/types";
+import { H3Error, type H3Event } from "h3";
+import type { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import isEqual from "lodash/isEqual";
-
-const requestBody = z.object({
-    department: z.string(),
-    municipality: z.string(),
-    institution: z.string(),
-    period: z.string(),
-    reportType: z.nativeEnum(ReportType),
-});
+import { SaveAnalysisSchema } from "@/schemas/analysis/saveAnalysis.schema";
 
 const normalizeContent = (content: string) =>
-    requestBody.parse(JSON.parse(content));
+    SaveAnalysisSchema.parse(JSON.parse(content));
 
 async function shouldSave(
-    parsedBody: z.infer<typeof requestBody>,
+    parsedBody: z.infer<typeof SaveAnalysisSchema>,
     userId: string,
 ): Promise<boolean> {
     const allStored = await prisma.savedAnalysis.findMany({
@@ -37,7 +29,7 @@ export default defineEventHandler(async (event: H3Event) => {
     try {
         const session = await requireUserSession(event);
         const body = await readBody(event);
-        const parsedBody = requestBody.parse(body);
+        const parsedBody = SaveAnalysisSchema.parse(body);
 
         if (!session.user.id)
             throw createError({
