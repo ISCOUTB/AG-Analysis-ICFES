@@ -1,0 +1,5 @@
+query period($id: ID!) {
+    period(id: $id) {
+        label
+    }
+}

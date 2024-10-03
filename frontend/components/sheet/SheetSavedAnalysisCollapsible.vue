@@ -3,6 +3,7 @@
     import { ChevronsUpDown } from "lucide-vue-next";
     import { SaveAnalysisSchema } from "@/schemas/analysis/saveAnalysis.schema";
     import { useToast } from "@/components/ui/toast";
+    import { ReportType } from "@/types/types";
 
     interface Props {
         savedItem: SavedAnalysis;
@@ -37,13 +38,56 @@
             },
         });
 
-        
+    const { data: highschoolData, refresh: refreshHighschool } = useAsyncGql({
+        operation: "highschool",
+        variables: {
+            id: parsedContent.institution,
+        },
+        options: {
+            immediate: false,
+        },
+    });
 
-    watch(isOpen, (newValue) => {
-        if (!newValue) return;
+    const { data: collegeData, refresh: refreshCollege } = useAsyncGql({
+        operation: "college",
+        variables: {
+            id: parsedContent.institution,
+        },
+        options: {
+            immediate: false,
+        },
+    });
 
-        if (!departmentData.value || !municipalityData.value)
-            Promise.all([refreshDeparment(), refreshMunicipality()]);
+    const { data: periodData, refresh: refreshPeriod } = useAsyncGql({
+        operation: "period",
+        variables: {
+            id: parsedContent.period,
+        },
+        options: {
+            immediate: false,
+        },
+    });
+
+    onMounted(() => {
+        watch(isOpen, (newValue) => {
+            if (!newValue) return;
+
+            if (!departmentData.value) refreshDeparment();
+
+            if (!municipalityData.value) refreshMunicipality();
+
+            switch (parsedContent.reportType) {
+                case ReportType.SABER11:
+                    if (!highschoolData.value) refreshHighschool();
+                    break;
+
+                case ReportType.SABERPRO:
+                    if (!collegeData.value) refreshCollege();
+                    break;
+            }
+
+            if (!periodData.value) refreshPeriod();
+        });
     });
 
     function handleDelete() {
@@ -128,9 +172,14 @@
         <CollapsibleContent class="space-y-2 mr-8">
             <div
                 v-if="parsedContent.department && departmentData.department"
-                class="rounded-md border px-4 py-3 text-sm flex items-center space-x-3"
+                class="rounded-md border pl-1 py-3 text-sm grid grid-cols-[1fr_4fr] items-start justify-items-start"
             >
-                <Icon name="mdi:briefcase" class="text-3xl text-green-500" />
+                <div class="w-full h-full flex items-center justify-center">
+                    <Icon
+                        name="mdi:briefcase"
+                        class="text-3xl text-green-500/80"
+                    />
+                </div>
                 <div class="flex flex-col">
                     <span class="font-medium text-sm">Department</span>
                     <span class="text-sm text-gray-600">{{
@@ -142,13 +191,75 @@
                 v-if="
                     parsedContent.municipality && municipalityData.municipality
                 "
-                class="rounded-md border px-4 py-3 text-sm flex items-center space-x-3"
+                class="rounded-md border pl-1 py-3 text-sm grid grid-cols-[1fr_4fr] items-start justify-items-start"
             >
-                <Icon name="mdi:land-fields" class="text-3xl text-sky-500" />
+                <div class="w-full h-full flex items-center justify-center">
+                    <Icon
+                        name="mdi:land-fields"
+                        class="text-4xl text-sky-500"
+                    />
+                </div>
                 <div class="flex flex-col">
                     <span class="font-medium text-sm">Municipality</span>
                     <span class="text-sm text-gray-600">{{
                         municipalityData.municipality.name
+                    }}</span>
+                </div>
+            </div>
+            <template v-if="parsedContent.reportType === ReportType.SABER11">
+                <div
+                    v-if="
+                        parsedContent.institution && highschoolData.highschool
+                    "
+                    class="rounded-md border pl-1 py-3 text-sm grid grid-cols-[1fr_4fr] items-start justify-items-start"
+                >
+                    <div class="w-full h-full flex items-center justify-center">
+                        <Icon
+                            name="hugeicons:student-card"
+                            class="text-4xl text-rose-500"
+                        />
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-medium text-sm">Highschool</span>
+                        <span class="text-sm text-gray-600">{{
+                            highschoolData.highschool.name
+                        }}</span>
+                    </div>
+                </div>
+            </template>
+            <template v-if="parsedContent.reportType === ReportType.SABERPRO">
+                <div
+                    v-if="parsedContent.institution && collegeData.college"
+                    class="rounded-md border pl-1 py-3 text-sm grid grid-cols-[1fr_4fr] items-start justify-items-start"
+                >
+                    <div class="w-full h-full flex items-center justify-center">
+                        <Icon
+                            name="ph:student"
+                            class="text-4xl text-yellow-500"
+                        />
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-medium text-sm">College</span>
+                        <span class="text-sm text-gray-600">{{
+                            collegeData.college.name
+                        }}</span>
+                    </div>
+                </div>
+            </template>
+            <div
+                v-if="parsedContent.period && periodData.period"
+                class="rounded-md border pl-1 py-3 text-sm grid grid-cols-[1fr_4fr] items-start justify-items-start"
+            >
+                <div class="w-full h-full flex items-center justify-center">
+                    <Icon
+                        name="material-symbols:nest-clock-farsight-analog-outline-rounded"
+                        class="text-3xl text-violet-500"
+                    />
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-medium text-sm">Period</span>
+                    <span class="text-sm text-gray-600">{{
+                        periodData.period.label
                     }}</span>
                 </div>
             </div>

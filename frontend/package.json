@@ -12,6 +12,7 @@
     "dependencies": {
         "@formkit/auto-animate": "^0.8.2",
         "@iconify-json/heroicons-outline": "^1.2.0",
+        "@iconify-json/hugeicons": "^1.2.0",
         "@iconify-json/material-symbols": "^1.2.1",
         "@iconify-json/material-symbols-light": "^1.2.1",
         "@iconify-json/mdi": "^1.2.0",
