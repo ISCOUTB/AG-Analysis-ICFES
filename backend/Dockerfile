@@ -12,8 +12,8 @@ RUN python -m pip install -r /app/requirements.txt
 
 COPY . /app/
 
-# Should seed the database here
-
-# Aplying the migrations
-
 CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
+
+
+# ! NEXT STEPS
+# RUN docker compose exec djangoapp python manage.py migrate

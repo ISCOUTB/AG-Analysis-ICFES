@@ -1,12 +1,11 @@
 services:
-  postgres:
+  db:
     image: postgres:latest
-    hostname: postgres
+    container_name: postgres_db
     environment:
+      POSTGRES_DB: database
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
-      POSTGRES_HOST: postgres
-      POSTGRES_DB: database
     ports:
       - "500:5432"
     volumes:
@@ -17,7 +16,7 @@ services:
       timeout: 5s
       retries: 3
     networks:
-      - db
+      - db_network
 
   pgadmin:
     image: dpage/pgadmin4
@@ -29,24 +28,26 @@ services:
     ports:
       - "15432:80"
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
     user: root
     networks:
-      - db
+      - db_network
 
   djangoapp:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
     networks:
-      - db
+      - db_network
 
 networks:
-  db:
+  db_network:
     driver: bridge
 
 volumes:
