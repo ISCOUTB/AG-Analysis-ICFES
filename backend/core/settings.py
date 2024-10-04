@@ -82,10 +82,10 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'AG-Analysis-Saber-Backend',
+        'NAME': 'database',
         'USER': 'postgres',
         'PASSWORD': 'root',
-        'HOST': 'localhost',
+        'HOST': 'postgres',
         'PORT': '5432'
     }
 }

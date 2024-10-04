@@ -8,7 +8,7 @@ services:
       POSTGRES_HOST: postgres
       POSTGRES_DB: database
     ports:
-      - "5000:5432"
+      - "500:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -32,6 +32,16 @@ services:
       postgres:
         condition: service_healthy
     user: root
+    networks:
+      - db
+
+  djangoapp:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - db
 
