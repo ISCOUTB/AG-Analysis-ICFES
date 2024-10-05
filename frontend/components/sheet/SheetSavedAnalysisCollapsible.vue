@@ -4,9 +4,18 @@
     import { SaveAnalysisSchema } from "@/schemas/analysis/saveAnalysis.schema";
     import { useToast } from "@/components/ui/toast";
     import { ReportType } from "@/types/types";
+    import type { HtmlHTMLAttributes } from "vue";
 
     interface Props {
         savedItem: SavedAnalysis;
+    }
+
+    interface Item {
+        label: string;
+        value?: string;
+        icon: string;
+        iconClass: HtmlHTMLAttributes["class"];
+        renderIf: boolean;
     }
 
     const { savedItem } = defineProps<Props>();
@@ -67,6 +76,57 @@
             immediate: false,
         },
     });
+
+    const items = computed<Item[]>(() => [
+        {
+            label: "Department",
+            value: departmentData.value.department?.name,
+            icon: "mdi:briefcase",
+            iconClass: "text-3xl text-green-500/80",
+            renderIf: !!(
+                parsedContent.department && departmentData.value.department
+            ),
+        },
+        {
+            label: "Municipality",
+            value: municipalityData.value.municipality?.name,
+            icon: "mdi:land-fields",
+            iconClass: "text-4xl text-sky-500",
+            renderIf: !!(
+                parsedContent.municipality &&
+                municipalityData.value.municipality
+            ),
+        },
+        {
+            label: "Highschool",
+            value: highschoolData.value.highschool?.name,
+            icon: "hugeicons:student-card",
+            iconClass: "text-4xl text-rose-500",
+            renderIf: !!(
+                parsedContent.institution &&
+                highschoolData.value.highschool &&
+                parsedContent.reportType === ReportType.SABER11
+            ),
+        },
+        {
+            label: "College",
+            value: collegeData.value.college?.name,
+            icon: "ph:student",
+            iconClass: "text-4xl text-yellow-500",
+            renderIf: !!(
+                parsedContent.institution &&
+                collegeData.value.college &&
+                parsedContent.reportType === ReportType.SABERPRO
+            ),
+        },
+        {
+            label: "Period",
+            value: periodData.value.period?.label,
+            icon: "material-symbols:nest-clock-farsight-analog-outline-rounded",
+            iconClass: "text-3xl text-violet-500",
+            renderIf: !!(parsedContent.period && periodData.value.period),
+        },
+    ]);
 
     onMounted(() => {
         watch(isOpen, (newValue) => {
@@ -170,7 +230,7 @@
         </div>
 
         <CollapsibleContent class="space-y-2 mr-8">
-            <div
+            <!-- <div
                 v-if="parsedContent.department && departmentData.department"
                 class="rounded-md border pl-1 py-3 text-sm grid grid-cols-[1fr_4fr] items-start justify-items-start"
             >
@@ -262,7 +322,26 @@
                         periodData.period.label
                     }}</span>
                 </div>
-            </div>
+            </div> -->
+
+            <template v-for="item in items" :key="item.label">
+                <div
+                    v-if="item.renderIf"
+                    class="rounded-md border pl-1 py-3 text-sm grid grid-cols-[1fr_4fr] items-start justify-items-start"
+                >
+                    <div class="w-full h-full flex items-center justify-center">
+                        <Icon :name="item.icon" :class="item.iconClass" />
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-medium text-sm">{{
+                            item.label
+                        }}</span>
+                        <span class="text-sm text-gray-600">{{
+                            item.value
+                        }}</span>
+                    </div>
+                </div>
+            </template>
         </CollapsibleContent>
     </Collapsible>
 </template>
