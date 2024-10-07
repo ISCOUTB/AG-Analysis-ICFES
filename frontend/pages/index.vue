@@ -7,8 +7,7 @@
 <template>
     <section :key="$route.fullPath">
         <HomeAnalysisOptions />
-        <HomeAditionalOptions />
-        <div class="w-full bg-background py-12">
+        <div class="w-full py-12 bg-gray-300/20 dark:bg-gray-900/80">
             <div class="container px-4 md:px-6 flex gap-2">
                 <Button> Submit </Button>
                 <HomeButtonSaveAnalysis />

@@ -8,8 +8,8 @@
 
 <template>
     <Sheet>
-        <SheetTrigger>
-            <Button variant="secondary"> Show stored analysis </Button>
+        <SheetTrigger as-child>
+            <Button variant="outline"> Show stored analysis </Button>
         </SheetTrigger>
         <SheetContent class="overflow-y-auto overflow-x-hidden">
             <SheetHeader>
