@@ -68,6 +68,105 @@
         },
     });
 
+    const items: SheetSavedAnalysisCollapsibleItem[] = [
+        {
+            label: "Department",
+            icon: "mdi:briefcase",
+            classIcon: "text-3xl text-green-500/80",
+            renderIf: computed(
+                () =>
+                    !(
+                        !parsedContent.department ||
+                        !departmentData.value ||
+                        !departmentData.value.department ||
+                        !departmentData.value.department.name
+                    ),
+            ),
+            getValue() {
+                if (!this.renderIf) return;
+                return departmentData.value.department?.name;
+            },
+        },
+        {
+            label: "Municipality",
+            icon: "mdi:land-fields",
+            classIcon: "text-4xl text-sky-500",
+            renderIf: computed(
+                () =>
+                    !(
+                        !parsedContent.municipality ||
+                        !municipalityData.value ||
+                        !municipalityData.value.municipality ||
+                        !municipalityData.value.municipality.name
+                    ),
+            ),
+            getValue() {
+                if (!this.renderIf) return;
+                return municipalityData.value.municipality?.name;
+            },
+        },
+        {
+            label: "Highschool",
+            icon: "hugeicons:student-card",
+            classIcon: "text-4xl text-rose-500",
+            renderIf: computed(() => {
+                if (parsedContent.reportType !== ReportType.SABER11)
+                    return false;
+
+                return !(
+                    (!parsedContent.institution ||
+                        !highschoolData.value ||
+                        !highschoolData.value.highschool ||
+                        !highschoolData.value.highschool.name) &&
+                    parsedContent.reportType === ReportType.SABER11
+                );
+            }),
+            getValue() {
+                if (!this.renderIf) return;
+                return highschoolData.value.highschool?.name;
+            },
+        },
+        {
+            label: "College",
+            icon: "ph:student",
+            classIcon: "text-4xl text-yellow-500",
+            renderIf: computed(() => {
+                if (parsedContent.reportType !== ReportType.SABERPRO)
+                    return false;
+
+                return !(
+                    (!parsedContent.institution ||
+                        !collegeData.value ||
+                        !collegeData.value.college ||
+                        !collegeData.value.college.name) &&
+                    parsedContent.reportType === ReportType.SABERPRO
+                );
+            }),
+            getValue() {
+                if (!this.renderIf) return;
+                return collegeData.value.college?.name;
+            },
+        },
+        {
+            label: "Period",
+            icon: "material-symbols:nest-clock-farsight-analog-outline-rounded",
+            classIcon: "text-3xl text-violet-500",
+            renderIf: computed(
+                () =>
+                    !(
+                        !parsedContent.period ||
+                        !periodData.value ||
+                        !periodData.value.period ||
+                        !periodData.value.period.label
+                    ),
+            ),
+            getValue() {
+                if (!this.renderIf) return;
+                return periodData.value.period?.label;
+            },
+        },
+    ];
+
     function handleDelete() {
         $fetch("/api/analysis/saved/deleted", {
             query: {
@@ -132,33 +231,9 @@
             </h4>
 
             <div>
-                <AlertDialog>
-                    <AlertDialogTrigger>
-                        <Button class="bg-inherit px-3 hover:bg-rose-500 group">
-                            <Icon
-                                name="mdi:trash-can-outline"
-                                class="text-lg text-rose-500 group-hover:text-slate-50"
-                            />
-                        </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle
-                                >Are you absolutely sure?</AlertDialogTitle
-                            >
-                            <AlertDialogDescription>
-                                This will remove the stored info from our
-                                servers and cannot be undone
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction @click="handleDelete"
-                                >Continue</AlertDialogAction
-                            >
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
+                <SheetSavedAnalysisCollapsibleAlertDialog
+                    :handle-delete="handleDelete"
+                />
 
                 <CollapsibleTrigger as-child>
                     <Button variant="ghost" size="sm" class="w-9 p-0">
@@ -170,99 +245,27 @@
         </div>
 
         <CollapsibleContent class="space-y-2 mr-8">
-            <div
-                v-if="parsedContent.department && departmentData.department"
-                class="rounded-md border pl-1 py-3 text-sm grid grid-cols-[1fr_4fr] items-start justify-items-start"
-            >
-                <div class="w-full h-full flex items-center justify-center">
-                    <Icon
-                        name="mdi:briefcase"
-                        class="text-3xl text-green-500/80"
-                    />
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-medium text-sm">Department</span>
-                    <span class="text-sm text-gray-600">{{
-                        departmentData.department.name
-                    }}</span>
-                </div>
-            </div>
-            <div
-                v-if="
-                    parsedContent.municipality && municipalityData.municipality
-                "
-                class="rounded-md border pl-1 py-3 text-sm grid grid-cols-[1fr_4fr] items-start justify-items-start"
-            >
-                <div class="w-full h-full flex items-center justify-center">
-                    <Icon
-                        name="mdi:land-fields"
-                        class="text-4xl text-sky-500"
-                    />
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-medium text-sm">Municipality</span>
-                    <span class="text-sm text-gray-600">{{
-                        municipalityData.municipality.name
-                    }}</span>
-                </div>
-            </div>
-            <template v-if="parsedContent.reportType === ReportType.SABER11">
-                <div
-                    v-if="
-                        parsedContent.institution && highschoolData.highschool
-                    "
-                    class="rounded-md border pl-1 py-3 text-sm grid grid-cols-[1fr_4fr] items-start justify-items-start"
-                >
-                    <div class="w-full h-full flex items-center justify-center">
-                        <Icon
-                            name="hugeicons:student-card"
-                            class="text-4xl text-rose-500"
-                        />
+            <template v-for="item in items" :key="item.label">
+                <template v-if="item.renderIf.value">
+                    <div
+                        class="rounded-md border pl-1 py-3 text-sm grid grid-cols-[1fr_4fr] items-start justify-items-start"
+                    >
+                        <div
+                            class="w-full h-full flex items-center justify-center"
+                        >
+                            <Icon :name="item.icon" :class="item.classIcon" />
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-medium text-sm">{{
+                                item.label
+                            }}</span>
+                            <span class="text-sm text-gray-600">{{
+                                item.getValue()
+                            }}</span>
+                        </div>
                     </div>
-                    <div class="flex flex-col">
-                        <span class="font-medium text-sm">Highschool</span>
-                        <span class="text-sm text-gray-600">{{
-                            highschoolData.highschool.name
-                        }}</span>
-                    </div>
-                </div>
+                </template>
             </template>
-            <template v-if="parsedContent.reportType === ReportType.SABERPRO">
-                <div
-                    v-if="parsedContent.institution && collegeData.college"
-                    class="rounded-md border pl-1 py-3 text-sm grid grid-cols-[1fr_4fr] items-start justify-items-start"
-                >
-                    <div class="w-full h-full flex items-center justify-center">
-                        <Icon
-                            name="ph:student"
-                            class="text-4xl text-yellow-500"
-                        />
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="font-medium text-sm">College</span>
-                        <span class="text-sm text-gray-600">{{
-                            collegeData.college.name
-                        }}</span>
-                    </div>
-                </div>
-            </template>
-            <div
-                v-if="parsedContent.period && periodData.period"
-                class="rounded-md border pl-1 py-3 text-sm grid grid-cols-[1fr_4fr] items-start justify-items-start"
-            >
-                <div class="w-full h-full flex items-center justify-center">
-                    <Icon
-                        name="material-symbols:nest-clock-farsight-analog-outline-rounded"
-                        class="text-3xl text-violet-500"
-                    />
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-medium text-sm">Period</span>
-                    <span class="text-sm text-gray-600">{{
-                        periodData.period.label
-                    }}</span>
-                </div>
-            </div>
         </CollapsibleContent>
     </Collapsible>
 </template>

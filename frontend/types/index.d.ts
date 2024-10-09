@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes } from "vue";
+import type { InputHTMLAttributes, HTMLAttributes } from "vue";
 
 declare module "#auth-utils" {
     interface User {
@@ -62,6 +62,14 @@ declare global {
         institution: string;
         reportType: ReportType;
         period: string;
+    }
+
+    interface SheetSavedAnalysisCollapsibleItem {
+        label: string;
+        getValue: () => string | undefined;
+        renderIf: ComputedRef<boolean>;
+        icon: string;
+        classIcon: HTMLAttributes["class"];
     }
 }
 
