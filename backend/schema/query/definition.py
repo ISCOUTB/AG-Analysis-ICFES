@@ -145,6 +145,7 @@ class Query(graphene.ObjectType):
 
     college_students = graphene.List(
         types.CollegeStudentType,
+        college_id=graphene.ID(),
         type=graphene.String(default_value="paginated"),
         period=graphene.String(default_value=None),
         start_period=graphene.String(default_value=None),
