@@ -26,7 +26,7 @@
         <NuxtLink class="hidden sm:flex items-center" to="/">
             <Icon
                 name="material-symbols-light:home-rounded"
-                class="text-xl font-medium text-gray-950"
+                class="text-xl font-medium text-gray-950 dark:text-slate-50"
             />
         </NuxtLink>
 
