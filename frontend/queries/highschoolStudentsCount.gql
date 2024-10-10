@@ -1,0 +1,3 @@
+query highschoolStudentsCount($highschoolId: ID!) {
+    highschoolStudentsCount(highschoolId: $highschoolId)
+}

@@ -1,0 +1,3 @@
+query collegeStudentsCount($collegeId: ID!) {
+    collegeStudentsCount(collegeId: $collegeId)
+}

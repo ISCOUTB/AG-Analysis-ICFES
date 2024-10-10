@@ -62,6 +62,7 @@ declare global {
         institution: string;
         reportType: ReportType;
         period: string;
+        studentsCount: number;
     }
 
     interface SheetSavedAnalysisCollapsibleItem {
@@ -71,6 +72,10 @@ declare global {
         icon: string;
         classIcon: HTMLAttributes["class"];
     }
+
+    type ExtractByType<T, U> = {
+        [K in keyof T]: T[K] extends U ? K : never;
+    }[keyof T];
 }
 
 export {};

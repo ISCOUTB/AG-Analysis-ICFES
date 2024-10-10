@@ -7,6 +7,7 @@ export const useAnalysisOptions = defineStore("analysis-options-store", {
         municipality: "",
         reportType: ReportType.SABER11,
         period: "",
+        studentsCount: 0,
     }),
     actions: {
         setDepartment(payload: string) {
@@ -31,7 +32,11 @@ export const useAnalysisOptions = defineStore("analysis-options-store", {
             this.period = payload;
         },
 
-        clear(key: keyof Omit<AnalysisOptionsState, "reportType">) {
+        setStudentsCount(payload: number) {
+            this.studentsCount = payload;
+        },
+
+        clear(key: ExtractByType<AnalysisOptionsState, string>) {
             this[key] = "";
         },
 

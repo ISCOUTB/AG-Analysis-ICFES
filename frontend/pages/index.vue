@@ -14,5 +14,12 @@
                 <SheetSavedAnalysis />
             </div>
         </div>
+        <div class="w-full bg-gray-300/20 dark:bg-gray-900/80 mt-4">
+            <div
+                class="container px-4 md:px-6 py-6 flex gap-2 text-sm font-medium opacity-60"
+            >
+                <span>Once submited you can view your results here</span>
+            </div>
+        </div>
     </section>
 </template>

@@ -1,0 +1,9 @@
+query collegeStudents($collegeId: ID!, $pageSize: Int, $page: Int) {
+    collegeStudents(collegeId: $collegeId, pageSize: $pageSize, page: $page) {
+        MODQuantitativeReasoning
+        MODWrittenCommunication
+        MODCriticalReading
+        MODEnglish
+        MODCitizenshipCompetences
+    }
+}
