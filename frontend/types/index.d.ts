@@ -67,8 +67,8 @@ declare global {
 
     interface SheetSavedAnalysisCollapsibleItem {
         label: string;
-        getValue: () => string | undefined;
-        renderIf: ComputedRef<boolean>;
+        value: string | undefined;
+        renderIf: boolean | (() => boolean);
         icon: string;
         classIcon: HTMLAttributes["class"];
     }
