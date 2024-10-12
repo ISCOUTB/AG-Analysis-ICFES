@@ -1,22 +1,11 @@
 <script setup lang="ts">
     import type { SavedAnalysis } from "@prisma/client";
-    import type { z } from "zod";
-    import { SaveAnalysisSchema } from "@/schemas/analysis/saveAnalysis.schema";
     import { ReportType } from "~/types/types";
+    import { SaveAnalysisSchema } from "@/schemas/analysis/saveAnalysis.schema";
 
-    type AnalysisData = z.infer<typeof SaveAnalysisSchema>;
+    const parsedData = useState<SheetSavedAnalysisParsedData[]>("parsed-data");
 
-    type ParsedAnalysisData = Partial<AnalysisData>;
-
-    interface ParsedData {
-        content: ParsedAnalysisData;
-        id: string;
-        createdAt: Date;
-    }
-
-    const parsedData = useState<ParsedData[]>("parsed-data");
-
-    async function getInstitutionInfo(item: AnalysisData) {
+    async function getInstitutionInfo(item: SheetSavedAnalysisData) {
         if (item.reportType === ReportType.SABER11) {
             const { highschool } = await GqlHighschool({
                 id: item.institution,
@@ -94,14 +83,7 @@
                             item.content.reportType;
                     }),
                 );
-            })
-            .then(() =>
-                console.table(
-                    parsedData.value.forEach((item) =>
-                        console.table(item.content),
-                    ),
-                ),
-            );
+            });
     }
 </script>
 
@@ -116,13 +98,15 @@
             <SheetHeader>
                 <SheetTitle>Stored Analysis</SheetTitle>
             </SheetHeader>
-            <!-- <div class="flex flex-col gap-4">
-                <SheetSavedAnalysisCollapsible
-                    v-for="item in data"
-                    :key="item.id"
-                    :saved-item="item"
-                />
-            </div> -->
+            <div class="flex flex-col gap-4">
+                <template v-if="parsedData">
+                    <SheetSavedAnalysisCollapsible
+                        v-for="item in parsedData"
+                        :key="item.id"
+                        :saved-item="item"
+                    />
+                </template>
+            </div>
         </SheetContent>
     </Sheet>
 </template>

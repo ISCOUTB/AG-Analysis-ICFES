@@ -16,7 +16,7 @@
                 />
             </Button>
         </AlertDialogTrigger>
-        <AlertDialogContent>
+        <AlertDialogContent aria-describedby="">
             <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>

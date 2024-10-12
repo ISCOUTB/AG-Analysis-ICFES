@@ -1,4 +1,6 @@
 import type { InputHTMLAttributes, HTMLAttributes } from "vue";
+import type { SaveAnalysisSchema } from "@/schemas/analysis/saveAnalysis.schema";
+import type { z } from "zod";
 
 declare module "#auth-utils" {
     interface User {
@@ -68,9 +70,19 @@ declare global {
     interface SheetSavedAnalysisCollapsibleItem {
         label: string;
         value: string | undefined;
-        renderIf: boolean | (() => boolean);
+        renderIf: () => boolean;
         icon: string;
         classIcon: HTMLAttributes["class"];
+    }
+
+    type SheetSavedAnalysisData = z.infer<typeof SaveAnalysisSchema>;
+
+    type SheetSavedAnalysisParsedAnalysisData = Partial<SheetSavedAnalysisData>;
+
+    interface SheetSavedAnalysisParsedData {
+        content: SheetSavedAnalysisParsedAnalysisData;
+        id: string;
+        createdAt: Date;
     }
 
     type ExtractByType<T, U> = {
