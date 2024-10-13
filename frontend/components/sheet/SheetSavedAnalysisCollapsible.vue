@@ -135,7 +135,7 @@
                             <span class="font-medium text-sm">{{
                                 item.label
                             }}</span>
-                            <span class="text-sm text-gray-600">{{
+                            <span class="text-sm text-gray-600 dark:text-slate-50">{{
                                 item.value
                             }}</span>
                         </div>

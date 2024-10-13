@@ -1,5 +1,6 @@
 import type { InputHTMLAttributes, HTMLAttributes } from "vue";
 import type { SaveAnalysisSchema } from "@/schemas/analysis/saveAnalysis.schema";
+import type { ReportType, StudentsCountStatus } from "@/types/types";
 import type { z } from "zod";
 
 declare module "#auth-utils" {
@@ -65,6 +66,7 @@ declare global {
         reportType: ReportType;
         period: string;
         studentsCount: number;
+        studentsCountStatus: StudentsCountStatus;
     }
 
     interface SheetSavedAnalysisCollapsibleItem {
@@ -85,8 +87,12 @@ declare global {
         createdAt: Date;
     }
 
-    type ExtractByType<T, U> = {
-        [K in keyof T]: T[K] extends U ? K : never;
+    export type ExtractByTypeExcluding<T, U, Exclude> = {
+        [K in keyof T]: T[K] extends U
+            ? T[K] extends Exclude
+                ? never
+                : K
+            : never;
     }[keyof T];
 }
 

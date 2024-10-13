@@ -1,5 +1,17 @@
-query collegeStudents($collegeId: ID!, $pageSize: Int, $page: Int) {
-    collegeStudents(collegeId: $collegeId, pageSize: $pageSize, page: $page) {
+query collegeStudents(
+    $departmentId: ID!
+    $municipalityId: ID
+    $collegeId: ID
+    $pageSize: Int
+    $page: Int
+) {
+    collegeStudents(
+        departmentId: $departmentId
+        municipalityId: $municipalityId
+        collegeId: $collegeId
+        pageSize: $pageSize
+        page: $page
+    ) {
         MODQuantitativeReasoning
         MODWrittenCommunication
         MODCriticalReading

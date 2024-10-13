@@ -10,12 +10,6 @@
 
     async function handleSelect(payload: string) {
         analysisStore.setInstitution(payload);
-
-        const { highschoolStudentsCount } = await GqlHighschoolStudentsCount({
-            highschoolId: analysisStore.institution,
-        });
-
-        analysisStore.setStudentsCount(highschoolStudentsCount || 100);
     }
 </script>
 

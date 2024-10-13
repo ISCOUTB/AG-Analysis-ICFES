@@ -8,6 +8,7 @@ click-didyoumean==0.3.1
 click-plugins==1.1.1
 click-repl==0.3.0
 cloudpickle==3.0.0
+colorama==0.4.6
 comm==0.2.2
 dask==2024.9.0
 dask-expr==1.1.14
@@ -15,6 +16,7 @@ debugpy==1.8.5
 decorator==5.1.1
 Django==5.1
 django-cors-headers==4.4.0
+djangorestframework==3.15.2
 executing==2.1.0
 fsspec==2024.9.0
 fuzzywuzzy==0.18.0
@@ -52,6 +54,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 python-Levenshtein==0.25.1
 pytz==2024.2
+pywin32==306
 PyYAML==6.0.2
 pyzmq==26.2.0
 rapidfuzz==3.9.7
