@@ -1,3 +1,11 @@
-query highschoolStudentsCount($highschoolId: ID!) {
-    highschoolStudentsCount(highschoolId: $highschoolId)
+query highschoolStudentsCount(
+    $departmentId: ID!
+    $municipalityId: ID
+    $highschoolId: ID
+) {
+    highschoolStudentsCount(
+        departmentId: $departmentId
+        municipalityId: $municipalityId
+        highschoolId: $highschoolId
+    )
 }

@@ -1,10 +1,22 @@
-query highschoolStudents($highschoolId: ID!, $pageSize: Int, $page: Int) {
-  highschoolStudents(highschoolId: $highschoolId, pageSize: $pageSize, page: $page) {
-    PUNTEnglish
-    PUNTMathematics
-    PUNTNaturalSciences
-    PUNTCriticalReading
-    PUNTSocialCitizenship
-    PUNTGlobal
-  }
+query highschoolStudents(
+    $departmentId: ID!
+    $municipalityId: ID
+    $highschoolId: ID
+    $pageSize: Int
+    $page: Int
+) {
+    highschoolStudents(
+        departmentId: $departmentId
+        municipalityId: $municipalityId
+        highschoolId: $highschoolId
+        pageSize: $pageSize
+        page: $page
+    ) {
+        PUNTEnglish
+        PUNTMathematics
+        PUNTNaturalSciences
+        PUNTCriticalReading
+        PUNTSocialCitizenship
+        PUNTGlobal
+    }
 }

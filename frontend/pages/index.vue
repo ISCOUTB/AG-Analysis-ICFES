@@ -2,6 +2,13 @@
     useHead({
         title: "Home Page",
     });
+
+    const { status, execute } =
+        await useStudents();
+
+    async function handleSubmit() {
+        execute();
+    }
 </script>
 
 <template>
@@ -9,7 +16,7 @@
         <HomeAnalysisOptions />
         <div class="w-full py-12 bg-gray-300/20 dark:bg-gray-900/80">
             <div class="container px-4 md:px-6 flex gap-2">
-                <Button> Submit </Button>
+                <Button @click="handleSubmit"> Submit </Button>
                 <HomeButtonSaveAnalysis />
                 <SheetSavedAnalysis />
             </div>
@@ -21,5 +28,6 @@
                 <span>Once submited you can view your results here</span>
             </div>
         </div>
+        {{ status }}
     </section>
 </template>

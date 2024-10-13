@@ -1,6 +1,7 @@
 import { useAnalysisOptions } from "@/stores/analysisOptions";
-import { ReportType } from "@/types/types";
+import { ReportType, StudentsCountStatus } from "@/types/types";
 import type { CollegeStudentsQuery, HighschoolStudentsQuery } from "#gql";
+import { useToast } from "@/components/ui/toast";
 
 enum Status {
     IDLE,
@@ -21,19 +22,19 @@ function calculatePageSize(x: number): number {
     return Math.max(x / Math.pow(Math.log(x), 2), 100);
 }
 
-function filterData<T>(array: (T | null | undefined)[]): T[] {
-    return array.filter(
-        (item): item is T => item !== null && item !== undefined,
-    );
-}
+// function filterData<T>(array: (T | null | undefined)[]): T[] {
+//     return array.filter(
+//         (item): item is T => item !== null && item !== undefined,
+//     );
+// }
 
 export default async function () {
     const store = useAnalysisOptions();
+    const { department, municipality, institution } = storeToRefs(store);
+    const { toast } = useToast();
 
     const status = useState<Status>(() => Status.IDLE);
-    const error = useState<unknown>();
-
-    const institutionId = computed(() => store.institution);
+    // const error = useState<unknown>();
 
     const calculatedPageSize = computed(() =>
         calculatePageSize(store.studentsCount),
@@ -54,62 +55,64 @@ export default async function () {
     );
 
     async function execute() {
+        if (store.studentsCountStatus === StudentsCountStatus.LOADING) {
+            toast({
+                title: "Oops!",
+                description:
+                    "Students count still loading. Please wait a little ^^",
+            });
+
+            return;
+        }
+
         status.value = Status.LOADING;
 
         if (store.reportType === ReportType.SABER11) {
             Promise.all(
                 Array.from({ length: totalPages.value }).map((_, pageIndex) => {
-                    return useAsyncGql({
-                        operation: "highschoolStudents",
-                        variables: {
-                            highschoolId: institutionId.value,
-                            pageSize: calculatedPageSize,
-                            page: pageIndex + 1,
-                        },
+                    return GqlHighschoolStudents({
+                        departmentId: department.value,
+                        municipalityId: municipality.value,
+                        highschoolId: institution.value,
+                        pageSize: calculatedPageSize.value,
+                        page: pageIndex + 1,
                     });
                 }),
             )
-                .then((data) =>
-                    data.flatMap(
-                        (result) => result.data.value.highschoolStudents,
-                    ),
-                )
-                .then(
-                    (combinedData) =>
-                        (highschoolStudentsData.value =
-                            filterData(combinedData)),
-                )
-                .catch((_error) => {
-                    error.value = _error;
-                    status.value = Status.ERROR;
-                })
+                .then((data) => console.table(data))
+                // .then(
+                //     (combinedData) =>
+                //         (highschoolStudentsData.value =
+                //             filterData(combinedData)),
+                // )
+                // .catch((_error) => {
+                //     error.value = _error;
+                //     status.value = Status.ERROR;
+                // })
                 .finally(() => (status.value = Status.COMPLETED));
         }
 
         if (store.reportType === ReportType.SABERPRO) {
             Promise.all(
                 Array.from({ length: totalPages.value }).map((_, pageIndex) => {
-                    return useAsyncGql({
-                        operation: "collegeStudents",
-                        variables: {
-                            collegeId: institutionId.value,
-                            pageSize: calculatedPageSize,
-                            page: pageIndex + 1,
-                        },
+                    return GqlCollegeStudents({
+                        departmentId: department.value,
+                        municipalityId: municipality.value,
+                        collegeId: institution.value,
+                        pageSize: calculatedPageSize.value,
+                        page: pageIndex + 1,
                     });
                 }),
             )
-                .then((data) =>
-                    data.flatMap((result) => result.data.value.collegeStudents),
-                )
-                .then(
-                    (combinedData) =>
-                        (collegeStudentsData.value = filterData(combinedData)),
-                )
-                .catch((_error) => {
-                    error.value = _error;
-                    status.value = Status.ERROR;
-                })
+                .then((data) => console.log(data))
+                // .then(
+                //     (combinedData) =>
+                //         (collegeStudentsData.value = filterData(combinedData)),
+                // )
+                // .catch((_error) => {
+                //     error.value = _error;
+                //     status.value = Status.ERROR;
+                // })
                 .finally(() => (status.value = Status.COMPLETED));
         }
     }

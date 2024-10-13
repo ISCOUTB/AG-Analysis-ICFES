@@ -102,7 +102,9 @@ class Query(graphene.ObjectType):
 
     highschool_students = graphene.List(
         types.HighschoolStudentType,
-        highschool_id=graphene.ID(),
+        department_id=graphene.ID(default_value=None),
+        municipality_id=graphene.ID(default_value=None),
+        highschool_id=graphene.ID(default_value=None),
         type=graphene.String(default_value="paginated"),
         period=graphene.String(default_value=None),
         start_period=graphene.String(default_value=None),
@@ -111,33 +113,85 @@ class Query(graphene.ObjectType):
         page_size=graphene.Int(default_value=1000)
     )
 
-    highschool_students_count = graphene.Int(highschool_id=graphene.ID())
+    highschool_students_count = graphene.Int(department_id=graphene.ID(default_value=None),
+                                             municipality_id=graphene.ID(default_value=None), highschool_id=graphene.ID(default_value=None))
 
-    def resolve_highschool_students(self, info, highschool_id: int | str, type: Literal['paginated', 'single_period', 'period_range'],
-                                    period: str, start_period: str, end_period: str, page: int = 1, page_size: int = 1000):
+    def resolve_highschool_students(self, info, department_id: int | str = None,
+                                    municipality_id: int | str = None, highschool_id: int | str = None,
+                                    type: Literal['paginated', 'single_period',
+                                                  'period_range'] = 'paginated',
+                                    period: str = None, start_period: str = None, end_period: str = None, page: int = 1, page_size: int = 1000):
 
-        try:
-            highschool = saber_models.Highschool.objects.get(pk=highschool_id)
+        queryset = saber_models.HighschoolStudent.objects.all()
+
+        if department_id:
+            try:
+                queryset = queryset.filter(
+                    highschool__municipality__department_id=department_id)
+            except ObjectDoesNotExist:
+                raise DepartmentNotFoundError(id=str(department_id))
+
+            if municipality_id:
+                try:
+                    queryset = queryset.filter(
+                        highschool__municipality_id=municipality_id)
+                except ObjectDoesNotExist:
+                    raise MunicipalityNotFoundError(
+                        id=str(municipality_id))
+
+                if highschool_id:
+                    try:
+                        queryset = queryset.filter(
+                            highschool_id=highschool_id)
+                    except ObjectDoesNotExist:
+                        raise HighschoolNotFoundError(
+                            id=str(highschool_id))
 
             return Query.handler_students(
-                qs=saber_models.HighschoolStudent.objects.filter(
-                    highschool=highschool),
+                qs=queryset,
                 type=type,
                 period=period,
                 start_period=start_period,
-                end_period=end_period,
-                page=page,
+                end_period=end_period, page=page,
                 page_size=page_size
             )
-        except ObjectDoesNotExist:
-            raise HighschoolNotFoundError(id=str(highschool_id))
 
-    def resolve_highschool_students_count(self, info, highschool_id: int | str):
-        try:
-            highschool = saber_models.Highschool.objects.get(pk=highschool_id)
-            return len(saber_models.HighschoolStudent.objects.filter(highschool=highschool))
-        except ObjectDoesNotExist:
-            raise HighschoolNotFoundError(id=str(highschool_id))
+        return Query.handler_students(
+            qs=queryset,
+            type=type,
+            period=period,
+            start_period=start_period,
+            end_period=end_period, page=page,
+            page_size=page_size
+        )
+
+    def resolve_highschool_students_count(self, info, department_id: int | str = None, municipality_id: int | str = None, highschool_id: int | str = None):
+        queryset = saber_models.HighschoolStudent.objects.all()
+
+        if department_id:
+            try:
+                queryset = queryset.filter(
+                    highschool__municipality__department_id=department_id)
+            except ObjectDoesNotExist:
+                raise DepartmentNotFoundError(id=str(department_id))
+
+            if municipality_id:
+                try:
+                    queryset = queryset.filter(
+                        highschool__municipality_id=municipality_id)
+                except ObjectDoesNotExist:
+                    raise MunicipalityNotFoundError(
+                        id=str(municipality_id))
+
+                if highschool_id:
+                    try:
+                        queryset = queryset.filter(
+                            highschool_id=highschool_id)
+                    except ObjectDoesNotExist:
+                        raise HighschoolNotFoundError(
+                            id=str(highschool_id))
+
+        return len(queryset)
 
     # -----------------------------------------------------------------------------|>
     # College Student
@@ -145,7 +199,9 @@ class Query(graphene.ObjectType):
 
     college_students = graphene.List(
         types.CollegeStudentType,
-        college_id=graphene.ID(),
+        department_id=graphene.ID(default_value=None),
+        municipality_id=graphene.ID(default_value=None),
+        college_id=graphene.ID(default_value=None),
         type=graphene.String(default_value="paginated"),
         period=graphene.String(default_value=None),
         start_period=graphene.String(default_value=None),
@@ -154,30 +210,85 @@ class Query(graphene.ObjectType):
         page_size=graphene.Int(default_value=100)
     )
 
-    college_students_count = graphene.Int(college_id=graphene.ID())
+    college_students_count = graphene.Int(department_id=graphene.ID(default_value=None
+                                                                    ), municipality_id=graphene.ID(default_value=None), college_id=graphene.ID(default_value=None))
 
-    def resolve_college_students(self, info, college_id: int | str, type: Literal['paginated', 'single_period', 'period_range'],
-                                 period: str, start_period: str, end_period: str, page: int = 1, page_size: int = 1000):
-        try:
-            college = saber_models.College.objects.get(pk=college_id)
+    def resolve_college_students(self, info, department_id: int | str = None,
+                                 municipality_id: int | str = None, college_id: int | str = None,
+                                 type: Literal['paginated', 'single_period',
+                                               'period_range'] = 'paginated',
+                                 period: str = None, start_period: str = None, end_period: str = None, page: int = 1, page_size: int = 1000):
+
+        queryset = saber_models.CollegeStudent.objects.all()
+
+        if department_id:
+            try:
+                queryset = queryset.filter(
+                    college__municipality__department_id=department_id)
+            except ObjectDoesNotExist:
+                raise DepartmentNotFoundError(id=str(department_id))
+
+            if municipality_id:
+                try:
+                    queryset = queryset.filter(
+                        college__municipality_id=municipality_id)
+                except ObjectDoesNotExist:
+                    raise MunicipalityNotFoundError(
+                        id=str(municipality_id))
+
+                if college_id:
+                    try:
+                        queryset = queryset.filter(
+                            college_id=college_id)
+                    except ObjectDoesNotExist:
+                        raise CollegeNotFoundError(
+                            id=str(college_id))
+
             return Query.handler_students(
-                qs=saber_models.CollegeStudent.objects.filter(college=college),
+                qs=queryset,
                 type=type,
                 period=period,
                 start_period=start_period,
-                end_period=end_period,
-                page=page,
+                end_period=end_period, page=page,
                 page_size=page_size
             )
-        except ObjectDoesNotExist:
-            raise CollegeNotFoundError(id=str(college_id))
 
-    def resolve_college_students_count(self, info, college_id: int | str):
-        try:
-            college = saber_models.College.objects.get(pk=college_id)
-            return len(saber_models.CollegeStudent.objects.filter(college=college))
-        except ObjectDoesNotExist:
-            raise CollegeNotFoundError(id=str(college_id))
+        return Query.handler_students(
+            qs=queryset,
+            type=type,
+            period=period,
+            start_period=start_period,
+            end_period=end_period, page=page,
+            page_size=page_size
+        )
+
+    def resolve_college_students_count(self, info, department_id: int | str = None, municipality_id: int | str = None, college_id: int | str = None):
+        queryset = saber_models.CollegeStudent.objects.all()
+
+        if department_id:
+            try:
+                queryset = queryset.filter(
+                    college__municipality__department_id=department_id)
+            except ObjectDoesNotExist:
+                raise DepartmentNotFoundError(id=str(department_id))
+
+            if municipality_id:
+                try:
+                    queryset = queryset.filter(
+                        college__municipality_id=municipality_id)
+                except ObjectDoesNotExist:
+                    raise MunicipalityNotFoundError(
+                        id=str(municipality_id))
+
+                if college_id:
+                    try:
+                        queryset = queryset.filter(
+                            college_id=college_id)
+                    except ObjectDoesNotExist:
+                        raise CollegeNotFoundError(
+                            id=str(college_id))
+
+        return len(queryset)
 
     # -----------------------------------------------------------------------------|>
     # Periods
