@@ -5,6 +5,7 @@ from .serializers import DepartmentSerializer, MunicipalitySerializer, Highschoo
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
+from django.http import StreamingHttpResponse
 from rest_framework import status
 
 
@@ -94,9 +95,9 @@ class HighschoolViewSet(viewsets.ReadOnlyModelViewSet):
 
         return super().list(request)
 
-    # POST /students
+    # POST /students_paginated
     @action(detail=False, methods=['POST'])
-    def students(self, request):
+    def students_paginated(self, request):
         body = request.data
 
         queryset = HighschoolStudent.objects.all()
@@ -144,6 +145,67 @@ class HighschoolViewSet(viewsets.ReadOnlyModelViewSet):
             queryset[start:end], many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # POST /students_stream
+    @action(detail=False, methods=['POST'])
+    def students_stream(self, request):
+        body = request.data
+
+        queryset = HighschoolStudent.objects.all()
+        deparment_id = body.get('department')
+        municipality_id = body.get('municipality')
+        highschool_id = body.get('highschool')
+        period_id = body.get('period')
+
+        if deparment_id:
+            try:
+                queryset = queryset.filter(
+                    highschool__municipality__department_id=deparment_id
+                )
+            except ObjectDoesNotExist:
+                return Response({'detail': 'department with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if municipality_id:
+            try:
+                queryset = queryset.filter(
+                    highschool_municipality_id=municipality_id)
+            except ObjectDoesNotExist:
+                return Response({'detail': 'municipality with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if highschool_id:
+            try:
+                highschool = Highschool.objects.get(pk=highschool_id)
+                queryset = queryset.filter(highschool=highschool)
+            except ObjectDoesNotExist:
+                return Response({'detail': 'highschool with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if period_id:
+            try:
+                period = Period.objects.get(pk=period_id)
+                queryset = queryset.filter(period=period)
+            except ObjectDoesNotExist:
+                return Response({'detail': 'period with the given :pk does not exists'})
+
+        page_size = body.get('pageSize', 1000)
+        total_items = queryset.count()
+
+        def event_stream():
+            for start in range(0, total_items, page_size):
+                end = start + page_size
+
+                page_data = queryset[start:end]
+
+                serializer = HighschoolStudentSerializer(page_data, many=True)
+
+                yield serializer.data
+
+        response = StreamingHttpResponse(
+            event_stream(), content_type='text/event-stream'
+        )
+
+        response['Cache-Control'] = 'no-cache'
+        response['X-Accel-Buffering'] = 'no'
+        return response
 
     # POST /students_count
     @action(detail=False, methods=['POST'])
@@ -214,10 +276,9 @@ class CollegeViewSet(viewsets.ReadOnlyModelViewSet):
 
         return super().list(request)
 
-    # POST /students
-
+    # POST /students_paginated
     @action(detail=False, methods=['POST'])
-    def students(self, request, pk=None):
+    def students_paginated(self, request, pk=None):
         body = request.data
 
         queryset = CollegeStudent.objects.all()
@@ -265,6 +326,67 @@ class CollegeViewSet(viewsets.ReadOnlyModelViewSet):
             queryset[start:end], many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # POST /students_stream
+    @action(detail=False, methods=['POST'])
+    def students_stream(self, request, pk=None):
+        body = request.data
+
+        queryset = CollegeStudent.objects.all()
+        deparment_id = body.get('department')
+        municipality_id = body.get('municipality')
+        college_id = body.get('college')
+        period_id = body.get('period')
+
+        if deparment_id:
+            try:
+                queryset = queryset.filter(
+                    college__municipality__department_id=deparment_id
+                )
+            except ObjectDoesNotExist:
+                return Response({'detail': 'department with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if municipality_id:
+            try:
+                queryset = queryset.filter(
+                    college_municipality_id=municipality_id)
+            except ObjectDoesNotExist:
+                return Response({'detail': 'municipality with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if college_id:
+            try:
+                college = College.objects.get(pk=college_id)
+                queryset = queryset.filter(college=college)
+            except ObjectDoesNotExist:
+                return Response({'detail': 'college with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if period_id:
+            try:
+                period = Period.objects.get(pk=period_id)
+                queryset = queryset.filter(period=period)
+            except ObjectDoesNotExist:
+                return Response({'detail': 'period with the given :pk does not exists'})
+
+        page_size = body.get('pageSize', 1000)
+        total_items = queryset.count()
+
+        def event_stream():
+            for start in range(0, total_items, page_size):
+                end = start + page_size
+
+                page_data = queryset[start:end]
+
+                serializer = CollegeStudentSerializer(page_data, many=True)
+
+                yield serializer.data
+
+        response = StreamingHttpResponse(
+            event_stream(), content_type='text/event-stream'
+        )
+
+        response['Cache-Control'] = 'no-cache'
+        response['X-Accel-Buffering'] = 'no'
+        return response
 
      # POST /students_count
     @action(detail=False, methods=['POST'])
