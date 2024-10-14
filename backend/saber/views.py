@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from .models import Department, Municipality, Highschool, College, HighschoolStudent, CollegeStudent, Period
-from .serializers import DepartmentSerializer, MunicipalitySerializer, HighschoolSerializer, CollegeSerializer, HighschoolStudentSerializer, CollegeStudentSerializer
+from .serializers import DepartmentSerializer, MunicipalitySerializer, HighschoolSerializer, CollegeSerializer, HighschoolStudentSerializer, CollegeStudentSerializer, PeriodSerializer
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
@@ -114,17 +114,59 @@ class HighschoolViewSet(viewsets.ReadOnlyModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # GET /:id/students_count
-    @action(detail=True, methods=['GET'])
+    # POST /students_count
+    @action(detail=False, methods=['POST'])
     def students_count(self, request, pk=None):
-        try:
-            highschool = Highschool.objects.get(pk=pk)
+        body = request.data
 
-            students = HighschoolStudent.objects.filter(highschool=highschool)
+        queryset = HighschoolStudent.objects.all()
+        deparment_id = body.get('department')
+        municipality_id = body.get('municipality')
+        highschool_id = body.get('highschool')
+        period_id = body.get('period')
 
-            return Response({'count': len(students)}, status=status.HTTP_200_OK)
-        except ObjectDoesNotExist:
-            return Response({'detail': 'highschool with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
+        if deparment_id:
+            try:
+                queryset = queryset.filter(
+                    highschool__municipality__department_id=deparment_id
+                )
+            except ObjectDoesNotExist:
+                return Response({'detail': 'department with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if municipality_id:
+            try:
+                queryset = queryset.filter(
+                    highschool_municipality_id=municipality_id)
+            except ObjectDoesNotExist:
+                return Response({'detail': 'municipality with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if highschool_id:
+            try:
+                highschool = Highschool.objects.get(pk=highschool_id)
+                queryset = queryset.filter(highschool=highschool)
+            except ObjectDoesNotExist:
+                return Response({'detail': 'highschool with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if period_id:
+            try:
+                period = Period.objects.get(pk=period_id)
+                queryset = queryset.filter(period=period)
+            except ObjectDoesNotExist:
+                return Response({'detail': 'period with the given :pk does not exists'})
+
+        return Response({'count': len(queryset)}, status=status.HTTP_200_OK)
+
+    # GET /periods
+    @action(detail=False, methods=['GET'])
+    def periods(self, request):
+        periods_id = HighschoolStudent.objects.values_list(
+            'period', flat=True).distinct()
+
+        periods = Period.objects.filter(id__in=periods_id)
+
+        serializer = PeriodSerializer(periods, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class CollegeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -182,14 +224,61 @@ class CollegeViewSet(viewsets.ReadOnlyModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-     # GET /:id/students_count
-    @action(detail=True, methods=['GET'])
+     # POST /students_count
+    @action(detail=False, methods=['POST'])
     def students_count(self, request, pk=None):
-        try:
-            college = College.objects.get(pk=pk)
+        body = request.data
 
-            students = CollegeStudent.objects.filter(college=college)
+        queryset = CollegeStudent.objects.all()
+        deparment_id = body.get('department')
+        municipality_id = body.get('municipality')
+        college_id = body.get('college')
+        period_id = body.get('period')
 
-            return Response({'count': len(students)}, status=status.HTTP_200_OK)
-        except ObjectDoesNotExist:
-            return Response({'detail': 'college with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
+        if deparment_id:
+            try:
+                queryset = queryset.filter(
+                    college__municipality__department_id=deparment_id
+                )
+            except ObjectDoesNotExist:
+                return Response({'detail': 'department with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if municipality_id:
+            try:
+                queryset = queryset.filter(
+                    college_municipality_id=municipality_id)
+            except ObjectDoesNotExist:
+                return Response({'detail': 'municipality with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if college_id:
+            try:
+                college = College.objects.get(pk=college_id)
+                queryset = queryset.filter(college=college)
+            except ObjectDoesNotExist:
+                return Response({'detail': 'college with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if period_id:
+            try:
+                period = Period.objects.get(pk=period_id)
+                queryset = queryset.filter(period=period)
+            except ObjectDoesNotExist:
+                return Response({'detail': 'period with the given :pk does not exists'})
+
+        return Response({'count': len(queryset)}, status=status.HTTP_200_OK)
+
+    # GET /periods
+    @action(detail=False, methods=['GET'])
+    def periods(self, request):
+        periods_id = CollegeStudent.objects.values_list(
+            'period', flat=True).distinct()
+
+        periods = Period.objects.filter(id__in=periods_id)
+
+        serializer = PeriodSerializer(periods, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class PeriodViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Period.objects.all()
+    serializer_class = PeriodSerializer
