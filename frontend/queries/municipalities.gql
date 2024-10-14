@@ -1,6 +1,0 @@
-query municipalities($departmentId: ID!) {
-    municipalities(departmentId: $departmentId) {
-        id
-        name
-    }
-}

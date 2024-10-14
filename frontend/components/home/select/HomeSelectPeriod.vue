@@ -1,27 +1,9 @@
 <script setup lang="ts">
     import { useAnalysisOptions } from "@/stores/analysisOptions";
-    import { ReportType } from "@/types/types";
 
     const analysisStore = useAnalysisOptions();
 
-    const { data } = useAsyncGql({
-        operation: "periods",
-        variables: {
-            type: computed(() => getType()),
-        },
-    });
-
-    const filteredPeriods = computed(() => {
-        if (!data.value) return [];
-
-        return data.value.periods?.filter((period) => period !== null);
-    });
-
-    function getType() {
-        if (analysisStore.reportType === ReportType.SABER11) return "Saber11";
-        if (analysisStore.reportType === ReportType.SABERPRO) return "SaberPro";
-        return "Saber11";
-    }
+    const { data } = await useHomePeriods();
 </script>
 
 <template>
@@ -36,9 +18,9 @@
             </SelectTrigger>
             <SelectContent>
                 <SelectItem
-                    v-for="item in filteredPeriods"
+                    v-for="item in data"
                     :key="item.id"
-                    :value="item.id"
+                    :value="item.id.toString()"
                 >
                     {{ item.label }}
                 </SelectItem>

@@ -1,5 +1,0 @@
-query college($id: ID!) {
-    college(id: $id) {
-        name
-    }
-}

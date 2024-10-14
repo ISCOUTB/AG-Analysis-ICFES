@@ -1,5 +1,0 @@
-query municipality($id: ID!) {
-    municipality(id: $id) {
-        name
-    }
-}

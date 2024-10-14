@@ -1,6 +1,0 @@
-query departments {
-    departments {
-        id
-        name
-    }
-}

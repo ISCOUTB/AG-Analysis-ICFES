@@ -1,5 +1,0 @@
-query department($id: ID!) {
-    department(id: $id) {
-        name
-    }
-}

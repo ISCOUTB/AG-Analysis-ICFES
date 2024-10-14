@@ -3,9 +3,9 @@
 
     const analysisStore = useAnalysisOptions();
 
-    const { filteredColleges } = useHomeColleges();
+    const { data } = await useHomeColleges();
     const disabled = computed(
-        () => !analysisStore.municipality || !filteredColleges.value?.length,
+        () => !analysisStore.municipality || !data.value?.length,
     );
 
     async function handleSelect(payload: string) {
@@ -26,9 +26,9 @@
             </SelectTrigger>
             <SelectContent>
                 <SelectItem
-                    v-for="item in filteredColleges"
+                    v-for="item in data"
                     :key="item.id"
-                    :value="item.id"
+                    :value="item.id.toString()"
                 >
                     {{ item.name }}
                 </SelectItem>

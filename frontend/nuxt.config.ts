@@ -6,7 +6,6 @@ export default defineNuxtConfig({
         "@nuxtjs/tailwindcss",
         ["shadcn-nuxt", { prefix: "", componentDir: "./components/ui" }],
         ["@nuxtjs/color-mode", { classSuffix: "" }],
-        "nuxt-graphql-client",
         "nuxt-auth-utils",
         [
             "@pinia/nuxt",
@@ -53,6 +52,7 @@ export default defineNuxtConfig({
         sessionPassword: process.env.NUXT_SESSION_PASSWORD,
         databaseURL: process.env.DATABASE_URL,
         public: {
+            API_URL: process.env.API_URL,
             GQL_HOST: process.env.GQL_HOST,
         },
     },
