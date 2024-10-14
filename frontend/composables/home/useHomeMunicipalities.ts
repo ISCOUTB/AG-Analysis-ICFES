@@ -1,30 +1,30 @@
 import { useAnalysisOptions } from "@/stores/analysisOptions";
+import { z } from "zod";
 
-export default function () {
+const Response = z.object({
+    id: z.number(),
+    name: z.string(),
+});
+
+const ResponseArray = z.array(Response);
+
+export default async function () {
     const analysisOptions = useAnalysisOptions();
-
+    const { $api } = useNuxtApp();
     const departmentId = computed(() => analysisOptions.department);
 
-    const { data } = useAsyncGql({
-        operation: "municipalities",
-        variables: {
-            departmentId,
-        },
-        options: {
-            immediate: false,
-            watch: [departmentId],
-        },
-    });
-
-    const filteredMunicipalities = computed(() => {
-        if (!data.value) return [];
-
-        return data.value.municipalities?.filter(
-            (department) => department !== null,
-        );
-    });
-
-    return {
-        filteredMunicipalities,
-    };
+    return useAsyncData(
+        "municipalities",
+        () =>
+            $api(`/department/${departmentId.value}/municipalities`)
+                .then((response) => ResponseArray.parse(response))
+                .catch((error) => {
+                    if (error instanceof z.ZodError)
+                        throw createError({
+                            statusCode: 500,
+                            statusMessage: error.message,
+                        });
+                }),
+        { immediate: false, watch: [departmentId] },
+    );
 }

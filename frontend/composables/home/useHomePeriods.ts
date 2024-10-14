@@ -1,22 +1,32 @@
 import { useAnalysisOptions } from "@/stores/analysisOptions";
 import { z } from "zod";
+import { ReportType } from "~/types/types";
 
 const Response = z.object({
     id: z.number(),
-    name: z.string(),
+    label: z.string(),
 });
 
 const ResponseArray = z.array(Response);
 
+function getQuery(reportType: ReportType): string {
+    switch (reportType) {
+        case ReportType.SABER11:
+            return "/highschool/periods/";
+        case ReportType.SABERPRO:
+            return "/college/periods/";
+    }
+}
+
 export default async function () {
     const analysisOptions = useAnalysisOptions();
     const { $api } = useNuxtApp();
-    const municipalityId = computed(() => analysisOptions.municipality);
+    const reportType = computed(() => analysisOptions.reportType);
 
     return useAsyncData(
-        "highschools",
+        "municipalities",
         () =>
-            $api(`/municipality/${municipalityId.value}/highschools`)
+            $api(getQuery(analysisOptions.reportType))
                 .then((response) => ResponseArray.parse(response))
                 .catch((error) => {
                     if (error instanceof z.ZodError)
@@ -25,6 +35,6 @@ export default async function () {
                             statusMessage: error.message,
                         });
                 }),
-        { immediate: false, watch: [municipalityId] },
+        { immediate: false, watch: [reportType] },
     );
 }

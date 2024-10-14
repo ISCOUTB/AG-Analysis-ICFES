@@ -3,10 +3,9 @@
 
     const analysisStore = useAnalysisOptions();
 
-    const { filteredMunicipalities } = useHomeMunicipalities();
+    const { data } = await useHomeMunicipalities();
     const disabled = computed(
-        () =>
-            !analysisStore.department || !filteredMunicipalities.value?.length,
+        () => !analysisStore.department || !data.value?.length,
     );
 
     function handleSelect(payload: string) {
@@ -29,11 +28,11 @@
             <SelectContent>
                 <div>
                     <SelectItem
-                        v-for="data in filteredMunicipalities"
-                        :key="data.id"
-                        :value="data.id"
+                        v-for="item in data"
+                        :key="item.id"
+                        :value="item.id.toString()"
                     >
-                        {{ data.name }}
+                        {{ item.name }}
                     </SelectItem>
                 </div>
             </SelectContent>

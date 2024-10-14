@@ -13,6 +13,8 @@
 
     const { toast } = useToast();
 
+    console.table(savedItem.content);
+
     const items: SheetSavedAnalysisCollapsibleItem[] = [
         {
             label: "Department",
@@ -62,6 +64,13 @@
             icon: "material-symbols:nest-clock-farsight-analog-outline-rounded",
             classIcon: "text-3xl text-violet-500",
             renderIf: () => !!savedItem.content.period,
+        },
+        {
+            label: "Report Type",
+            value: savedItem.content.reportType,
+            icon: "icon-park-outline:table-report",
+            classIcon: "text-3xl text-gray-800",
+            renderIf: () => !!savedItem.content.reportType,
         },
     ];
 
@@ -135,9 +144,10 @@
                             <span class="font-medium text-sm">{{
                                 item.label
                             }}</span>
-                            <span class="text-sm text-gray-600 dark:text-slate-50">{{
-                                item.value
-                            }}</span>
+                            <span
+                                class="text-sm text-gray-600 dark:text-slate-50"
+                                >{{ item.value }}</span
+                            >
                         </div>
                     </div>
                 </template>
