@@ -9,5 +9,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("graphql", csrf_exempt(require_http_methods(
         ["POST", "OPTIONS", "GET"])(GraphQLView.as_view(graphiql=True, schema=schema)))),
-    path('api/', include('saber.urls'))
+    path('api/saber/', include('saber.urls'))
 ]
