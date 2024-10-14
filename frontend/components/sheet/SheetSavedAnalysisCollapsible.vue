@@ -2,6 +2,7 @@
     import { ChevronsUpDown } from "lucide-vue-next";
     import { useToast } from "@/components/ui/toast";
     import { ReportType } from "@/types/types";
+    import { z } from "zod";
 
     interface Props {
         savedItem: SheetSavedAnalysisParsedData;
@@ -12,8 +13,6 @@
     const isOpen = ref(false);
 
     const { toast } = useToast();
-
-    console.table(savedItem.content);
 
     const items: SheetSavedAnalysisCollapsibleItem[] = [
         {
@@ -69,7 +68,7 @@
             label: "Report Type",
             value: savedItem.content.reportType,
             icon: "icon-park-outline:table-report",
-            classIcon: "text-3xl text-gray-800",
+            classIcon: "text-3xl text-gray-800 dark:text-slate-50",
             renderIf: () => !!savedItem.content.reportType,
         },
     ];
@@ -93,7 +92,87 @@
                     title: "Deleted succesfully",
                 });
             })
-            .finally(async () => await refreshNuxtData("stored-analysis"));
+            .finally(() => {
+                const { reload } = useSavedAnalysis();
+
+                reload();
+            });
+    }
+
+    async function handleImport() {
+        const analysisStore = useAnalysisOptions();
+        const { $api } = useNuxtApp();
+
+        analysisStore.clearAll();
+
+        const Response = z.object({
+            id: z.number(),
+        });
+
+        if (savedItem.content.department) {
+            const response = await $api<unknown>("/department/", {
+                query: {
+                    name: savedItem.content.department,
+                },
+            });
+
+            const data = Response.parse(response);
+
+            analysisStore.setDepartment(data.id.toString());
+
+            if (savedItem.content.municipality) {
+                const response = await $api("/municipality/", {
+                    query: {
+                        name: savedItem.content.municipality,
+                    },
+                });
+
+                const data = Response.parse(response);
+
+                analysisStore.setMunicipality(data.id.toString());
+
+                if (savedItem.content.institution) {
+                    if (savedItem.content.reportType === ReportType.SABER11) {
+                        const response = await $api("/highschool/", {
+                            query: {
+                                name: savedItem.content.institution,
+                            },
+                        });
+
+                        const data = Response.parse(response);
+
+                        analysisStore.setInstitution(data.id.toString());
+                    }
+
+                    if (savedItem.content.reportType === ReportType.SABERPRO) {
+                        const response = await $api("/college/", {
+                            query: {
+                                name: savedItem.content.institution,
+                            },
+                        });
+
+                        const data = Response.parse(response);
+
+                        analysisStore.setInstitution(data.id.toString());
+                    }
+                }
+            }
+        }
+
+        if (savedItem.content.period) {
+            const response = await $api("/period", {
+                query: {
+                    label: savedItem.content.period,
+                },
+            });
+
+            const data = Response.parse(response);
+
+            analysisStore.setPeriod(data.id.toString());
+        }
+
+        if (savedItem.content.reportType)
+            analysisStore.setReportType(savedItem.content.reportType);
     }
 </script>
 
@@ -102,18 +181,26 @@
         <div
             class="flex items-center justify-between mr-4 px-4 py-1 rounded-md"
         >
-            <h4 class="text-sm font-semibold">
-                {{
-                    new Date(savedItem.createdAt).toLocaleString("en-Es", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                    })
-                }}
-            </h4>
+            <div class="flex flex-col items-start">
+                <h4 class="text-sm font-semibold">
+                    {{
+                        new Date(savedItem.createdAt).toLocaleString("en-Es", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                        })
+                    }}
+                </h4>
+                <button
+                    class="text-xs text-blue-600 underline"
+                    @click="handleImport"
+                >
+                    Import
+                </button>
+            </div>
 
             <div>
                 <SheetSavedAnalysisCollapsibleAlertDialog

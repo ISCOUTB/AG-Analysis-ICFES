@@ -31,9 +31,7 @@ export default function () {
     }
 
     async function reload() {
-        $fetch<SavedAnalysis[]>("/api/analysis/saved", {
-            cache: "force-cache",
-        })
+        $fetch<SavedAnalysis[]>("/api/analysis/saved")
             .then((results) => {
                 return results.map((item) => ({
                     ...item,

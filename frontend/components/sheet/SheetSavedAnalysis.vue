@@ -13,7 +13,7 @@
             <SheetHeader>
                 <SheetTitle>Stored Analysis</SheetTitle>
             </SheetHeader>
-            <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-4 mt-4">
                 <template v-if="parsedData">
                     <SheetSavedAnalysisCollapsible
                         v-for="item in parsedData"

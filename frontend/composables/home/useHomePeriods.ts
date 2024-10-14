@@ -24,7 +24,7 @@ export default async function () {
     const reportType = computed(() => analysisOptions.reportType);
 
     return useAsyncData(
-        "municipalities",
+        "periods",
         () =>
             $api(getQuery(analysisOptions.reportType))
                 .then((response) => ResponseArray.parse(response))
@@ -35,6 +35,6 @@ export default async function () {
                             statusMessage: error.message,
                         });
                 }),
-        { immediate: false, watch: [reportType] },
+        { watch: [reportType] },
     );
 }

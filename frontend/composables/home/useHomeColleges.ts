@@ -13,10 +13,12 @@ export default async function () {
     const { $api } = useNuxtApp();
     const municipalityId = computed(() => analysisOptions.municipality);
 
-    return useAsyncData(
+    return useAsyncData<z.infer<typeof ResponseArray>>(
         "colleges",
-        () =>
-            $api(`/municipality/${municipalityId.value}/colleges`)
+        () => {
+            if (!municipalityId.value) return Promise.resolve([]);
+
+            return $api(`/municipality/${municipalityId.value}/colleges`)
                 .then((response) => ResponseArray.parse(response))
                 .catch((error) => {
                     if (error instanceof z.ZodError)
@@ -24,7 +26,13 @@ export default async function () {
                             statusCode: 500,
                             statusMessage: error.message,
                         });
-                }),
+
+                    throw createError({
+                        statusCode: 500,
+                        statusMessage: JSON.stringify(error),
+                    });
+                });
+        },
         { immediate: false, watch: [municipalityId] },
     );
 }

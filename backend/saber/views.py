@@ -4,12 +4,23 @@ from .models import Department, Municipality, Highschool, College, HighschoolStu
 from .serializers import DepartmentSerializer, MunicipalitySerializer, HighschoolSerializer, CollegeSerializer, HighschoolStudentSerializer, CollegeStudentSerializer, PeriodSerializer
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 
 
 class DepartmentViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
+
+    def list(self, request):
+        name = request.query_params.get('name')
+
+        if name:
+            department = get_object_or_404(Department, name__iexact=name)
+            serializer = self.get_serializer(department)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return super().list(request)
 
     # GET /:id/municipalities
     @action(detail=True, methods=['GET'])
@@ -29,6 +40,16 @@ class DepartmentViewSet(viewsets.ReadOnlyModelViewSet):
 class MunicipalityViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Municipality.objects.all()
     serializer_class = MunicipalitySerializer
+
+    def list(self, request):
+        name = request.query_params.get('name')
+
+        if name:
+            municipality = get_object_or_404(Municipality, name__iexact=name)
+            serializer = self.get_serializer(municipality)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return super().list(request)
 
     # GET /:id/highschools
     @action(detail=True, methods=['GET'])
@@ -62,6 +83,16 @@ class MunicipalityViewSet(viewsets.ReadOnlyModelViewSet):
 class HighschoolViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Highschool.objects.all()
     serializer_class = HighschoolSerializer
+
+    def list(self, request):
+        name = request.query_params.get('name')
+
+        if name:
+            highschool = get_object_or_404(Highschool, name__iexact=name)
+            serializer = self.get_serializer(highschool)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return super().list(request)
 
     # POST /students
     @action(detail=False, methods=['POST'])
@@ -173,7 +204,18 @@ class CollegeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = College.objects.all()
     serializer_class = CollegeSerializer
 
+    def list(self, request):
+        name = request.query_params.get('name')
+
+        if name:
+            college = get_object_or_404(College, name__iexact=name)
+            serializer = self.get_serializer(college)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return super().list(request)
+
     # POST /students
+
     @action(detail=False, methods=['POST'])
     def students(self, request, pk=None):
         body = request.data
@@ -282,3 +324,13 @@ class CollegeViewSet(viewsets.ReadOnlyModelViewSet):
 class PeriodViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Period.objects.all()
     serializer_class = PeriodSerializer
+
+    def list(self, request):
+        label = request.query_params.get('label')
+
+        if label:
+            period = get_object_or_404(Period, label__iexact=label)
+            serializer = self.get_serializer(period)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return super().list(request)
