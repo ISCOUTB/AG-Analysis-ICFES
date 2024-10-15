@@ -1,9 +1,9 @@
-import { ReportType, StudentsCountStatus } from "@/types/types";
+import { ReportType } from "@/types/types";
 
 type StringKeys = ExtractByTypeExcluding<
     AnalysisOptionsState,
     string,
-    ReportType | StudentsCountStatus
+    ReportType
 >;
 
 export const useAnalysisOptions = defineStore("analysis-options-store", {
@@ -13,8 +13,6 @@ export const useAnalysisOptions = defineStore("analysis-options-store", {
         municipality: "",
         reportType: ReportType.SABER11,
         period: "",
-        studentsCount: 0,
-        studentsCountStatus: StudentsCountStatus.IDLE,
     }),
     actions: {
         setDepartment(payload: string) {
@@ -39,14 +37,6 @@ export const useAnalysisOptions = defineStore("analysis-options-store", {
             this.period = payload;
         },
 
-        setStudentsCount(payload: number) {
-            this.studentsCount = payload;
-        },
-
-        setStudentsCountStatus(payload: StudentsCountStatus) {
-            this.studentsCountStatus = payload;
-        },
-
         clear(key: StringKeys) {
             this[key] = "";
         },
@@ -57,8 +47,6 @@ export const useAnalysisOptions = defineStore("analysis-options-store", {
             this.institution = "";
             this.reportType = ReportType.SABER11;
             this.period = "";
-            this.studentsCount = 0;
-            this.studentsCountStatus = StudentsCountStatus.IDLE;
         },
     },
 });

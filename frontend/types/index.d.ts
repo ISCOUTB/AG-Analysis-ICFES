@@ -65,8 +65,6 @@ declare global {
         institution: string;
         reportType: ReportType;
         period: string;
-        studentsCount: number;
-        studentsCountStatus: StudentsCountStatus;
     }
 
     interface SheetSavedAnalysisCollapsibleItem {
