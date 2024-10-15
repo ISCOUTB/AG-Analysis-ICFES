@@ -8,4 +8,5 @@ export enum Status {
     LOADING,
     COMPLETED,
     ERROR,
+    TERMINATED,
 }

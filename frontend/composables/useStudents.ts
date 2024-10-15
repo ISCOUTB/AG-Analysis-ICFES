@@ -20,77 +20,109 @@ interface Options {
 
 export default async function () {
     const store = useAnalysisOptions();
-    const status = useState<Status>(() => Status.IDLE);
-    const error = useState();
+    const { status } = useStatus();
     const { toast } = useToast();
 
-    const highschoolStudentsData =
-        useState<z.infer<typeof HighschoolResponseArray>>();
+    const highschoolStudentsData = useState<
+        z.infer<typeof HighschoolResponseArray>
+    >(() => []);
 
-    const collegeStudentsData =
-        useState<z.infer<typeof CollegeResponseArray>>();
+    const collegeStudentsData = useState<z.infer<typeof CollegeResponseArray>>(
+        () => [],
+    );
 
     async function execute() {
         status.value = Status.LOADING;
 
         if (store.reportType === ReportType.SABER11) {
-            await fetchData(
-                {
-                    endpoint: "/highschool/students_paginated/",
-                    options: {
-                        method: "POST",
+            async function loop(page: number) {
+                const response = await fetchData(
+                    {
+                        endpoint: "/highschool/students_paginated/",
+                        options: {
+                            method: "POST",
+                        },
+                        body: {
+                            department: store.department,
+                            municipality: store.municipality,
+                            highschool: store.institution,
+                            period: store.period,
+                            pageSize: 1000,
+                        },
                     },
-                    body: {
-                        department: store.department,
-                        municipality: store.municipality,
-                        highschool: store.institution,
-                        period: store.period,
-                        pageSize: 1000,
-                    },
-                },
-                {
-                    page: 1,
-                },
-            )
-                .catch((_error) => console.log(_error))
-                .finally(() => {
-                    status.value = status.value = Status.COMPLETED;
-                    
-                    toast({
-                        title: "Getting the data for the students",
-                        description: "Action just finished",
-                    });
-                });
+                    { page: page },
+                );
+
+                const data = HighschoolResponseArray.parse(response);
+
+                if (data.length) {
+                    highschoolStudentsData.value = [
+                        ...highschoolStudentsData.value,
+                        ...data,
+                    ];
+
+                    if (status.value === Status.TERMINATED) {
+                        highschoolStudentsData.value.length = 0;
+                        return;
+                    }
+
+                    await loop(page + 1);
+                }
+            }
+
+            await loop(1);
+
+            if (status.value !== (Status.TERMINATED as Status))
+                status.value = Status.COMPLETED;
         }
 
         if (store.reportType === ReportType.SABERPRO) {
-            await fetchData(
-                {
-                    endpoint: "/college/students_paginated/",
-                    options: {
-                        method: "POST",
+            async function loop(page: number) {
+                const response = await fetchData(
+                    {
+                        endpoint: "/college/students_paginated",
+                        options: {
+                            method: "POST",
+                        },
+                        body: {
+                            department: store.department,
+                            municipality: store.municipality,
+                            college: store.institution,
+                            period: store.period,
+                            pageSize: 1000,
+                        },
                     },
-                    body: {
-                        department: store.department,
-                        municipality: store.municipality,
-                        college: store.institution,
-                        period: store.period,
-                        pageSize: 1000,
-                    },
-                },
-                {
-                    page: 1,
-                },
-            )
-                .catch((_error) => console.log(_error))
-                .finally(() => {
-                    status.value = status.value = Status.COMPLETED;
-                    toast({
-                        title: "Getting the data for the students",
-                        description: "Action just finished",
-                    });
-                });
+                    { page: page },
+                );
+
+                const data = CollegeResponseArray.parse(response);
+
+                if (data.length) {
+                    collegeStudentsData.value = [
+                        ...collegeStudentsData.value,
+                        ...data,
+                    ];
+
+                    if (status.value === Status.TERMINATED) {
+                        collegeStudentsData.value.length = 0;
+                        return;
+                    }
+
+                    await loop(page + 1);
+                }
+            }
+
+            await loop(1);
+
+            if (status.value !== (Status.TERMINATED as Status))
+                status.value = Status.COMPLETED;
         }
+
+        if (status.value === Status.COMPLETED)
+            toast({
+                title: "Finished gathering the students data",
+                description: "Action just finished",
+            });
     }
 
     async function fetchData(
@@ -99,54 +131,25 @@ export default async function () {
     ) {
         const { $api } = useNuxtApp();
 
-        $api<unknown[]>(endpoint, {
-            ...options,
-            body: {
-                ...body,
-                page,
-            },
-        })
-            .then((response) => {
-                if (store.reportType === ReportType.SABER11) {
-                    const data = HighschoolResponseArray.parse(response);
-
-                    if (data.length) {
-                        highschoolStudentsData.value = [
-                            ...highschoolStudentsData.value,
-                            ...data,
-                        ];
-
-                        fetchData(
-                            { endpoint, options, body },
-                            { page: page + 1 },
-                        );
-                    }
-                }
-
-                if (store.reportType === ReportType.SABERPRO) {
-                    const data = CollegeResponseArray.parse(response);
-
-                    if (data.length) {
-                        collegeStudentsData.value = [
-                            ...collegeStudentsData.value,
-                            ...data,
-                        ];
-
-                        fetchData(
-                            { endpoint, options, body },
-                            { page: page + 1 },
-                        );
-                    }
-                }
-            })
-            .catch((_error) => {
-                error.value = _error;
-                status.value = Status.ERROR;
+        try {
+            const response = await $api<unknown[]>(endpoint, {
+                ...options,
+                body: {
+                    ...body,
+                    page,
+                },
             });
+
+            return response;
+        } catch (error) {
+            throw createError({
+                statusCode: 500,
+                statusMessage: JSON.stringify(error),
+            });
+        }
     }
 
     return {
-        status,
         highschoolStudentsData,
         collegeStudentsData,
         execute,
