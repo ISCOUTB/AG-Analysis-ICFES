@@ -8,3 +8,10 @@ export enum StudentsCountStatus {
     LOADING = "LOADING",
     COMPLETED = "COMPLETED",
 }
+
+export enum Status {
+    IDLE,
+    LOADING,
+    COMPLETED,
+    ERROR,
+}

@@ -1,6 +1,15 @@
 <script setup lang="ts">
+    import { Status } from "@/types/types";
+
     useHead({
         title: "Home Page",
+    });
+
+    const { execute, status } = await useStudents();
+    const { $api } = useNuxtApp();
+
+    const response = await $api<unknown[]>("/highschool/students_paginated/", {
+        method: "POST",
     });
 </script>
 
@@ -21,5 +30,11 @@
                 <span>Once submited you can view your results here</span>
             </div>
         </div>
+        <Button
+            :disabled="status === Status.LOADING"
+            @click="async () => await execute()"
+            >Execute</Button
+        >
+        {{ response.length }}
     </section>
 </template>

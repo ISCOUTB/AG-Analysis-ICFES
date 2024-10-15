@@ -229,7 +229,7 @@ class HighschoolViewSet(viewsets.ReadOnlyModelViewSet):
         if municipality_id:
             try:
                 queryset = queryset.filter(
-                    highschool_municipality_id=municipality_id)
+                    highschool__municipality_id=municipality_id)
             except ObjectDoesNotExist:
                 return Response({'detail': 'municipality with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -298,7 +298,7 @@ class CollegeViewSet(viewsets.ReadOnlyModelViewSet):
         if municipality_id:
             try:
                 queryset = queryset.filter(
-                    college_municipality_id=municipality_id)
+                    college__municipality_id=municipality_id)
             except ObjectDoesNotExist:
                 return Response({'detail': 'municipality with the given :pk does not exists'}, status=status.HTTP_400_BAD_REQUEST)
 
