@@ -6,11 +6,6 @@
     });
 
     const { execute, status } = await useStudents();
-    const { $api } = useNuxtApp();
-
-    const response = await $api<unknown[]>("/highschool/students_paginated/", {
-        method: "POST",
-    });
 </script>
 
 <template>
@@ -18,7 +13,12 @@
         <HomeAnalysisOptions />
         <div class="w-full py-12 bg-gray-300/20 dark:bg-gray-900/80">
             <div class="container px-4 md:px-6 flex gap-2">
-                <Button> Submit </Button>
+                <Button
+                    :disabled="status === Status.LOADING"
+                    @click="async () => await execute()"
+                >
+                    Submit
+                </Button>
                 <HomeButtonSaveAnalysis />
                 <SheetSavedAnalysis />
             </div>
@@ -30,11 +30,5 @@
                 <span>Once submited you can view your results here</span>
             </div>
         </div>
-        <Button
-            :disabled="status === Status.LOADING"
-            @click="async () => await execute()"
-            >Execute</Button
-        >
-        {{ response.length }}
     </section>
 </template>

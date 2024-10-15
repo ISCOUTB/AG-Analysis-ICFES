@@ -3,12 +3,6 @@ export enum ReportType {
     SABERPRO = "SABERPRO",
 }
 
-export enum StudentsCountStatus {
-    IDLE = "IDLE",
-    LOADING = "LOADING",
-    COMPLETED = "COMPLETED",
-}
-
 export enum Status {
     IDLE,
     LOADING,
