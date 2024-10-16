@@ -1,6 +1,6 @@
 import type { InputHTMLAttributes, HTMLAttributes } from "vue";
 import type { SaveAnalysisSchema } from "@/schemas/analysis/saveAnalysis.schema";
-import type { ReportType, StudentsCountStatus } from "@/types/types";
+import type { ReportType } from "@/types/types";
 import type { z } from "zod";
 
 declare module "#auth-utils" {
@@ -92,6 +92,15 @@ declare global {
                 : K
             : never;
     }[keyof T];
+
+    interface PricingPlan {
+        title: string;
+        description: string;
+        price: string;
+        features: string[];
+        message: string;
+        disabled: boolean;
+    }
 }
 
 export {};

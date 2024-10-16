@@ -7,6 +7,7 @@ import type { FetchOptions } from "ofetch";
 import { ReportType, Status } from "@/types/types";
 import { useToast } from "@/components/ui/toast";
 import type { z } from "zod";
+import { STUDENTS_CHUNK_SIZE } from "@/config/constants";
 
 interface RequestArgs {
     endpoint: string;
@@ -47,7 +48,7 @@ export default async function () {
                             municipality: store.municipality,
                             highschool: store.institution,
                             period: store.period,
-                            pageSize: 1000,
+                            pageSize: STUDENTS_CHUNK_SIZE,
                         },
                     },
                     { page: page },
@@ -89,7 +90,7 @@ export default async function () {
                             municipality: store.municipality,
                             college: store.institution,
                             period: store.period,
-                            pageSize: 1000,
+                            pageSize: STUDENTS_CHUNK_SIZE,
                         },
                     },
                     { page: page },

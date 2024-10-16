@@ -8,7 +8,7 @@
         },
         {
             label: "pricing",
-            to: "/",
+            to: "/pricing",
         },
         {
             label: "about",
