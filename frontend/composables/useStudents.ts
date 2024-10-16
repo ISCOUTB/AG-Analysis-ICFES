@@ -37,21 +37,23 @@ export default async function () {
 
         if (store.reportType === ReportType.SABER11) {
             async function loop(page: number) {
-                const response = await fetchData(
-                    {
-                        endpoint: "/highschool/students_paginated/",
-                        options: {
-                            method: "POST",
+                const [_, response] = await withCatch(
+                    fetchData(
+                        {
+                            endpoint: "/highschool/students_paginated/",
+                            options: {
+                                method: "POST",
+                            },
+                            body: {
+                                department: store.department,
+                                municipality: store.municipality,
+                                highschool: store.institution,
+                                period: store.period,
+                                pageSize: STUDENTS_CHUNK_SIZE,
+                            },
                         },
-                        body: {
-                            department: store.department,
-                            municipality: store.municipality,
-                            highschool: store.institution,
-                            period: store.period,
-                            pageSize: STUDENTS_CHUNK_SIZE,
-                        },
-                    },
-                    { page: page },
+                        { page: page },
+                    ),
                 );
 
                 const data = HighschoolResponseArray.parse(response);
@@ -79,21 +81,23 @@ export default async function () {
 
         if (store.reportType === ReportType.SABERPRO) {
             async function loop(page: number) {
-                const response = await fetchData(
-                    {
-                        endpoint: "/college/students_paginated",
-                        options: {
-                            method: "POST",
+                const [_, response] = await withCatch(
+                    fetchData(
+                        {
+                            endpoint: "/college/students_paginated",
+                            options: {
+                                method: "POST",
+                            },
+                            body: {
+                                department: store.department,
+                                municipality: store.municipality,
+                                college: store.institution,
+                                period: store.period,
+                                pageSize: STUDENTS_CHUNK_SIZE,
+                            },
                         },
-                        body: {
-                            department: store.department,
-                            municipality: store.municipality,
-                            college: store.institution,
-                            period: store.period,
-                            pageSize: STUDENTS_CHUNK_SIZE,
-                        },
-                    },
-                    { page: page },
+                        { page: page },
+                    ),
                 );
 
                 const data = CollegeResponseArray.parse(response);
@@ -132,23 +136,34 @@ export default async function () {
     ) {
         const { $api } = useNuxtApp();
 
-        try {
-            const response = await $api<unknown[]>(endpoint, {
+        const [error, response] = await withCatch(
+            $api<unknown[]>(endpoint, {
                 ...options,
                 body: {
                     ...body,
                     page,
                 },
+            }),
+        );
+
+        if (error) {
+            toast({
+                title: "Oops! An error ocurred",
+                description: JSON.stringify(error),
             });
 
-            return response;
-        } catch (error) {
-            throw createError({
-                statusCode: 500,
-                statusMessage: JSON.stringify(error),
-            });
+            return;
         }
+
+        return response;
     }
+
+    onMounted(() => {
+        watch(
+            () => highschoolStudentsData.value.length,
+            () => console.log(highschoolStudentsData.value.length),
+        );
+    });
 
     return {
         highschoolStudentsData,
