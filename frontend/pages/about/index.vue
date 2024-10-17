@@ -9,6 +9,13 @@
             tags: ["UI Designer", "Vue Developer"],
             image: "https://avatars.githubusercontent.com/u/101476062?v=4",
         },
+        {
+            name: "Aaron Dali",
+            role: "Backend Developer",
+            description: "College Student",
+            tags: ["Schizophrenia"],
+            image: "https://avatars.githubusercontent.com/u/163145987?v=4",
+        },
     ];
 </script>
 
@@ -33,6 +40,7 @@
                             {{ participant.name }}
                         </CardTitle>
                         <CardDescription>
+                            {{ participant.role }} |
                             {{ participant.description }}
                         </CardDescription>
                     </div>
