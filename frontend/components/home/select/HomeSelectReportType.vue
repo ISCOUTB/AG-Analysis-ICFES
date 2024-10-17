@@ -1,10 +1,11 @@
 <script setup lang="ts">
     import { useAnalysisOptions } from "@/stores/analysisOptions";
-    import { ReportType } from "@/types/types";
+    import { ReportType, Status } from "@/types/types";
 
     const analysisStore = useAnalysisOptions();
+    const { status } = useStatus();
 
-    function handleReportTypeChange(payload: string | number) {
+    async function handleReportTypeChange(payload: string | number) {
         const value = payload.toString();
 
         if (value !== ReportType.SABER11 && value !== ReportType.SABERPRO)
@@ -13,6 +14,14 @@
         analysisStore.setReportType(value);
         analysisStore.clear("period");
         analysisStore.clear("institution");
+
+        if (analysisStore.reportType === ReportType.SABER11)
+            await refreshNuxtData("highschools");
+
+        if (analysisStore.reportType === ReportType.SABERPRO)
+            await refreshNuxtData("colleges");
+
+        status.value = Status.TERMINATED;
     }
 </script>
 

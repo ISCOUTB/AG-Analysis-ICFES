@@ -101,6 +101,13 @@ declare global {
         message: string;
         disabled: boolean;
     }
+
+    interface BarChartData {
+        name: string;
+        average: number;
+        max: number;
+        min: number;
+    }
 }
 
 export {};
