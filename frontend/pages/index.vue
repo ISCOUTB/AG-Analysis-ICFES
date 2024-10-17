@@ -56,15 +56,23 @@
         </div>
         <template v-if="status === Status.COMPLETED">
             <div class="w-full mt-4">
-                <div class="container px-4 md:px-6 py-6">
-                    <template v-if="store.reportType === ReportType.SABER11">
+                <template v-if="store.reportType === ReportType.SABER11">
+                    <div
+                        class="container px-4 md:px-6 py-6 flex flex-col gap-8"
+                    >
                         <LazyChartHighschoolBar />
-                    </template>
+                        <LazyChartHighschoolTable />
+                    </div>
+                </template>
 
-                    <template v-if="store.reportType === ReportType.SABERPRO">
+                <template v-if="store.reportType === ReportType.SABERPRO">
+                    <div
+                        class="container px-4 md:px-6 py-6 flex flex-col gap-8"
+                    >
                         <LazyChartCollegeBar />
-                    </template>
-                </div>
+                        <LazyChartCollegeTable />
+                    </div>
+                </template>
             </div>
         </template>
     </section>

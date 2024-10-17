@@ -108,6 +108,15 @@ declare global {
         max: number;
         min: number;
     }
+
+    interface TableData {
+        name: string;
+        std: number;
+        variance: number;
+        Q1: number;
+        Q3: number;
+        median: number;
+    }
 }
 
 export {};

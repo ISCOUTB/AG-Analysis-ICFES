@@ -1,21 +1,19 @@
 <script setup lang="ts">
-    import type { HighschoolDataSchemaType } from "@/schemas/analysis/students.schema";
+    import type { CollegeDataSchemaType } from "@/schemas/analysis/students.schema";
     import { std, variance, quantileSeq } from "mathjs";
 
-    const { parsedHighschoolStudentsData, highschoolCategories } =
+    const { parsedCollegeStudentsData, collegeCategories } =
         await useStudentsData();
 
     const tableData = computed<TableData[]>(() =>
-        highschoolCategories.value.map((category) => ({
+        collegeCategories.value.map((category) => ({
             name: category,
             ...calculateStats(category),
         })),
     );
 
-    function calculateStats(key: keyof HighschoolDataSchemaType) {
-        const values = parsedHighschoolStudentsData.value.map(
-            (item) => item[key],
-        );
+    function calculateStats(key: keyof CollegeDataSchemaType) {
+        const values = parsedCollegeStudentsData.value.map((item) => item[key]);
 
         return {
             std: roundToDecimals(Number(std(values)), 2),
