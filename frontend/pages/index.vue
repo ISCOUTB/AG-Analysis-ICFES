@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { Status } from "@/types/types";
+    import { ReportType, Status } from "@/types/types";
     import { useToast } from "@/components/ui/toast";
 
     useHead({
@@ -9,6 +9,7 @@
     const { execute } = await useStudents();
     const { status } = useStatus();
     const { toast } = useToast();
+    const store = useAnalysisOptions();
 
     function handleTerminate() {
         status.value = Status.TERMINATED;
@@ -42,12 +43,29 @@
                 >
             </div>
         </div>
-        <div class="w-full bg-gray-300/20 dark:bg-gray-900/80 mt-4">
+        <div
+            v-if="status !== Status.COMPLETED"
+            v-auto-animate
+            class="w-full bg-gray-300/20 dark:bg-gray-900/80 mt-4"
+        >
             <div
                 class="container px-4 md:px-6 py-6 flex gap-2 text-sm font-medium opacity-60"
             >
                 <span>Once submited you can view your results here</span>
             </div>
         </div>
+        <template v-if="status === Status.COMPLETED">
+            <div class="w-full mt-4">
+                <div class="container px-4 md:px-6 py-6">
+                    <template v-if="store.reportType === ReportType.SABER11">
+                        <LazyChartHighschoolBar />
+                    </template>
+
+                    <template v-if="store.reportType === ReportType.SABERPRO">
+                        <LazyChartCollegeBar />
+                    </template>
+                </div>
+            </div>
+        </template>
     </section>
 </template>

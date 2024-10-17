@@ -99,8 +99,6 @@ export default async function () {
             return;
         }
 
-        console.log(studentsCount.value);
-
         const totalPages = Math.ceil(studentsCount.value / STUDENTS_CHUNK_SIZE);
 
         if (store.reportType === ReportType.SABER11) {
@@ -221,13 +219,6 @@ export default async function () {
 
         return response;
     }
-
-    onMounted(() => {
-        watch(
-            () => highschoolStudentsData.value.length,
-            () => console.log(highschoolStudentsData.value.length),
-        );
-    });
 
     return {
         highschoolStudentsData,
