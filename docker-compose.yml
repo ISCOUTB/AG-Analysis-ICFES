@@ -7,7 +7,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
     ports:
-      - "5432:5432"
+      - "15432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -38,7 +38,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: python:latest
     ports:
       - "8006:8006"
     depends_on:
@@ -47,18 +46,18 @@ services:
     networks:
       - db_network
 
-  nuxtapp:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    image: node:latest
-    ports:
-      - "3006:3006"
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - db_network
+  # nuxtapp:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   image: node:latest
+  #   ports:
+  #     - "3006:3006"
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #   networks:
+  #     - db_network
 
 networks:
   db_network:
