@@ -46,18 +46,18 @@ services:
     networks:
       - db_network
 
-  # nuxtapp:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   image: node:latest
-  #   ports:
-  #     - "3006:3006"
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
-  #   networks:
-  #     - db_network
+  nuxtapp:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: node:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - db_network
 
 networks:
   db_network:
