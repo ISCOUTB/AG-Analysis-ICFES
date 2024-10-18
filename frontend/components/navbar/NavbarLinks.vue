@@ -16,7 +16,7 @@
         },
         {
             label: "contact",
-            to: "/",
+            to: "/contact",
         },
     ];
 </script>
