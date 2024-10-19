@@ -1,13 +1,12 @@
-FROM node:22-bullseye
+FROM node:22
 
 WORKDIR /app
 
-COPY package.json .
-COPY package-lock.json .
+COPY . .
 
 RUN npm i
 
-COPY . .
+EXPOSE 3000
 
 CMD [ "npm", "run", "dev" ]
 
