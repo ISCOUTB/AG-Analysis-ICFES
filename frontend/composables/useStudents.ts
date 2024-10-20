@@ -19,6 +19,23 @@ interface Options {
     page: number;
 }
 
+function groupBy<T>(array: T[], key: keyof T): Record<string, T[]> {
+    return array.reduce(
+        (result, currentValue) => {
+            const groupKey = String(currentValue[key]);
+
+            if (!result[groupKey]) {
+                result[groupKey] = [];
+            }
+
+            result[groupKey].push(currentValue);
+
+            return result;
+        },
+        {} as Record<string, T[]>,
+    );
+}
+
 export default async function () {
     const store = useAnalysisOptions();
     const { status } = useStatus();
@@ -139,6 +156,25 @@ export default async function () {
                 }),
             );
 
+            const groupedByHighschool = groupBy(
+                highschoolStudentsData.value,
+                "highschool",
+            );
+
+            console.log(
+                Object.keys(groupedByHighschool).forEach(
+                    (key: keyof typeof groupedByHighschool) => {
+                        groupedByHighschool[key] = groupBy(
+                            groupedByHighschool[key],
+                            "period",
+                        ) as Record<
+                            string,
+                            z.infer<typeof HighschoolResponseArray>
+                        >;
+                    },
+                ),
+            );
+
             if (status.value !== (Status.TERMINATED as Status))
                 status.value = Status.COMPLETED;
         }
@@ -224,5 +260,6 @@ export default async function () {
         highschoolStudentsData,
         collegeStudentsData,
         execute,
+        studentsCount,
     };
 }
