@@ -75,6 +75,7 @@
                     >
                         <ChartHighschoolBar />
                         <ChartHighschoolTable />
+                        <ChartHighschoolBarDetailed />
                     </div>
                 </template>
 
