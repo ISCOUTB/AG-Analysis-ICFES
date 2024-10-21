@@ -63,7 +63,11 @@
         <template v-if="status === Status.LOADING">
             <div class="w-full flex items-center justify-center mt-12">
                 <div class="w-4/5">
-                    <Progress :model-value="progress" class="mx-auto" />
+                    <Progress
+                        :model-value="progress"
+                        :max="100"
+                        class="mx-auto"
+                    />
                 </div>
             </div>
         </template>
