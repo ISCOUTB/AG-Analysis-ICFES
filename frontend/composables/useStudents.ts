@@ -19,23 +19,6 @@ interface Options {
     page: number;
 }
 
-function groupBy<T>(array: T[], key: keyof T): Record<string, T[]> {
-    return array.reduce(
-        (result, currentValue) => {
-            const groupKey = String(currentValue[key]);
-
-            if (!result[groupKey]) {
-                result[groupKey] = [];
-            }
-
-            result[groupKey].push(currentValue);
-
-            return result;
-        },
-        {} as Record<string, T[]>,
-    );
-}
-
 export default async function () {
     const store = useAnalysisOptions();
     const { status } = useStatus();
@@ -49,6 +32,14 @@ export default async function () {
     const collegeStudentsData = useState<z.infer<typeof CollegeResponseArray>>(
         () => [],
     );
+
+    const highschoolGroupBy = useState<
+        Record<string, Record<string, typeof highschoolStudentsData.value>>
+    >(() => ({}));
+
+    const collegeGroupBy = useState<
+        Record<string, Record<string, typeof collegeStudentsData.value>>
+    >(() => ({}));
 
     async function gatherStudentsCount() {
         const { $api } = useNuxtApp();
@@ -161,18 +152,17 @@ export default async function () {
                 "highschool",
             );
 
-            console.log(
-                Object.keys(groupedByHighschool).forEach(
-                    (key: keyof typeof groupedByHighschool) => {
-                        groupedByHighschool[key] = groupBy(
-                            groupedByHighschool[key],
-                            "period",
-                        ) as Record<
-                            string,
-                            z.infer<typeof HighschoolResponseArray>
-                        >;
-                    },
-                ),
+            highschoolGroupBy.value = Object.entries(
+                groupedByHighschool,
+            ).reduce(
+                (result, [highschoolId, students]) => {
+                    result[highschoolId] = groupBy(students, "period");
+                    return result;
+                },
+                {} as Record<
+                    string,
+                    Record<string, typeof highschoolStudentsData.value>
+                >,
             );
 
             if (status.value !== (Status.TERMINATED as Status))
@@ -215,6 +205,22 @@ export default async function () {
                             }
                         });
                 }),
+            );
+
+            const groupedByCollege = groupBy(
+                collegeStudentsData.value,
+                "college",
+            );
+
+            collegeGroupBy.value = Object.entries(groupedByCollege).reduce(
+                (result, [collegeId, students]) => {
+                    result[collegeId] = groupBy(students, "period");
+                    return result;
+                },
+                {} as Record<
+                    string,
+                    Record<string, typeof collegeStudentsData.value>
+                >,
             );
 
             if (status.value !== (Status.TERMINATED as Status))
@@ -261,5 +267,7 @@ export default async function () {
         collegeStudentsData,
         execute,
         studentsCount,
+        highschoolGroupBy,
+        collegeGroupBy,
     };
 }
