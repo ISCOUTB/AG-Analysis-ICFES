@@ -8,11 +8,16 @@
         items: Record<string, z.infer<typeof HighschoolResponseArray>>;
     }
 
-    const { highschoolId } = defineProps<Props>();
+    const { highschoolId, items } = defineProps<Props>();
 
     const HighschoolResponse = z.object({
         id: z.number(),
         name: z.string(),
+    });
+
+    const PeriodResponse = z.object({
+        id: z.number(),
+        label: z.string(),
     });
 
     const { $api } = useNuxtApp();
@@ -21,6 +26,16 @@
         $api<unknown>(`/highschool/${highschoolId}`),
     );
     const highschool = HighschoolResponse.parse(highschoolResponse);
+
+    const periods = await Promise.all(
+        Object.keys(items).map(async (period) => {
+            const [_, response] = await withCatch(
+                $api<unknown>(`/period/${period}`),
+            );
+
+            return PeriodResponse.parse(response);
+        }),
+    );
 </script>
 
 <template>
@@ -44,7 +59,7 @@
             </div>
         </div>
         <CollapsibleContent class="px-4">
-            <div v-for="item in 20" :key="item">{{ item }}</div>
+            <div v-for="item in periods" :key="item.id">{{ item.label }}</div>
         </CollapsibleContent>
     </Collapsible>
 </template>
