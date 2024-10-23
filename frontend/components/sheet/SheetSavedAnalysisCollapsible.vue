@@ -1,6 +1,3 @@
-<!-- TODO -->
-<!-- 1. Show a message when the user is not logged in -->
-
 <script setup lang="ts">
     import { ChevronsUpDown } from "lucide-vue-next";
     import { useToast } from "@/components/ui/toast";
