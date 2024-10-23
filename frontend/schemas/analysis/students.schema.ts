@@ -45,6 +45,14 @@ export const CollegeDataSchema = z.object({
     MOD_CITIZENSHIP_COMPETENCES: z.number(),
 });
 
+export const HighschoolDataSchemaArray = z.array(HighschoolDataSchema);
+
+export const CollegeDataSchemaArray = z.array(CollegeDataSchema);
+
 export type HighschoolDataSchemaType = z.infer<typeof HighschoolDataSchema>;
 
+export type HighschoolDataKeys = keyof HighschoolDataSchemaType;
+
 export type CollegeDataSchemaType = z.infer<typeof CollegeDataSchema>;
+
+export type CollegeDataKeys = keyof CollegeDataSchemaType;

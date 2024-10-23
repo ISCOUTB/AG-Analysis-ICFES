@@ -7,14 +7,17 @@ export default async function () {
     const progress = computed<number>(() => {
         if (store.reportType === ReportType.SABER11) {
             return (
-                (highschoolStudentsData.value.length / studentsCount.value) *
+                (highschoolStudentsData.value.length /
+                    (studentsCount.value || 1)) *
                 100
             );
         }
 
         if (store.reportType === ReportType.SABERPRO) {
             return (
-                (collegeStudentsData.value.length / studentsCount.value) * 100
+                (collegeStudentsData.value.length /
+                    (studentsCount.value || 1)) *
+                100
             );
         }
 

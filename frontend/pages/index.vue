@@ -61,13 +61,18 @@
             </div>
         </template>
         <template v-if="status === Status.LOADING">
-            <div class="w-full flex items-center justify-center mt-12">
+            <div
+                class="w-full flex items-center justify-center mt-12 flex-col gap-2"
+            >
                 <div class="w-4/5">
                     <Progress
                         :model-value="progress"
                         :max="100"
                         class="mx-auto"
                     />
+                </div>
+                <div class="animate-pulse text-gray-800 dark:text-gray-500">
+                    Loading: {{ roundToDecimals(progress, 2) }}%
                 </div>
             </div>
         </template>
@@ -79,7 +84,8 @@
                     >
                         <ChartHighschoolBar />
                         <ChartHighschoolTable />
-                        <ChartHighschoolBarDetailed />
+                        <ChartHighschoolBarSelect />
+                        <ChartHighschoolHistogram />
                     </div>
                 </template>
 
