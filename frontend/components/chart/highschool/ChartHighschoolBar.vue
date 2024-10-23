@@ -15,7 +15,7 @@
         const values = parsedHighschoolStudentsData.value.map(
             (item) => item[key],
         );
-        
+
         return {
             average: roundToDecimals(
                 values.reduce((acc, val) => acc + val, 0) / values.length,

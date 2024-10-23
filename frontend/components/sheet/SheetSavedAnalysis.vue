@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    const { parsedData, reload } = useSavedAnalysis() 
+    const { parsedData, reload } = useSavedAnalysis();
 </script>
 
 <template>

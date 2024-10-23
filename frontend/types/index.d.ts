@@ -117,6 +117,13 @@ declare global {
         Q3: number;
         median: number;
     }
+
+    interface HistogramChartData {
+        minRange: number;
+        maxRange: number;
+        label: string;
+        count: number;
+    }
 }
 
 export {};

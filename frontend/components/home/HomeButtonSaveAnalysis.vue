@@ -1,10 +1,23 @@
 <script setup lang="ts">
     import { useToast } from "@/components/ui/toast";
+    import { cn } from "~/lib/utils";
+
+    const { loggedIn } = useUserSession();
 
     function saveAnalysis() {
         const { toast } = useToast();
         const analyisStore = useAnalysisOptions();
         const refs = storeToRefs(analyisStore);
+
+        if (!loggedIn.value) {
+            toast({
+                title: "Oops!",
+                description: "You must be loggeed in to use this feature",
+                variant: "destructive",
+            });
+
+            return;
+        }
 
         $fetch("/api/analysis/save", {
             body: {
@@ -33,5 +46,11 @@
 </script>
 
 <template>
-    <Button variant="outline" @click="saveAnalysis"> Save Analysis </Button>
+    <Button
+        variant="outline"
+        :class="cn({ 'opacity-50': !loggedIn })"
+        @click="saveAnalysis"
+    >
+        Save Analysis
+    </Button>
 </template>

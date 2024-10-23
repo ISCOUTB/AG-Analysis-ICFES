@@ -2,6 +2,7 @@
     import { z } from "zod";
     import type { HighschoolResponseArray } from "@/schemas/analysis/students.schema";
     import { ChevronsUpDown } from "lucide-vue-next";
+    import { useToast } from "@/components/ui/toast";
 
     interface Props {
         highschoolId: string;
@@ -21,6 +22,9 @@
     });
 
     const { $api } = useNuxtApp();
+    const { toast } = useToast();
+    const { data } = useSelectedData();
+    const isOpen = ref<boolean>(false);
 
     const [_, highschoolResponse] = await withCatch(
         $api<unknown>(`/highschool/${highschoolId}`),
@@ -36,10 +40,31 @@
             return PeriodResponse.parse(response);
         }),
     );
+
+    function handleSelect({ periodId }: { periodId: number }) {
+        if (!Object.keys(items).some((key) => key === periodId.toString())) {
+            toast({
+                title: "Oops! Wrong key",
+            });
+
+            return;
+        }
+
+        data.value = items[periodId];
+
+        const period = periods.filter((item) => item.id === periodId)[0];
+
+        isOpen.value = false;
+
+        toast({
+            title: "Selected",
+            description: `Institution: ${highschool.name} with ${period.label} period`,
+        });
+    }
 </script>
 
 <template>
-    <Collapsible>
+    <Collapsible v-model:open="isOpen">
         <div
             class="flex items-center justify-between mr-4 px-4 py-1 rounded-md"
         >
@@ -59,7 +84,18 @@
             </div>
         </div>
         <CollapsibleContent class="px-4">
-            <div v-for="item in periods" :key="item.id">{{ item.label }}</div>
+            <div
+                v-for="item in periods"
+                :key="item.id"
+                class="border-b-2 border-gray-300/30 dark:border-gray-400/20 py-2 pr-4 flex justify-between items-center"
+            >
+                <span class="font-bold text-gray-800 dark:text-gray-200">
+                    {{ item.label }}
+                </span>
+                <Button @click="handleSelect({ periodId: item.id })">
+                    Select
+                </Button>
+            </div>
         </CollapsibleContent>
     </Collapsible>
 </template>
