@@ -1,3 +1,7 @@
+<!-- TODO -->
+<!-- 1. Add more descriptions about the data that is showing -->
+<!-- 1.1 Like, be kind to the user -->
+
 <script setup lang="ts">
     import { ReportType, Status } from "@/types/types";
     import { useToast } from "@/components/ui/toast";
