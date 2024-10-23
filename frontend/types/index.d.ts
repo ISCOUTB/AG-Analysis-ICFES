@@ -124,6 +124,13 @@ declare global {
         label: string;
         count: number;
     }
+
+    interface UserDropdownMenuItem {
+        label: string;
+        icon?: string;
+        action?: () => unknown;
+        subItems?: UserDropdownMenuItem[];
+    }
 }
 
 export {};

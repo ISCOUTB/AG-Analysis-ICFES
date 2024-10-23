@@ -4,17 +4,10 @@
     import { capitalize } from "vue";
     import { useToast } from "@/components/ui/toast";
 
-    interface DropdownMenuItem {
-        label: string;
-        icon?: string;
-        action?: () => unknown;
-        subItems?: DropdownMenuItem[];
-    }
-
     const { clear } = useUserSession();
     const { toast } = useToast();
 
-    const dropdownMenuItems: DropdownMenuItem[] = [
+    const dropdownMenuItems: UserDropdownMenuItem[] = [
         {
             label: "Sign up",
             subItems: [

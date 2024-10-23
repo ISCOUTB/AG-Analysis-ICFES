@@ -69,13 +69,11 @@
                 class="w-full flex items-center justify-center mt-12 flex-col gap-2"
             >
                 <div class="w-4/5">
-                    <Progress
-                        :model-value="progress"
-                        :max="100"
-                        class="mx-auto"
-                    />
+                    <Progress :model-value="progress" :max="100" />
                 </div>
-                <div class="animate-pulse text-gray-800 dark:text-gray-500">
+                <div
+                    class="animate-pulse text-gray-800 dark:text-gray-500 text-sm"
+                >
                     Loading: {{ roundToDecimals(progress, 2) }}%
                 </div>
             </div>
