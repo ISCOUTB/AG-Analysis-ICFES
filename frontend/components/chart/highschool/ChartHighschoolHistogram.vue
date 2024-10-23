@@ -1,3 +1,6 @@
+<!-- TODO -->
+<!-- 1. Now that the key is selected, generate the histogram -->
+
 <script setup lang="ts">
     import {
         HighschoolDataSchemaArray,
