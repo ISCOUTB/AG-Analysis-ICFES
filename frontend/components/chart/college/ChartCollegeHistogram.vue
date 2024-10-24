@@ -1,17 +1,17 @@
 <script setup lang="ts">
     import {
-        HighschoolDataSchemaArray,
-        type HighschoolDataKeys,
+        CollegeDataSchemaArray,
+        type CollegeDataKeys,
     } from "@/schemas/analysis/students.schema";
 
-    const { highschoolCategories } = await useStudentsData();
+    const { collegeCategories } = await useStudentsData();
     const { data } = useSelectedData();
     const parsedData = computed(() => {
         if (!Array.isArray(data.value) || !data.value.length) return [];
 
-        return HighschoolDataSchemaArray.parse(data.value);
+        return CollegeDataSchemaArray.parse(data.value);
     });
-    const selectedSubject = useState<HighschoolDataKeys>();
+    const selectedSubject = useState<CollegeDataKeys>();
 
     const categorizedData = computed<HistogramChartData[] | undefined>(() => {
         if (!selectedSubject.value) return;
@@ -38,7 +38,7 @@
             class="flex flex-wrap rounded-lg border-2 border-gray-300/30 dark:border-gray-400/20 py-2"
         >
             <ToggleGroupItem
-                v-for="item in highschoolCategories"
+                v-for="item in collegeCategories"
                 :key="item"
                 :value="item"
                 class="font-semibold"
