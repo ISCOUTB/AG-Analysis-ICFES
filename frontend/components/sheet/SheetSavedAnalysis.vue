@@ -75,12 +75,19 @@
                         <SheetTitle>Stored Analysis</SheetTitle>
                     </SheetHeader>
                     <div class="flex flex-col gap-4 mt-4">
-                        <template v-if="parsedData">
+                        <template v-if="parsedData.length">
                             <SheetSavedAnalysisCollapsible
                                 v-for="item in parsedData"
                                 :key="item.id"
                                 :saved-item="item"
                             />
+                        </template>
+                        <template v-else>
+                            <div
+                                class="text-sm text-purple-500 dark:text-rose-500 underline"
+                            >
+                                The current user haven't saved any analysis yet
+                            </div>
                         </template>
                     </div>
                 </template>

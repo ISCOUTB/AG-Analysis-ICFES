@@ -4,7 +4,7 @@
     import { capitalize } from "vue";
     import { useToast } from "@/components/ui/toast";
 
-    const { clear } = useUserSession();
+    const { clear, loggedIn } = useUserSession();
     const { toast } = useToast();
 
     const dropdownMenuItems: UserDropdownMenuItem[] = [
@@ -37,7 +37,19 @@
         {
             label: "Sign out",
             action: async () => {
+                if (!loggedIn.value) {
+                    toast({
+                        title: "Oops!",
+                        description:
+                            "You have to be logged in order to sign out",
+                        variant: "destructive",
+                    });
+
+                    return;
+                }
+
                 clear();
+
                 toast({
                     title: "Logged out",
                 });
