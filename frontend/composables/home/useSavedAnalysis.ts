@@ -31,7 +31,7 @@ export default function () {
     }
 
     async function reload() {
-        $fetch<SavedAnalysis[]>("/api/analysis/saved")
+        $fetch<SavedAnalysis[]>("http://localhost:3000/api/analysis/saved")
             .then((results) => {
                 return results.map((item) => ({
                     ...item,
