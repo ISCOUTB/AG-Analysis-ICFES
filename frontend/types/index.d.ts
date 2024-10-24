@@ -119,8 +119,6 @@ declare global {
     }
 
     interface HistogramChartData {
-        minRange: number;
-        maxRange: number;
         label: string;
         count: number;
     }

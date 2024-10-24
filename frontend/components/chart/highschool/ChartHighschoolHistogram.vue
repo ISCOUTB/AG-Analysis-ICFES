@@ -22,8 +22,6 @@
         return createRanges({ min: 0, max: 100, steps: 10 }).map(
             ({ minRange, maxRange }) => {
                 return {
-                    minRange,
-                    maxRange,
                     label: `[${minRange}, ${maxRange}]`,
                     count: parsedData.value.filter(
                         (student) =>
@@ -52,8 +50,15 @@
                 {{ item }}
             </ToggleGroupItem>
         </ToggleGroup>
-        <pre>
-            {{ categorizedData }}
-        </pre>
+
+        <template v-if="categorizedData">
+            <BarChart
+                :data="categorizedData"
+                :categories="['count']"
+                index="label"
+                :rounded-corners="4"
+                :show-grid-line="false"
+            />
+        </template>
     </template>
 </template>
