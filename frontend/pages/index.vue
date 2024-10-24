@@ -97,6 +97,8 @@
                     >
                         <ChartCollegeBar />
                         <ChartCollegeTable />
+                        <ChartCollegeBarSelect />
+                        <ChartCollegeHistogram />
                     </div>
                 </template>
             </div>

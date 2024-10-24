@@ -21,7 +21,7 @@
         if (analysisStore.reportType === ReportType.SABERPRO)
             await refreshNuxtData("colleges");
 
-        status.value = Status.TERMINATED;
+        if (status.value === Status.COMPLETED) status.value = Status.TERMINATED;
     }
 </script>
 
