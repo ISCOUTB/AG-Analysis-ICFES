@@ -26,7 +26,7 @@
 </script>
 
 <template>
-    <div>
+    <div id="select-options__report-type">
         <span class="font-semibold">Report Type</span>
         <Select
             :default-value="ReportType.SABER11"

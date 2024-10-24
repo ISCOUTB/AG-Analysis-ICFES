@@ -7,7 +7,7 @@
 </script>
 
 <template>
-    <div key="HomeSelectPeriod">
+    <div id="select-options__period" key="HomeSelectPeriod">
         <span class="font-semibold">Period</span>
         <Select
             :model-value="analysisStore.period"

@@ -8,6 +8,7 @@
 <template>
     <section class="w-full bg-background py-12">
         <div
+            id="select-options"
             class="container px-4 md:px-6 flex flex-col md:grid md:grid-cols-2 gap-4"
         >
             <div class="flex flex-col gap-8">

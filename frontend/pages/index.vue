@@ -16,6 +16,7 @@
     const { toast } = useToast();
     const store = useAnalysisOptions();
     const { progress } = await useHomeProgress();
+    const { startDriver } = useDriver();
 
     function handleTerminate() {
         status.value = Status.TERMINATED;
@@ -35,7 +36,7 @@
 </script>
 
 <template>
-    <section :key="$route.fullPath" v-auto-animate>
+    <section id="section__start" :key="$route.fullPath" v-auto-animate>
         <HomeAnalysisOptions />
         <div class="w-full py-12 bg-gray-300/20 dark:bg-gray-900/80">
             <div v-auto-animate class="container px-4 md:px-6 flex gap-2">
@@ -53,6 +54,9 @@
                     @click.once="handleTerminate"
                     >Cancel</Button
                 >
+                <Button variant="ghost" @click="startDriver">
+                    Start Tutorial
+                </Button>
             </div>
         </div>
         <template v-if="status === Status.IDLE">
