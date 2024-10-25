@@ -1,19 +1,4 @@
 <script setup lang="ts">
-    interface KeyFeature {
-        icon: string;
-        title: string;
-        description: string;
-    }
-
-    interface FeatureSpotlight {
-        label: string;
-    }
-
-    interface Feature {
-        title: string;
-        description: string;
-    }
-
     const keyFeatures: KeyFeature[] = [
         {
             icon: "mdi:google",
@@ -55,14 +40,6 @@
                 "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, vel similique laborum perferendis qui obcaecati et culpa pariatur il enim vitae, debitis soluta nostrum tempora, delectus magni necessitatibus alias assumenda.",
         },
     ];
-
-    function scrollToSection(id: string) {
-        const element = document.getElementById(id);
-
-        if (!element) return;
-
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
 </script>
 
 <template>
@@ -79,7 +56,7 @@
                 </div>
                 <Button
                     class="rounded-full"
-                    @click="scrollToSection('main-features')"
+                    @click="scrollToElement('main-features')"
                 >
                     Explore Features
                 </Button>
@@ -157,7 +134,9 @@
         <div id="more-features" class="w-full">
             <div class="container px-4 py-20 flex flex-col items-center gap-12">
                 <span class="font-bold text-2xl">More Features</span>
-                <div class="flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
+                <div
+                    class="flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-3 gap-4 w-full"
+                >
                     <Card v-for="feature in features" :key="feature.title">
                         <CardHeader>
                             <CardTitle>

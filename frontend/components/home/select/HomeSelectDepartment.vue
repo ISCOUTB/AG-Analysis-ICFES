@@ -25,7 +25,7 @@
 </script>
 
 <template>
-    <div key="HomeSelectDepartment">
+    <div id="select-options__department">
         <span class="font-semibold">Department</span>
         <Select
             :model-value="analysisStore.department"

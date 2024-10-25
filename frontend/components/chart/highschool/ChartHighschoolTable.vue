@@ -28,8 +28,11 @@
 </script>
 
 <template>
-    <div class="space-y-2">
+    <div class="space-y-6">
         <Separator label="Descriptive Variables" />
+        <ChartDescription class="text-center">
+            Standard Deviation, Variance, Q1, Q3 and Median for each subject.
+        </ChartDescription>
         <Table>
             <TableHeader>
                 <TableHead> Subject </TableHead>

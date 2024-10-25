@@ -25,8 +25,12 @@
 </script>
 
 <template>
-    <div>
+    <div class="space-y-4">
         <Separator label="College Chart Bar" />
+        <ChartDescription class="text-center">
+            Basic description of the sample data. Showing max, min, and the
+            average of them.
+        </ChartDescription>
         <BarChart
             :data="chartData"
             index="name"

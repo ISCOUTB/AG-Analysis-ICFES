@@ -1,7 +1,3 @@
-<!-- TODO -->
-<!-- 1. Add more descriptions about the data that is showing -->
-<!-- 1.1 Like, be kind to the user -->
-
 <script setup lang="ts">
     import { ReportType, Status } from "@/types/types";
     import { useToast } from "@/components/ui/toast";
@@ -10,8 +6,6 @@
         title: "Home Page",
     });
 
-    const { execute, highschoolStudentsData, collegeStudentsData } =
-        await useStudents();
     const { status } = useStatus();
     const { toast } = useToast();
     const store = useAnalysisOptions();
@@ -27,20 +21,15 @@
             variant: "destructive",
         });
     }
-
-    async function handleSubmit() {
-        highschoolStudentsData.value.length = 0;
-        collegeStudentsData.value.length = 0;
-        execute();
-    }
 </script>
 
 <template>
-    <section id="section__start" :key="$route.fullPath" v-auto-animate>
+    <section :key="$route.fullPath" v-auto-animate>
         <HomeAnalysisOptions />
         <div class="w-full py-12 bg-gray-300/20 dark:bg-gray-900/80">
             <div v-auto-animate class="container px-4 md:px-6 flex gap-2">
                 <Button
+                    id="select-options__submit"
                     :disabled="status === Status.LOADING"
                     @click="handleSubmit"
                 >

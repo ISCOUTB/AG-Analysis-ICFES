@@ -28,8 +28,12 @@
 </script>
 
 <template>
-    <div class="space-y-2">
+    <div class="space-y-4">
         <Separator label="Highschool Chart Bar" />
+        <ChartDescription class="text-center">
+            Basic description of the sample data. Showing max, min, and the
+            average of them.
+        </ChartDescription>
         <BarChart
             :data="chartData"
             index="name"

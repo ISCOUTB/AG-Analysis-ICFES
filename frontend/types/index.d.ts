@@ -42,6 +42,21 @@ declare global {
         action: () => void;
     }
 
+    interface KeyFeature {
+        icon: string;
+        title: string;
+        description: string;
+    }
+
+    interface FeatureSpotlight {
+        label: string;
+    }
+
+    interface Feature {
+        title: string;
+        description: string;
+    }
+
     interface FormField<T extends object> {
         name: keyof T;
         label: string;

@@ -59,7 +59,9 @@
         toast({
             title: "Selected",
             description: `Institution: ${college.name} with ${period.label} period`,
-        });
+        }); 
+
+        scrollToElement("component__toggle-group__histogram-college");
     }
 </script>
 

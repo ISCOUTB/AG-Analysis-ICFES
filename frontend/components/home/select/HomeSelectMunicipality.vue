@@ -15,7 +15,7 @@
 </script>
 
 <template>
-    <div>
+    <div id="select-options__municipality">
         <span class="font-semibold">Municipality</span>
         <Select
             :model-value="analysisStore.municipality"
