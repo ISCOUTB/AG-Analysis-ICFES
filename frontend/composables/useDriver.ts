@@ -28,11 +28,44 @@ export default function () {
                 },
             },
             {
-                element: "#select-options__period",
+                element: "#select-options__department",
                 popover: {
-                    title: "By Period",
+                    title: "By Department",
+                    description: "Select based on the department",
+                },
+            },
+            {
+                element: "#select-options__municipality",
+                popover: {
+                    title: "By Municipality",
+                    description: "Select based on the municipality",
+                },
+            },
+            {
+                element: "#select-options__submit",
+                popover: {
+                    title: "Submit button",
+                },
+                onHighlighted() {
+                    const store = useAnalysisOptions();
+
+                    store.setDepartment("21");
+
+                    handleSubmit();
+                },
+            },
+            {
+                popover: {
+                    title: "After clicking the analysis will start",
                     description:
-                        "This will be the period used to select the institutions, not the students",
+                        "First getting the students count, and soon after, gathering all the students info",
+                },
+            },
+            {
+                popover: {
+                    title: "That's it",
+                    description:
+                        "Sometimes the loading can take a while, take into consideration that. ^^",
                 },
             },
         ]);

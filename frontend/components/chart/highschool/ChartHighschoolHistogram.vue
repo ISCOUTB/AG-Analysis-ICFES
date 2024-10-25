@@ -33,7 +33,10 @@
 
 <template>
     <template v-if="parsedData.length">
+        <Separator label="Select Subject" />
+
         <ToggleGroup
+            id="component__toggle-group__histogram-highschool"
             type="single"
             class="flex flex-wrap rounded-lg border-2 border-gray-300/30 dark:border-gray-400/20 py-2"
         >

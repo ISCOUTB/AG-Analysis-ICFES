@@ -60,6 +60,8 @@
             title: "Selected",
             description: `Institution: ${highschool.name} with ${period.label} period`,
         });
+
+        scrollToElement("component__toggle-group__histogram-highschool");
     }
 </script>
 
