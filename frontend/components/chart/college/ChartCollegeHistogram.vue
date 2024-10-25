@@ -12,6 +12,7 @@
         return CollegeDataSchemaArray.parse(data.value);
     });
     const selectedSubject = useState<CollegeDataKeys>();
+    const { skewness, kurtosis } = useStatistics();
 
     const categorizedData = computed<HistogramChartData[] | undefined>(() => {
         if (!selectedSubject.value) return;
@@ -28,6 +29,12 @@
                 };
             },
         );
+    });
+
+    const dataArray = computed(() => {
+        if (!categorizedData.value) return [];
+
+        return categorizedData.value.map(({ count }) => count);
     });
 </script>
 
@@ -58,6 +65,22 @@
                 :rounded-corners="4"
                 :show-grid-line="false"
             />
+            <Table>
+                <TableHeader>
+                    <TableHead>Test</TableHead>
+                    <TableHead>Value</TableHead>
+                </TableHeader>
+                <TableBody>
+                    <TableRow>
+                        <TableCell>Skewness</TableCell>
+                        <TableCell>{{ skewness(dataArray) }}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>Kurtosis</TableCell>
+                        <TableCell>{{ kurtosis(dataArray) }}</TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
         </template>
     </template>
 </template>
