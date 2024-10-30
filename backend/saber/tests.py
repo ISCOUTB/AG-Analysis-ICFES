@@ -1,8 +1,9 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
-from .models import Department, Municipality, Highschool, College
-from .serializers import DepartmentSerializer, MunicipalitySerializer, HighschoolSerializer, CollegeSerializer
+from .models import Department, Municipality, Highschool, College, HighschoolStudent, CollegeStudent, Period, GENRE
+from .serializers import DepartmentSerializer, MunicipalitySerializer, HighschoolSerializer, CollegeSerializer, HighschoolStudentSerializer, CollegeStudentSerializer
+import random
 
 
 class DepartmentTestCase(APITestCase):
@@ -107,6 +108,119 @@ class MunicipalityTestCase(APITestCase):
         response = self.client.get(self.college_url)
         colleges = College.objects.all()
         serializer = CollegeSerializer(colleges, many=True)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data)
+
+
+class HighschoolTestCase(APITestCase):
+    def setUp(self) -> None:
+        department = Department.objects.create(name='Department Name 1')
+        self.municipality = Municipality.objects.create(
+            name='Municipality Name 1', department=department)
+        self.highschool = Highschool.objects.create(
+            name='Highschool Name 1', municipality=self.municipality)
+
+        self.list_url = reverse('highschool-list')
+        self.detail_url = reverse(
+            'highschool-detail', args=[self.highschool.id])
+
+        # POST /students_paginated
+
+        period = Period.objects.create(label='1234')
+
+        for i in range(100):
+            HighschoolStudent.objects.create(
+                PUNT_ENGLISH=random.randint(0, 100),
+                PUNT_MATHEMATICS=random.randint(0, 100),
+                PUNT_SOCIAL_CITIZENSHIP=random.randint(0, 100),
+                PUNT_NATURAL_SCIENCES=random.randint(0, 100),
+                PUNT_CRITICAL_READING=random.randint(0, 100),
+                PUNT_GLOBAL=random.randint(0, 100),
+                highschool=self.highschool,
+                genre=random.choice(GENRE),
+                period=period
+            )
+
+        self.students_paginated_url = reverse('highschool-students-paginated')
+
+    def test_list_highschool(self):
+        response = self.client.get(self.list_url)
+        highschools = Highschool.objects.all()
+        serializer = HighschoolSerializer(highschools, many=True)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data)
+
+    def test_retrieve_highschool(self):
+        response = self.client.get(self.detail_url)
+        highschool = Highschool.objects.get(id=self.highschool.id)
+        serializer = HighschoolSerializer(highschool)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data)
+
+    def test_students_paginated(self):
+        response = self.client.post(self.students_paginated_url)
+        highschool_students = HighschoolStudent.objects.all()
+        serializer = HighschoolStudentSerializer(
+            highschool_students, many=True)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data)
+
+
+class CollegeTestCase(APITestCase):
+    def setUp(self) -> None:
+        department = Department.objects.create(name='Department Name 1')
+        self.municipality = Municipality.objects.create(
+            name='Municipality Name 1', department=department)
+        self.college = College.objects.create(
+            name='College Name 1', municipality=self.municipality)
+
+        self.list_url = reverse('college-list')
+        self.detail_url = reverse(
+            'college-detail', args=[self.college.id])
+
+        # POST /students_paginated
+
+        period = Period.objects.create(label='1234')
+
+        for i in range(100):
+            CollegeStudent.objects.create(
+                MOD_QUANTITATIVE_REASONING=random.randint(0, 100),
+                MOD_WRITTEN_COMMUNICATION=random.randint(0, 100),
+                MOD_CRITICAL_READING=random.randint(0, 100),
+                MOD_ENGLISH=random.randint(0, 100),
+                MOD_CITIZENSHIP_COMPETENCES=random.randint(0, 100),
+                college=self.college,
+                genre=random.choice(GENRE),
+                period=period
+            )
+
+        self.students_paginated_url = reverse('college-students-paginated')
+
+    def test_list_college(self):
+        response = self.client.get(self.list_url)
+        colleges = College.objects.all()
+        serializer = HighschoolSerializer(colleges, many=True)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data)
+
+    def test_retrieve_highschool(self):
+        response = self.client.get(self.detail_url)
+        college = College.objects.get(id=self.college.id)
+        serializer = CollegeSerializer(college)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data)
+
+    def test_students_paginated(self):
+        response = self.client.post(self.students_paginated_url)
+        college_students = CollegeStudent.objects.all()
+        serializer = CollegeStudentSerializer(
+            college_students, many=True)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, serializer.data)
