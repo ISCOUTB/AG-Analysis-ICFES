@@ -10,6 +10,7 @@
     const { toast } = useToast();
     const store = useAnalysisOptions();
     const { progress } = await useHomeProgress();
+    const { currentTask } = useHomeCurrentTask();
     const { startDriver } = useDriver();
 
     function handleTerminate() {
@@ -27,7 +28,10 @@
     <section :key="$route.fullPath" v-auto-animate>
         <HomeAnalysisOptions />
         <div class="w-full py-12 bg-gray-300/20 dark:bg-gray-900/80">
-            <div v-auto-animate class="container px-4 md:px-6 flex gap-2">
+            <div
+                v-auto-animate
+                class="container px-4 md:px-6 flex flex-wrap gap-2"
+            >
                 <Button
                     id="select-options__submit"
                     :disabled="status === Status.LOADING"
@@ -65,9 +69,10 @@
                     <Progress :model-value="progress" :max="100" />
                 </div>
                 <div
-                    class="animate-pulse text-gray-800 dark:text-gray-500 text-sm"
+                    class="animate-pulse text-gray-800 dark:text-gray-500 text-sm flex flex-col items-center"
                 >
-                    Loading: {{ roundToDecimals(progress, 2) }}%
+                    <span>{{ currentTask }}</span>
+                    <span> Loading: {{ roundToDecimals(progress, 2) }}% </span>
                 </div>
             </div>
         </template>

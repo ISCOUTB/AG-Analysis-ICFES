@@ -24,6 +24,7 @@ export default async function () {
     const { status } = useStatus();
     const { toast } = useToast();
     const studentsCount = useState(() => 0);
+    const { currentTask } = useHomeCurrentTask()
 
     const highschoolStudentsData = useState<
         z.infer<typeof HighschoolResponseArray>
@@ -96,6 +97,8 @@ export default async function () {
     async function execute() {
         status.value = Status.LOADING;
 
+        currentTask.value = "Gathering students count ...";
+
         await gatherStudentsCount();
 
         if (!studentsCount.value) {
@@ -107,7 +110,11 @@ export default async function () {
             return;
         }
 
+        currentTask.value = "Calculating total pages ...";
+
         const totalPages = Math.ceil(studentsCount.value / STUDENTS_CHUNK_SIZE);
+
+        currentTask.value = "Getting students data ...";
 
         if (store.reportType === ReportType.SABER11) {
             await Promise.all(
@@ -146,6 +153,8 @@ export default async function () {
                         });
                 }),
             );
+
+            currentTask.value = "Grouping objects ...";
 
             const groupedByHighschool = groupBy(
                 highschoolStudentsData.value,
@@ -207,6 +216,8 @@ export default async function () {
                 }),
             );
 
+            currentTask.value = "Grouping objects ...";
+
             const groupedByCollege = groupBy(
                 collegeStudentsData.value,
                 "college",
@@ -227,11 +238,14 @@ export default async function () {
                 status.value = Status.COMPLETED;
         }
 
-        if (status.value === Status.COMPLETED)
+        if (status.value === Status.COMPLETED) {
             toast({
                 title: "Finished gathering the students data",
                 description: "Action just finished",
             });
+
+            currentTask.value = "";
+        }
     }
 
     async function fetchData(
