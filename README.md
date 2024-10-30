@@ -3,7 +3,9 @@
 This project focuses on the analysis and visualization of the results from **Pruebas Saber** in Colombia, using a frontend-backend architecture. The backend is built with **Django**, and the frontend uses **Nuxt 3** to visualize the data.
 
 ### Objective
+
 The objective of this project is to provide a tool that:
+
 1. Retrieves results from the **Saber 11** and **Saber Pro** exams by department or municipality.
 2. Visualizes and analyzes the data through interactive charts.
 3. Provides basic statistics such as **skewness**, **standard deviation**, and other relevant indicators.
@@ -13,6 +15,7 @@ The objective of this project is to provide a tool that:
 ## Project Structure
 
 The project is divided into two parts:
+
 1. **Backend (REST API)**: Developed with Django, which exposes the data through API endpoints.
 2. **Frontend**: Developed with Nuxt 3, which consumes the API endpoints and visualizes the data in an interactive interface.
 
@@ -21,6 +24,7 @@ The project is divided into two parts:
 ## Installation and Setup
 
 ### Requirements
+
 - Python 3.x (for the backend)
 - Node.js (for the frontend)
 - PostgreSQL Database (optional, recommended)
@@ -68,22 +72,24 @@ The project is divided into two parts:
      python manage.py runserver
      ```
 4. Setup **frontend**
-  - Navigate into the folder
-    ```bash
-    cd frontend/
-    ```
-  - Install the dependencies
-    ```bash
-    npm install
-    ```
-  - Apply migrations
-    ```bash
-    npx prisma migrate dev
-    ```
-  - Run the app
-    ```bash
-    npm run dev
-    ```
+
+- Navigate into the folder
+  ```bash
+  cd frontend/
+  ```
+- Install the dependencies
+  ```bash
+  npm install
+  ```
+- Apply migrations
+  ```bash
+  npx prisma migrate dev
+  ```
+- Run the app
+  ```bash
+  npm run dev
+  ```
+
 ---
 
 ### Considerations
@@ -92,10 +98,20 @@ The project is divided into two parts:
   - backend: POSTGRES_HOST, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD
   - frontend: DATABASE_URL, and the credentials for OAuth (Github & Google)
 
+---
 
+### Docs
 
+### Frontend
 
+In the frontend, you can access the route `/docs` in order to see the full documentation for the Nuxt mounted API.
 
+Keep in mind that this route will only be visible in **dev**.
 
+### Backend
 
-     
+The documentation can be found in `/backend/docs/Backend api.yaml`
+
+### Data Model
+
+![DataModel](/backend/public/DataModel.jpeg)
