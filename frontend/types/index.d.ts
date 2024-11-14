@@ -77,9 +77,7 @@ declare global {
     interface AnalysisOptionsState {
         department: string;
         municipality: string;
-        institution: string;
         reportType: ReportType;
-        period: string;
     }
 
     interface SheetSavedAnalysisCollapsibleItem {

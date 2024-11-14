@@ -9,10 +9,8 @@ type StringKeys = ExtractByTypeExcluding<
 export const useAnalysisOptions = defineStore("analysis-options-store", {
     state: (): AnalysisOptionsState => ({
         department: "",
-        institution: "",
         municipality: "",
         reportType: ReportType.SABER11,
-        period: "",
     }),
     actions: {
         setDepartment(payload: string) {
@@ -24,17 +22,8 @@ export const useAnalysisOptions = defineStore("analysis-options-store", {
             this.municipality = payload;
         },
 
-        setInstitution(payload: string) {
-            if (!this.department || !this.department) return;
-            this.institution = payload;
-        },
-
         setReportType(payload: ReportType) {
             this.reportType = payload;
-        },
-
-        setPeriod(payload: string) {
-            this.period = payload;
         },
 
         clear(key: StringKeys) {
@@ -44,9 +33,7 @@ export const useAnalysisOptions = defineStore("analysis-options-store", {
         clearAll() {
             this.department = "";
             this.municipality = "";
-            this.institution = "";
             this.reportType = ReportType.SABER11;
-            this.period = "";
         },
     },
 });

@@ -1,20 +1,38 @@
 <script setup lang="ts">
     import { createAvatarFallback } from "@/lib/utils";
 
+    useHead({
+        title: "About",
+    });
+
     const participants: Participant[] = [
         {
             name: "Mauro Gonzalez",
             role: "Frontend Developer",
             description: "College Student",
-            tags: ["UI Designer", "Vue Developer"],
+            tags: ["UI Designer", "Vue Developer", "Backend Developer"],
             image: "https://avatars.githubusercontent.com/u/101476062?v=4",
         },
         {
             name: "Aaron Dali",
             role: "Backend Developer",
             description: "College Student",
-            tags: ["Schizophrenia"],
+            tags: ["Backend Developer"],
             image: "https://avatars.githubusercontent.com/u/163145987?v=4",
+        },
+        {
+            name: "Juan Jimenez",
+            role: "UI Designer",
+            description: "College Student",
+            tags: ["UI Designer"],
+            image: "/351743357_579266880985447_8411470123673684729_n.jpeg",
+        },
+        {
+            name: "Jorge Herrera",
+            role: "College Student",
+            description: "College Student",
+            tags: ["Backend Developer"],
+            image: "/403819879_3582026238782743_8221450097149757394_n.jpg",
         },
     ];
 </script>

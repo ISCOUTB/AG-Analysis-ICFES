@@ -30,41 +30,6 @@
             renderIf: () => !!savedItem.content.municipality,
         },
         {
-            label: "Highschool",
-            value: savedItem.content.institution,
-            icon: "hugeicons:student-card",
-            classIcon: "text-4xl text-rose-500",
-            renderIf: () => {
-                if (
-                    !!savedItem.content.institution &&
-                    savedItem.content.reportType === ReportType.SABER11
-                )
-                    return true;
-                return false;
-            },
-        },
-        {
-            label: "College",
-            value: savedItem.content.institution,
-            icon: "ph:student",
-            classIcon: "text-4xl text-yellow-500",
-            renderIf: () => {
-                if (
-                    !!savedItem.content.institution &&
-                    savedItem.content.reportType === ReportType.SABERPRO
-                )
-                    return true;
-                return false;
-            },
-        },
-        {
-            label: "Period",
-            value: savedItem.content.period,
-            icon: "material-symbols:nest-clock-farsight-analog-outline-rounded",
-            classIcon: "text-3xl text-violet-500",
-            renderIf: () => !!savedItem.content.period,
-        },
-        {
             label: "Report Type",
             value: savedItem.content.reportType,
             icon: "icon-park-outline:table-report",
@@ -130,45 +95,7 @@
                 const data = Response.parse(response);
 
                 analysisStore.setMunicipality(data.id.toString());
-
-                if (savedItem.content.institution) {
-                    if (savedItem.content.reportType === ReportType.SABER11) {
-                        const response = await $api("/highschool/", {
-                            query: {
-                                name: savedItem.content.institution,
-                            },
-                        });
-
-                        const data = Response.parse(response);
-
-                        analysisStore.setInstitution(data.id.toString());
-                    }
-
-                    if (savedItem.content.reportType === ReportType.SABERPRO) {
-                        const response = await $api("/college/", {
-                            query: {
-                                name: savedItem.content.institution,
-                            },
-                        });
-
-                        const data = Response.parse(response);
-
-                        analysisStore.setInstitution(data.id.toString());
-                    }
-                }
             }
-        }
-
-        if (savedItem.content.period) {
-            const response = await $api("/period/", {
-                query: {
-                    label: savedItem.content.period,
-                },
-            });
-
-            const data = Response.parse(response);
-
-            analysisStore.setPeriod(data.id.toString());
         }
 
         if (savedItem.content.reportType)
@@ -181,8 +108,8 @@
         <div
             class="flex items-center justify-between mr-4 px-4 py-1 rounded-md"
         >
-            <div class="flex flex-col items-start">
-                <h4 class="text-sm font-semibold">
+            <div class="flex flex-col items-start justify-start">
+                <h4 class="text-xs font-semibold line-clamp-1">
                     {{
                         new Date(savedItem.createdAt).toLocaleString("en-Es", {
                             year: "numeric",
