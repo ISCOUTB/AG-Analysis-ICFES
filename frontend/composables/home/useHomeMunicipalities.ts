@@ -18,7 +18,7 @@ export default async function () {
         () => {
             if (!departmentId.value) return Promise.resolve([]);
 
-            return $api(`/department/${departmentId.value}/municipalities`)
+            return $api(`/department/${departmentId.value}/municipalities/`)
                 .then((response) => ResponseArray.parse(response))
                 .catch((error) => {
                     if (error instanceof z.ZodError)

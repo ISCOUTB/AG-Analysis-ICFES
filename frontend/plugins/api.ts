@@ -13,7 +13,7 @@ export default defineNuxtPlugin({
         const { API_URL } = useRuntimeConfig().public;
 
         const api = $fetch.create<unknown, NitroFetchRequest>({
-            baseURL: `${API_URL}/api/saber/`,
+            baseURL: `${API_URL}/api/saber`,
             onResponseError({ response }) {
                 const { toast } = useToast();
 

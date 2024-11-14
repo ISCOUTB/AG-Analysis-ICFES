@@ -160,7 +160,7 @@
         }
 
         if (savedItem.content.period) {
-            const response = await $api("/period", {
+            const response = await $api("/period/", {
                 query: {
                     label: savedItem.content.period,
                 },

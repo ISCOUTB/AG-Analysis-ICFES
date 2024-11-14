@@ -27,14 +27,14 @@
     const isOpen = ref<boolean>(false);
 
     const [_, highschoolResponse] = await withCatch(
-        $api<unknown>(`/highschool/${highschoolId}`),
+        $api<unknown>(`/highschool/${highschoolId}/`),
     );
     const highschool = HighschoolResponse.parse(highschoolResponse);
 
     const periods = await Promise.all(
         Object.keys(items).map(async (period) => {
             const [_, response] = await withCatch(
-                $api<unknown>(`/period/${period}`),
+                $api<unknown>(`/period/${period}/`),
             );
 
             return PeriodResponse.parse(response);
